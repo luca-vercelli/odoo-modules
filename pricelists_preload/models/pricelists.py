@@ -24,7 +24,7 @@ class PricelistPreloadRun(models.TransientModel):	#Transient = la tabella viene 
 
 	#eventuali parametri di lancio
 	attr_preload_id = fields.Many2one('product.attribute', string='Attribute')
-	qta_id = fields.Many2one(string="Quantità per scatola", comodel_name='product.attribute.value', required=True)
+	qta_id = fields.Many2one(string="Attribute value", comodel_name='product.attribute.value', required=True)
 
 	#azione associata alla pressione del bottone
 
