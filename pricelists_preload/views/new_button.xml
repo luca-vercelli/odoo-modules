@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+			
+		<!-- maschera di lancio -->
+		<record id="view_listini_dialog" model="ir.ui.view">
+			<field name="name">product.pricelist.preload</field>
+			<field name="model">pricelists_preload.run</field>
+			<field name="arch" type="xml">
+				<form string="Prepara righe listino">
+					<label for="attr_preload_id" />
+					<field name="attr_preload_id" class="oe_inline"/>
+					<label for="qta_id" />
+					<field name="qta_id" class="oe_inline" domain="[('attribute_id', '=', attr_preload_id)]"/>
+					<button name="load_now" string="Carica" type="object" class="oe_highlight"/> or
+					<button special="cancel" string="Cancel" class="oe_link"/>
+				</form>
+			</field>
+		</record>
+
+		<!-- azione 'apri una finestra' -->
+
+		<act_window id="action_preload_pricelists"
+			multi="False"
+			name="Prepara righe listino"
+			res_model="pricelists_preload.run"
+			src_model="product.pricelist"
+			view_mode="form"
+			view_type="form"
+			view_id="view_listini_dialog"
+			target="new"
+			/>
+		
+		<!-- Hide "Countries" -->
+		<record id="product_pricelist_hide_countries_view" model="ir.ui.view">
+			<field name="name">product.pricelist.hidecountries.form</field>
+			<field name="model">product.pricelist</field>		
+			<field eval="8" name="priority"/>
+			<field name="inherit_id" ref="product.product_pricelist_view"/>
+			<field name="arch" type="xml">
+				<!--<xpath expr="/form/sheet/group/field[@name='country_group_ids']" position="attributes">-->
+				<xpath expr="/form/sheet/group[1]" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+			</field>
+		</record>
+		
+	</data>
+</openerp>
