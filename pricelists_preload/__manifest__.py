@@ -17,9 +17,6 @@
 		
 		Configuration: set Attribute in Sales configuration settings.
 		
-		KNOWN ISSUES:
-		there are two useless buttons "Save" and "Cancel" that I am not able to hide.
-		
 		""",
     "author": "Luca Vercelli - Finsoft srl",
     "website": "",
