@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record model="ir.config_parameter" id="print_command">
+    <field name="key">printer.print_command</field>
+    <field name="value"><![CDATA[C:\Program Files (x86)\Ghostgum\gsview\gsprint.exe]]></field>
+  </record>
+  
+  <record model="ir.config_parameter" id="print_command_args">
+    <field name="key">printer.print_command_args</field>
+    <field name="value"><![CDATA[-ghostscript "C:\Program Files\gs\gs9.22\bin\gswin64.exe" "C:\Program Files (x86)\Ghostgum\gsview\gsview32.exe" -printer "%(printer)s" "%(filename)s"]]></field>
+  </record>
+
+</odoo>
