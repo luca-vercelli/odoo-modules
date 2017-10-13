@@ -6,7 +6,7 @@
 ##############################################################################
 
 {
-    "name": "Carica listini",
+    "name": "Pricelists preload",
     "version": "1.0",
     "category": "Sales",
     "description": """
