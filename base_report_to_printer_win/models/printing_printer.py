@@ -157,15 +157,20 @@ class PrintingPrinter(models.Model):
 			raise UserError(message) 
 		except TimeoutExpired as err:
 			#process did not terminate within timeout, and was killed
+			#please notice by now (2017-10-17) there is some bug in subprocess32, line 1190, that could affect this
 			message = _('Process did not terminate within %s seconds. Message: %s')
-			message = message  % (str(err.returncode), err.output[-1000:])
+			message = message  % (str(err.timeout), err.output[-1000:])
 			_logger.error(message)		#DEBUG
 			raise UserError(message) 
 		except:
 			#IOError?
-			import sys
-			message = _("Exception while running external process: %s")
-			raise UserError(message % str(sys.exc_info()))	#list of 3 components...
+			import sys, traceback
+			message = _("Exception while running external process: %s") % str(sys.exc_info()[1])
+			_logger.error(traceback.format_exc())
+			#message = message % format_exc
+			#message = message % (str(sys.exc_info()[0]),str(sys.exc_info()[1]))
+			#_logger.error(sys.exc_info()[2])
+			raise UserError(message)
 	
 	@api.multi
 	def set_default(self):
