@@ -12,7 +12,8 @@ import logging
 import os
 from tempfile import mkstemp
 
-from odoo import models, fields, api
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 
 _logger = logging.getLogger(__name__)
@@ -123,26 +124,49 @@ class PrintingPrinter(models.Model):
 			file_name,
 			self.system_name,
 		))
-		command = self.env['ir.config_parameter'].get_param('printer.print_command')
-		args = self.env['ir.config_parameter'].get_param('printer.print_command_args') % {
+		command = eval(self.env['ir.config_parameter'].get_param('printer.print_command') % {
 			"printer" : self.system_name,
 			"filename": file_name
-			}
+			})
 			
-		self.execute_command(command, args)
+		self.execute_command(command)
 
 		return True
 
-	def execute_command(self, command, args):
+
+	def execute_command(self, command):
 		"""
-		Execute external program using win32api
-		@param command and args must be strings
+		Execute external program
+		@param command is a list of strings
 		"""
 		#code from https://www.odoo.com/it_IT/forum/help-1/question/49495
-		_logger.info("Going to execute: " + str(command) + " " + str(args))
-		import win32api		#in pypiwin32 package
-		win32api.ShellExecute(0, 'open', command, args, '.', 1)
-
+		
+		_logger.info("Going to execute: " + str(command))
+		
+		#wrt subprocess, subprocess32 allows to set a timeout
+		from subprocess32 import check_output, CalledProcessError, TimeoutExpired, STDOUT
+		try:
+			import subprocess32
+			check_output(command, stderr=STDOUT, timeout=60)	#may raise CalledProcessError,TimeoutExpired
+			_logger.info("Command successfully terminated with exit code 0. ")
+		except CalledProcessError as err:
+			#process terminated with returncode != 0
+			message = _('Process failed (error code: %s). Message: %s')
+			message = message  % (str(err.returncode), err.output[-1000:])
+			_logger.error(message)		#DEBUG
+			raise UserError(message) 
+		except TimeoutExpired as err:
+			#process did not terminate within timeout, and was killed
+			message = _('Process did not terminate within %s seconds. Message: %s')
+			message = message  % (str(err.returncode), err.output[-1000:])
+			_logger.error(message)		#DEBUG
+			raise UserError(message) 
+		except:
+			#IOError?
+			import sys
+			message = _("Exception while running external process: %s")
+			raise UserError(message % str(sys.exc_info()))	#list of 3 components...
+	
 	@api.multi
 	def set_default(self):
 		if not self:

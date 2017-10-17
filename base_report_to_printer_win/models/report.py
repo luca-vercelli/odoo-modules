@@ -4,6 +4,8 @@
 
 from odoo import models, exceptions, _, api
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class Report(models.Model):
     _inherit = 'report'
@@ -29,6 +31,12 @@ class Report(models.Model):
         If you want to prevent `get_pdf` to send report you can set
         the `must_skip_send_to_printer` key to True in the context
         """
+
+        #DEBUG code
+        _logger.info("must_skip_send_to_printer = "+str(self.env.context.get('must_skip_send_to_printer')))
+        _logger.info("behaviour = "+str(behaviour))
+        _logger.info("printer = "+str(printer))
+
         if self.env.context.get('must_skip_send_to_printer'):
             return False
         if behaviour['action'] == 'server' and printer and document:

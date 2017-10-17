@@ -35,7 +35,7 @@
     'installable': True,
     'application': True,
     'external_dependencies': {
-        'python': ['win32api'],
+        'python': ['subprocess32'],
 		#FIXME should Ghostscript/GSView be listed here?
     },
 }
