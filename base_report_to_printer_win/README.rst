@@ -28,11 +28,10 @@ Installation
 ============
 
 You must install:
-* win32api Python module (i.e. PyPI pypiwin32 package)
+
+* subprocess32 Python module
 * GSView at http://pages.cs.wisc.edu/~ghost/gsview/get50.htm
 * Ghostscript at https://ghostscript.com
-
-WARNING: currently, this works if and only if Odoo is launched as program, not as service (working on this yet).
 
 Configuration
 =============
@@ -41,6 +40,15 @@ After installing enable the "Printing / Print User" option under access
 rights to give users the ability to view the print menu.
 
 You must fix Ghostscript and GSView paths in "System parameters" menu (this should be improved in future).
+
+If you are running Odoo as a service (as you should do), GSView may have issues finding printer: "Couldn't open Windows GDI printer driver".
+You can fix it this way: open a command prompt as administrator, then type and run:
+
+``reg copy "HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Devices" "HKEY_USERS\.DEFAULT\Software\Microsoft\Windows NT\CurrentVersion\Devices" /f``
+
+That way, **all printers of current Windows user will be also available to all other Windows users**.
+
+More details in this post: http://pages.cs.wisc.edu/~ghost/redmon/muir.htm .
 
 
 Usage
