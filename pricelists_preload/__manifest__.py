@@ -7,7 +7,7 @@
 
 {
     "name": "Pricelists preload",
-    "version": "1.0",
+    "version": "1.1",
     "category": "Sales",
     "description": """
 		Load into a pricelist rows for all product variants with some given attribute.

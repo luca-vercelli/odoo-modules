@@ -9,7 +9,7 @@
 
 {
     'name': "Report to printer - Windows Version",
-    'version': '10.0.1.0.1',
+    'version': '10.0.1.0.2',
     'category': 'Generic Modules/Base',
     'author': "Luca Vercelli - Finsoft srl",
     'website': 'http://www.agilebg.com',

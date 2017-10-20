@@ -7,7 +7,7 @@
 
 {
     "name": "Product variant search",
-    "version": "1.0",
+    "version": "1.1",
     "category": "Sales",
     "description": """
 		Enable search in product variants names instead then in product name only.
