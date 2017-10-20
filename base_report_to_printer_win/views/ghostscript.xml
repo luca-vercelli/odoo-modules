@@ -3,7 +3,7 @@
 
   <record model="ir.config_parameter" id="print_command">
     <field name="key">printer.print_command</field>
-    <field name="value"><![CDATA[["C:\Program Files (x86)\Ghostgum\gsview\gsprint.exe","-ghostscript","C:\Program Files\gs\gs9.22\bin\gswin64.exe","-printer","%(printer)s","%(filename)s"]]]></field>
+    <field name="value"><![CDATA[["C:\\Program Files (x86)\\Ghostgum\\gsview\\gsprint.exe","-ghostscript","C:\\Program Files\\gs\\gs9.22\\bin\\gswin64.exe","-printer","%(printer)s","%(filename)s"]]]></field>
 	<!-- please notice *two* brackets
 		this is an array to be loaded with eval() -->
   </record>

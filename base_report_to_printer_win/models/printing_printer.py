@@ -126,9 +126,9 @@ class PrintingPrinter(models.Model):
 		))
 		command = eval(self.env['ir.config_parameter'].get_param('printer.print_command') % {
 			"printer" : self.system_name,
-			"filename": file_name
+			"filename": str(file_name).replace('\\','\\\\')
 			})
-			
+		
 		self.execute_command(command)
 
 		return True
@@ -153,14 +153,14 @@ class PrintingPrinter(models.Model):
 			#process terminated with returncode != 0
 			message = _('Process failed (error code: %s). Message: %s')
 			message = message  % (str(err.returncode), err.output[-1000:])
-			_logger.error(message)		#DEBUG
+			_logger.error(message)
 			raise UserError(message) 
 		except TimeoutExpired as err:
 			#process did not terminate within timeout, and was killed
 			#please notice by now (2017-10-17) there is some bug in subprocess32, line 1190, that could affect this
 			message = _('Process did not terminate within %s seconds. Message: %s')
 			message = message  % (str(err.timeout), err.output[-1000:])
-			_logger.error(message)		#DEBUG
+			_logger.error(message)
 			raise UserError(message) 
 		except:
 			#IOError?

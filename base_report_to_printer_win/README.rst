@@ -32,6 +32,7 @@ You must install:
 * GSView at http://pages.cs.wisc.edu/~ghost/gsview/get50.htm
 * Ghostscript at https://ghostscript.com
 
+WARNING: currently, this works if and only if Odoo is launched as program, not as service (working on this yet).
 
 Configuration
 =============
