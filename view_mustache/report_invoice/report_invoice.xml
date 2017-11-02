@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- examples of views (may depend on other modules!) -->
+
+<!--
+What I have lost:
+report.html_container
+t-lang="o.partner_id.lang"
+<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+<span t-field="l.uom_id"  groups="product.group_uom"/>
+<span t-field="l.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+
+-->
+		<record id="view_report_invoice_mustache" model="ir.ui.view"> <!-- l'id completo sarà nomemodulo.xxx -->
+			<field name="name">view_report_invoice_mustache</field>
+			<field name="model">account.invoice</field>	
+			<field name="type">mustache</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+	{{#docs}}
+		{{>view_report_header_mustache}}
+		
+		<div class="page">
+			<div class="row">
+				<div name="invoice_address" class="col-xs-5 col-xs-offset-7">
+					{{#partner_id}}
+						{{>view_report_address_mustache}}
+					{{/partner_id}}
+					{{#partner_id.vat}}<span>TIN: {{partner_id.vat}}</span>{{/partner_id.vat}}
+				</div>
+			</div>
+
+			<h2>
+				<span>{{display_title}}</span>
+				{{number}}
+			</h2>
+			
+			<div class="row mt32 mb32">
+				{{#name}}
+				<div class="col-xs-2">
+					<strong>Description:</strong>
+					<p>{{.}}</p>
+				</div>
+				{{/name}}
+				{{#date_invoice}}
+				<div class="col-xs-2">
+					<strong>Invoice Date:</strong>
+					<p>{{.}}</p>
+				</div>
+				{{/date_invoice}}
+				{{#display_date_due}}
+				<div class="col-xs-2">
+					<strong>Due Date:</strong>
+					<p>{{date_due}}</p>
+				</div>
+				{{/display_date_due}}
+				{{#origin}}
+				<div class="col-xs-2">
+					<strong>Source:</strong>
+					<p>{{.}}</p>
+				</div>
+				{{/origin}}
+				{{#partner_id.ref}}
+				<div class="col-xs-2">
+					<strong>Customer Code:</strong>
+					<p>{{.}}</p>
+				</div>
+				{{/partner_id.ref}}
+				{{#reference}}
+				<div name="reference" class="col-xs-2">
+					<strong>Reference:</strong>
+					<p>{{.}}</p>
+				</div>
+				{{/reference}}
+			</div>
+
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>Description</th>
+						<th class="hidden">Source Document</th>
+						<th class="text-right">Quantity</th>
+						<th class="text-right">Unit Price</th>
+						{{#display_discount}}<th class="text-right">Disc.(%)</th>{{/display_discount}}
+						<th class="text-right">Taxes</th>
+						<th class="text-right">Tax Excluded Price</th>
+					</tr>
+				</thead>
+				<tbody class="invoice_tbody">
+					{{#invoice_line_ids}}
+					<tr>
+						<td><span>{{name}}</span></td>
+						<td class="hidden"><span>{{origin}}</span></td>
+						<td class="text-right">
+							<span>{{quantity}}</span>
+							<span>{{uom_id}}</span>
+						</td>
+						<td class="text-right">
+							<span>{{price_unit}}</span>
+						</td>
+						{{#display_discount}}
+						<td class="text-right">
+							<span>{{discount}}</span>
+						</td>
+						{{/display_discount}}
+						<td class="text-right">
+							<span>{{display_taxes}}</span>
+						</td>
+						<td class="text-right">
+							<span>{{price_subtotal}}</span>
+						</td>
+					</tr>
+					{{/invoice_line_ids}}
+				</tbody>
+			</table>
+
+			<div class="row">
+				<div class="col-xs-4 pull-right">
+					<table class="table table-condensed">
+						<tr class="border-black">
+							<td><strong>Subtotal</strong></td>
+							<td class="text-right">
+								<span>{{amount_untaxed}}</span>
+							</td>
+						</tr>
+						{{#display_tax_amount_grouped}}
+							<tr>
+								<td><span>{{name}}</span></td>
+								<td class="text-right">
+									<span>{{amount}}</span>
+								</td>
+							</tr>
+						{{/display_tax_amount_grouped}}
+						<tr class="border-black">
+							<td><strong>Total</strong></td>
+							<td class="text-right">
+								 <span>{{amount_total}}</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<!-- DO NOT REMOVE THIS TABLE. MANDATORY IN SOME COUNTRIES -->
+			{{#tax_line_ids.length}}
+			<div class="row">
+				<div class="col-xs-6">
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>Tax</th>
+								<th class="text-right">Base</th>
+								<th class="text-right">Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#tax_line_ids}}
+							<tr>
+								<td><span>{{tax_id.description}}</span></td>
+								<td class="text-right">
+									<span>{{base}}</span>
+								</td>
+								<td class="text-right">
+									<span>{{amount}}</span>
+								</td>
+							</tr>
+							{{/tax_line_ids}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			{{/tax_line_ids.length}}
+
+			{{#comment}}
+			<p>
+				<strong>Comment:</strong>
+				<span>{{.}}</span>
+			</p>
+			{{/comment}}
+			{{#payment_term_id}}
+			<p>
+				<strong>Comment:</strong>
+				<span>{{note}}</span>
+			</p>
+			{{/payment_term_id}}
+			{{#fiscal_position_id.note}}
+			<p>
+				<strong>Comment:</strong>
+				<span>{{.}}</span>
+			</p>
+			{{/fiscal_position_id.note}}
+		</div>
+		
+		{{>view_report_footer_mustache}}
+	{{/docs}}
+</t>
+			</field>
+		</record>
+
+<record id="view_report_address_mustache" model="ir.ui.view"> <!-- l'id completo sarà nomemodulo.xxx -->
+			<field name="name">view_report_address_mustache</field>
+			<field name="model">res.partner</field>	
+			<field name="type">mustache</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+</t>
+			</field>
+		</record>
+		
+<record id="view_report_address_mustache" model="ir.ui.view"> <!-- l'id completo sarà nomemodulo.xxx -->
+			<field name="name">view_report_header_mustache</field>
+			<field name="type">mustache</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+	SOME BEAUTIFUL HEADER HERE
+</t>
+			</field>
+		</record>
+		
+<record id="view_report_address_mustache" model="ir.ui.view"> <!-- l'id completo sarà nomemodulo.xxx -->
+			<field name="name">view_report_footer_mustache</field>
+			<field name="type">mustache</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+	SOME BEAUTIFUL FOOTER HERE
+</t>
+			</field>
+		</record>
+		
+        <report 
+            id="report_invoice_mustache"
+            model="account.invoice"
+            string="Invoices (Mustache version)"
+            report_type="qweb-pdf"
+            name="view_mustache.view_report_invoice_mustache"
+            file="view_mustache.view_report_invoice_mustache"
+            attachment_use="True"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+        />
+</odoo>

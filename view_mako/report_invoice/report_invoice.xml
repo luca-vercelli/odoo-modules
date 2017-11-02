@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- examples of views (may depend on other modules!) -->
+
+<!--
+What I have lost:
+report.html_container
+t-lang="o.partner_id.lang"
+<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+<span t-field="l.uom_id"  groups="product.group_uom"/>
+<span t-field="l.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+
+-->
+		<record id="view_invoice_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
+			<field name="name">view_invoice_mako</field>
+			<field name="model">account.invoice</field>	
+			<field name="type">mako</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+	%for doc in docs:
+		<div class="page">
+		{{>view_header_mako}}
+			<div class="row">
+				<div name="invoice_address" class="col-xs-5 col-xs-offset-7">
+					{{>view_address_mako}}
+					% if doc.partner_id.vat:
+					<span>TIN: ${doc.partner_id.vat}</span>
+					% endif
+				</div>
+			</div>
+
+			<h2>
+				<span>${report.display_title(doc)}</span>
+				${doc.number or ''}
+			</h2>
+			
+			<div class="row mt32 mb32">
+				% if doc.name:
+				<div class="col-xs-2">
+					<strong>Description:</strong>
+					<p>${doc.name}</p>
+				</div>
+				% endif
+				% if doc.date_invoice:
+				<div class="col-xs-2">
+					<strong>Invoice Date:</strong>
+					<p>${doc.date_invoice}</p>
+				</div>
+				% endif
+				% if report.display_date_due(doc):
+				<div class="col-xs-2">
+					<strong>Due Date:</strong>
+					<p>${doc.date_due}</p>
+				</div>
+				% endif
+				% if doc.origin:
+				<div class="col-xs-2">
+					<strong>Source:</strong>
+					<p>${doc.origin}</p>
+				</div>
+				% endif
+				% if doc.partner_id.ref:
+				<div class="col-xs-2">
+					<strong>Customer Code:</strong>
+					<p>${doc.partner_id.ref}</p>
+				</div>
+				% endif
+				% if doc.reference:
+				<div name="reference" class="col-xs-2">
+					<strong>Reference:</strong>
+					<p>${doc.reference}</p>
+				</div>
+				% endif
+			</div>
+
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>Description</th>
+						<th class="hidden">Source Document</th>
+						<th class="text-right">Quantity</th>
+						<th class="text-right">Unit Price</th>
+						% if report.display_discount(doc):
+						<th class="text-right">Disc.(%)</th>
+						% endif
+						<th class="text-right">Taxes</th>
+						<th class="text-right">Tax Excluded Price</th>
+					</tr>
+				</thead>
+				<tbody class="invoice_tbody">
+					% for l in doc.invoice_line_ids:
+					<tr>
+						<td><span>${l.name}</span></td>
+						<td class="hidden"><span>${l.origin}</span></td>
+						<td class="text-right">
+							<span>${l.quantity}</span>
+							<span>${l.uom_id}</span>
+						</td>
+						<td class="text-right">
+							<span>${currency(l.price_unit)}</span>
+						</td>
+						% if report.display_discount:
+						<td class="text-right">
+							<span>${l.discount}}</span>
+						</td>
+						% endif
+						<td class="text-right">
+							<span>${report.display_taxes(l)}</span>
+						</td>
+						<td class="text-right">
+							<span>${l.price_subtotal}</span>
+						</td>
+					</tr>
+					% endfor
+				</tbody>
+			</table>
+
+			<div class="row">
+				<div class="col-xs-4 pull-right">
+					<table class="table table-condensed">
+						<tr class="border-black">
+							<td><strong>Subtotal</strong></td>
+							<td class="text-right">
+								<span>${doc.amount_untaxed}</span>
+							</td>
+						</tr>
+						% for l in report.display_tax_amount_grouped(doc):
+							<tr>
+								<td><span>${l.name}</span></td>
+								<td class="text-right">
+									<span>${l.amount}</span>
+								</td>
+							</tr>
+						% endfor
+						<tr class="border-black">
+							<td><strong>Total</strong></td>
+							<td class="text-right">
+								 <span>${doc.amount_total}</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<!-- DO NOT REMOVE THIS TABLE. MANDATORY IN SOME COUNTRIES -->
+			% if len(doc.tax_line_ids):
+			<div class="row">
+				<div class="col-xs-6">
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>Tax</th>
+								<th class="text-right">Base</th>
+								<th class="text-right">Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							% for l in doc.tax_line_ids:
+							<tr>
+								<td><span>${l.tax_id.description}</span></td>
+								<td class="text-right">
+									<span>${l.base}</span>
+								</td>
+								<td class="text-right">
+									<span>${l.amount}</span>
+								</td>
+							</tr>
+							% endfor
+						</tbody>
+					</table>
+				</div>
+			</div>
+			% endif
+
+			% if doc.comment:
+			<p>
+				<strong>Comment:</strong>
+				<span>${doc.comment}</span>
+			</p>
+			% endif
+			% if doc.fiscal_position_id.note:
+			<p>
+				<strong>Comment:</strong>
+				<span>${doc.fiscal_position_id.note}</span>
+			</p>
+			% endif
+		</div>
+		
+		{{>view_footer_mako}}
+	% endfor
+</t>
+			</field>
+		</record>
+
+<record id="view_address_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
+			<field name="name">view_address_mako</field>
+			<field name="model">res.partner</field>	
+			<field name="type">mako</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+</t>
+			</field>
+		</record>
+		
+<record id="view_header_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
+			<field name="name">view_header_mako</field>
+			<field name="model">res.partner</field>	<!-- compulsory but useless -->
+			<field name="type">mako</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+	SOME BEAUTIFUL HEADER HERE
+</t>
+			</field>
+		</record>
+		
+<record id="view_footer_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
+			<field name="name">view_footer_mako</field>
+			<field name="model">res.partner</field>		<!-- compulsory but useless -->
+			<field name="type">mako</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+	SOME BEAUTIFUL FOOTER HERE
+</t>
+			</field>
+		</record>
+		
+         <!-- Report ID and view ID are obviously different! -->
+        <report 
+            id="report_invoice_mako"
+            model="account.invoice"
+            string="Invoices (Mako version)"
+            report_type="qweb-pdf"
+            name="view_mako.view_invoice_mako"
+            file="view_mako.view_invoice_mako"
+            attachment_use="True"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+        />
+</odoo>
