@@ -5,13 +5,15 @@
 
 <!--
 What I have lost:
-report.html_container
+report.html_container/report.layout
 t-lang="o.partner_id.lang"
 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
 <span t-field="l.uom_id"  groups="product.group_uom"/>
 <span t-field="l.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
 
 -->
+
+<!-- this first template is really ugly -->
 		<record id="view_invoice_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
 			<field name="name">view_invoice_mako</field>
 			<field name="model">account.invoice</field>	
@@ -19,12 +21,24 @@ t-lang="o.partner_id.lang"
 			<field eval="8" name="priority"/>
 			<field name="arch" type="xml">
 <t>
+${render('view_mako.view_external_html_mako',content=render('view_mako.view_invoice_document_mako'))}
+</t>
+			</field>
+		</record>
+
+		<record id="view_invoice_document_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
+			<field name="name">view_invoice_document_mako</field>
+			<field name="model">account.invoice</field>	
+			<field name="type">mako</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
 	%for doc in docs:
+${render('view_mako.view_header_mako',company=(doc.company_id or res_company))}
 		<div class="page">
-		{{>view_header_mako}}
 			<div class="row">
 				<div name="invoice_address" class="col-xs-5 col-xs-offset-7">
-					{{>view_address_mako}}
+					${render('view_mako.view_address_mako',partner=doc.partner_id)}
 					% if doc.partner_id.vat:
 					<span>TIN: ${doc.partner_id.vat}</span>
 					% endif
@@ -46,7 +60,7 @@ t-lang="o.partner_id.lang"
 				% if doc.date_invoice:
 				<div class="col-xs-2">
 					<strong>Invoice Date:</strong>
-					<p>${doc.date_invoice}</p>
+					<p>${date(doc.date_invoice)}</p>
 				</div>
 				% endif
 				% if report.display_date_due(doc):
@@ -95,13 +109,13 @@ t-lang="o.partner_id.lang"
 						<td><span>${l.name}</span></td>
 						<td class="hidden"><span>${l.origin}</span></td>
 						<td class="text-right">
-							<span>${l.quantity}</span>
-							<span>${l.uom_id}</span>
+							<span>${number(l.quantity)}</span>
+							<!--FIXME uom_id -->
 						</td>
 						<td class="text-right">
 							<span>${currency(l.price_unit)}</span>
 						</td>
-						% if report.display_discount:
+						% if report.display_discount(doc):
 						<td class="text-right">
 							<span>${l.discount}}</span>
 						</td>
@@ -110,7 +124,7 @@ t-lang="o.partner_id.lang"
 							<span>${report.display_taxes(l)}</span>
 						</td>
 						<td class="text-right">
-							<span>${l.price_subtotal}</span>
+							<span>${currency(l.price_subtotal)}</span>
 						</td>
 					</tr>
 					% endfor
@@ -123,21 +137,21 @@ t-lang="o.partner_id.lang"
 						<tr class="border-black">
 							<td><strong>Subtotal</strong></td>
 							<td class="text-right">
-								<span>${doc.amount_untaxed}</span>
+								<span>${currency(doc.amount_untaxed)}</span>
 							</td>
 						</tr>
 						% for l in report.display_tax_amount_grouped(doc):
 							<tr>
-								<td><span>${l.name}</span></td>
+								<td><span>${l['name']}</span></td>
 								<td class="text-right">
-									<span>${l.amount}</span>
+									<span>${currency(l['amount'])}</span>
 								</td>
 							</tr>
 						% endfor
 						<tr class="border-black">
 							<td><strong>Total</strong></td>
 							<td class="text-right">
-								 <span>${doc.amount_total}</span>
+								 <span>${currency(doc.amount_total)}</span>
 							</td>
 						</tr>
 					</table>
@@ -161,10 +175,10 @@ t-lang="o.partner_id.lang"
 							<tr>
 								<td><span>${l.tax_id.description}</span></td>
 								<td class="text-right">
-									<span>${l.base}</span>
+									<span>${currency(l.base)}</span>
 								</td>
 								<td class="text-right">
-									<span>${l.amount}</span>
+									<span>${currency(l.amount)}</span>
 								</td>
 							</tr>
 							% endfor
@@ -187,48 +201,163 @@ t-lang="o.partner_id.lang"
 			</p>
 			% endif
 		</div>
-		
-		{{>view_footer_mako}}
+		${render('view_mako.view_footer_mako',company=(doc.company_id or res_company))}
 	% endfor
 </t>
 			</field>
 		</record>
 
+<!-- FIXME This is naive w.r.t. standard address widget -->
 <record id="view_address_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
 			<field name="name">view_address_mako</field>
 			<field name="model">res.partner</field>	
 			<field name="type">mako</field>	
 			<field eval="8" name="priority"/>
 			<field name="arch" type="xml">
-<t>
-</t>
+<div>
+<address class="mb0" itemscope="itemscope" itemtype="http://schema.org/Organization">
+  <div>
+	<span>${partner.name}</span>
+  </div>
+  <div>
+	<span>
+	${partner.street}<br/>
+% if partner.street2:
+	${partner.street2}<br/>
+% endif
+% if partner.zip_id:
+	${partner.zip_id.name}
+% endif 
+	${partner.city}
+% if partner.state_id.name:
+	(${partner.state_id.name})
+% endif
+	</span>
+  </div>
+</address>
+</div>
 			</field>
 		</record>
 		
 <record id="view_header_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
 			<field name="name">view_header_mako</field>
-			<field name="model">res.partner</field>	<!-- compulsory but useless -->
+			<field name="model">res.company</field>
 			<field name="type">mako</field>	
 			<field eval="8" name="priority"/>
 			<field name="arch" type="xml">
 <t>
-	SOME BEAUTIFUL HEADER HERE
+    <div class="header">
+        <div class="row">
+            <div class="col-xs-3">
+				% if company.logo:
+                <img src="data:image/png;base64,${b64encode(company.logo)}" style="max-height: 45px;"/>
+				% endif
+            </div>
+            <div class="col-xs-9 text-right" style="margin-top:20px;" >${(company.rml_header1 and company.rml_header1.encode('ascii','replace')) or ''}</div> <!-- FIXME ASCII ?!?!?!?!? -->
+        </div>
+        <div class="row zero_min_height">
+            <div class="col-xs-12">
+                <div style="border-bottom: 1px solid black;"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6" name="company_address">
+				${render('view_mako.view_address_mako', partner=company.partner_id)}
+            </div>
+        </div>
+    </div>
 </t>
 			</field>
 		</record>
 		
 <record id="view_footer_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
 			<field name="name">view_footer_mako</field>
-			<field name="model">res.partner</field>		<!-- compulsory but useless -->
+			<field name="model">res.company</field>
 			<field name="type">mako</field>	
 			<field eval="8" name="priority"/>
 			<field name="arch" type="xml">
 <t>
-	SOME BEAUTIFUL FOOTER HERE
+    <div class="footer">
+        <div class="text-center" style="border-top: 1px solid black;">
+            <ul t-if="not company.custom_footer" class="list-inline">
+                <!--t t-set="company" t-value="company.sudo()"/-->
+				% if company.phone:
+                <li>Phone: <span>${company.phone}</span></li>
+				% endif
+				% if company.fax and company.phone:
+                <li>*</li>								<!-- FIXME why &bull; is not accepted ?!? -->
+				% endif
+				% if company.fax:
+                <li>Fax: <span>${company.fax}</span></li>
+				% endif
+				% if company.email and company.fax or company.email and company.phone:
+                <li>*</li>
+				% endif
+				% if company.email:
+                <li>Email: <span>${company.email}</span></li>
+				% endif
+				% if company.website and company.email or company.website and company.fax or company.website and company.phone:
+                <li>*</li>
+				% endif
+				% if company.website:
+                <li>Website: <span>${company.website}</span></li>
+				% endif
+            </ul>
+			
+			%if not company.custom_footer:
+            <ul class="list-inline" name="financial_infos">
+				% if company.vat:
+                <li>TIN: <span>${company.vat}</span></li>
+				% endif
+            </ul>
+			% endif
+			
+			%if company.custom_footer:
+            <span>${company.rml_footer}</span>
+			%endif
+			
+            <ul class="list-inline">
+                <li>Page:</li>
+                <li><span class="page"/></li>
+                <li>/</li>
+                <li><span class="topage"/></li>
+            </ul>
+        </div>
+    </div>      
 </t>
 			</field>
 		</record>
+
+
 		
+<record id="view_external_html_mako" model="ir.ui.view"> <!-- I STRONGLY SUGGEST id=name -->
+			<field name="name">view_external_html_mako</field>
+			<field name="model">res.company</field>
+			<field name="type">mako</field>	
+			<field eval="8" name="priority"/>
+			<field name="arch" type="xml">
+<t>
+    <html>
+        <head>
+            <meta charset="utf-8"/>
+            <meta name="viewport" content="initial-scale=1"/>
+            <title>Odoo Report</title>
+            
+			<!-- cfr. view report.layout-->
+            
+        </head>
+        <body class="container">
+            <div id="wrapwrap">
+                <main>
+				${content}
+                </main>
+            </div>
+        </body>
+    </html>
+</t>
+			</field>
+		</record>
+
          <!-- Report ID and view ID are obviously different! -->
         <report 
             id="report_invoice_mako"

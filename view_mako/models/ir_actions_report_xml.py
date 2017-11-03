@@ -7,7 +7,7 @@ class ir_actions_report(models.Model):
 
 	def allowed_associated_view_types(self):
 		"""
-		Return list of view types allowed for association with reports (e.g. 'qweb', 'mustache', ...)
+		Return list of view types allowed for association with reports (e.g. 'qweb', 'mako', 'mustache', ...)
 		"""
 		try:
 			viewtypes = super(ir_actions_report, self).allowed_associated_view_types()
@@ -20,7 +20,7 @@ class ir_actions_report(models.Model):
 	@api.multi
 	def associated_view(self):
 		"""
-		Override to include "Mustache" type
+		Override to include "Mako" type
 		
 		Unluckily, I had to completely override this method, without calling super().
 		"""
