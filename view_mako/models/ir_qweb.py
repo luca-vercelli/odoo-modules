@@ -62,7 +62,7 @@ class Engine(models.AbstractModel):
 				return view_id[0]
 		
 		return None
-		
+
 	def _extend_values(self, values):
 		"""
 		Extend values with interesting functions.
@@ -80,7 +80,7 @@ class Engine(models.AbstractModel):
 			#FIXME which locale ???
 			import locale
 			return locale.format("%.2g", q, grouping=True)
-		values['number'] = currency
+		values['number'] = number
 
 		def date(date):
 			#FIXME which locale ???
@@ -130,7 +130,7 @@ class Engine(models.AbstractModel):
 			return rendered
 		values['render'] = render
 
-		def b64encode(data):			# DOES NOT WORK
+		def b64encode(data):
 			import base64
 			return base64.b64encode(data)
 		values['b64encode'] = b64encode

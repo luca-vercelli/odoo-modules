@@ -26,14 +26,14 @@ t-lang="o.partner_id.lang"
 			<div class="row">
 				<div name="invoice_address" class="col-xs-5 col-xs-offset-7">
 					{{#partner_id}}
-						{{>view_report_address_mustache}}
+						{{>view_mustache.view_report_address_mustache}}
 					{{/partner_id}}
 					{{#partner_id.vat}}<span>TIN: {{partner_id.vat}}</span>{{/partner_id.vat}}
 				</div>
 			</div>
 
 			<h2>
-				<span>{{display_title}}</span>
+				<span>{{report.display_title}}</span>
 				{{number}}
 			</h2>
 			
@@ -95,7 +95,7 @@ t-lang="o.partner_id.lang"
 						<td class="hidden"><span>{{origin}}</span></td>
 						<td class="text-right">
 							<span>{{quantity}}</span>
-							<span>{{uom_id}}</span>
+							<!-- TODO UOM -->
 						</td>
 						<td class="text-right">
 							<span>{{price_unit}}</span>
@@ -193,7 +193,7 @@ t-lang="o.partner_id.lang"
 			{{/fiscal_position_id.note}}
 		</div>
 		
-		{{>view_report_footer_mustache}}
+		{{>view_mustache.view_report_footer_mustache}}
 	{{/docs}}
 </t>
 			</field>
@@ -205,14 +205,35 @@ t-lang="o.partner_id.lang"
 			<field name="type">mustache</field>	
 			<field eval="8" name="priority"/>
 			<field name="arch" type="xml">
-<t>
-</t>
+<div>
+<address class="mb0" itemscope="itemscope" itemtype="http://schema.org/Organization">
+  <div>
+	<span>{{partner.name}}</span>
+  </div>
+  <div>
+	<span>
+	{{partner.street}}<br/>
+{{#partner.street2}}
+	{{partner.street2}}<br/>
+{{/partner.street2}}
+{{#partner.zip_id}}
+	{{partner.zip_id.name}}
+{{/partner.zip_id}}
+	{{partner.city}}
+{{#partner.state_id}}
+	{{partner.zip_id.name}}
+{{/partner.state_id}}
+	</span>
+  </div>
+</address>
+</div>
 			</field>
 		</record>
 		
-<record id="view_report_address_mustache" model="ir.ui.view"> <!-- l'id completo sarà nomemodulo.xxx -->
+<record id="view_report_header_mustache" model="ir.ui.view"> <!-- l'id completo sarà nomemodulo.xxx -->
 			<field name="name">view_report_header_mustache</field>
-			<field name="type">mustache</field>	
+			<field name="type">mustache</field>
+			<field name="model">res.company</field>	
 			<field eval="8" name="priority"/>
 			<field name="arch" type="xml">
 <t>
@@ -224,6 +245,7 @@ t-lang="o.partner_id.lang"
 <record id="view_report_address_mustache" model="ir.ui.view"> <!-- l'id completo sarà nomemodulo.xxx -->
 			<field name="name">view_report_footer_mustache</field>
 			<field name="type">mustache</field>	
+			<field name="model">res.company</field>	
 			<field eval="8" name="priority"/>
 			<field name="arch" type="xml">
 <t>

@@ -229,7 +229,7 @@ ${render('view_mako.view_header_mako',company=(doc.company_id or res_company))}
 	${partner.zip_id.name}
 % endif 
 	${partner.city}
-% if partner.state_id.name:
+% if partner.state_id:
 	(${partner.state_id.name})
 % endif
 	</span>

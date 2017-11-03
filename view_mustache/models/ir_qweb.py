@@ -7,29 +7,38 @@ _logger = logging.getLogger(__name__)
 
 try:
 	import pystache
-	import re
-	import Queue
 	import set
 except:
 	pass
 
-class ViewDict(dict):
+class PartialsDict(dict):
 	"""
 	This dict search keys in the ir.ui.view table, too.
-	Keys that are not found are stored in self._unknownKeys for better performance.
+	For each key, the DB is queried only once:
+	keys that are found on DB are stored in this dict,
+	keys that are not found on DB are stored in self._unknownKeys
 	"""
 	_unknownKeys = set()
 
+	def __init__(self, engine):
+		self.engine = engine
+		super(PartialsDict, self).__init__()
+
 	def __getitem__(self, key):
+	
+	
+		_logger.warn("SONO QUA!!! key=" + str(key))
+		
+		
 		if key in self._unknownKeys:
 			raise KeyError(key)
 		try:
-			return super(ViewDict, self).__getitem__(self, key)
+			return super(PartialsDict, self).__getitem__(key)
 		except KeyError:
-			view_id = Engine._find_mustache_template(key)
-			if view_id is not None:
-				self[key] = view_id.arch
-				return view_id.arch
+			view_arch = self.engine._find_mustache_template(key)
+			if view_arch is not None:
+				self[key] = view_arch
+				return view_arch
 			else:
 				self._unknownKeys.add(key)
 				raise KeyError(key)
@@ -37,7 +46,14 @@ class ViewDict(dict):
 	def __putitem__(self, key, value):	
 		if key in self._unknownKeys:
 			self._unknownKeys.remove(key)
-		return super(ViewDict, self).__putitem__(self, key, value)
+		return super(PartialsDict, self).__putitem__(key, value)
+	
+	def get(self, key, defaultval=None):
+		try:
+			return self[key]
+		except KeyError:
+			return defaultval
+
 
 #see base/ir/ir_qweb/ir_qweb.py
 class Engine(models.AbstractModel):
@@ -60,24 +76,24 @@ class Engine(models.AbstractModel):
 			  profile line with time ms >= profile)
 		"""
 		
-		view_id = self._find_mustache_template(id_or_xml_id)
-		if view_id is not None:
+		view_arch = self._find_mustache_template(id_or_xml_id)
+		if view_arch is not None:
 		
 				# only in this case, render using Pystache
-				
-				templates = self._load_other_templates(view_id.name, view_id.arch)
 				if values is None:
 					values = {}
+				self._extend_values(values)
 				
-				values.update(templates)
-				
-				return pystache.render(view_id.arch, values)	#ignore **options
+				renderer = pystache.Renderer(partials=PartialsDict(self))	#ignore **options
+				return renderer.render(view_arch, values)
 		
 		# In all other cases, render with super()
 		return super(Engine, self).render(id_or_xml_id, values, **options)
 
 	def _find_mustache_template(self, id_or_xml_id):
-	
+		"""
+		Return view_id.arch, with some modifications
+		"""
 		view_id = None
 		
 		if isinstance(id_or_xml_id, ( int, long ) ):
@@ -88,39 +104,64 @@ class Engine(models.AbstractModel):
 		
 		if (view_id is not None) and (len(view_id) == 1) :
 			if view_id[0].type and view_id[0].type == "mustache":
-				return view_id[0]
+				if not view_id[0].arch:
+					return ''
+				else:
+					return view_id[0].arch.replace("{{&gt;","{{>").replace("<t>","").replace("</t>","")
 		
 		return None
-		
-	def _load_other_templates(self, template_name, template_arch):
-		"""
-		Find and return all sub-templates that are required by 'template'.
-		
-		Another possibility is to tell pystache how to find templates ... 
-		
-		@return dict template names -> template archs
-		"""
-		
-		return {}
-		
-	#	MATCHER = "{{>[^}]*}}"
-	#	all_template_names = [template_name]
-	#	all_template_archs = [template_arch]
-	#	queue = Queue()
-	#	queue.put(template_name)
-	#	
-	#	while not queue.empty():
-	#		try:
-	#			cur_template_name = queue.get()
-	#			cur_template = self._find_mustache_template(cur_template_name)
-	#			if 
-	#			
-	#			cur_dep_names = re.findall(MATCHER, template)
-	#			cur_dep_names = [ dep for dep in cur_deps if dep not in all_templates]
-	#			for dep in cur_deps:
-	#				view_id = self._find_mustache_template(dep)
-	#				
-	#				
-	#			all_templates.extend(cur_deps)
-				
 
+	def _extend_values(self, values):
+		"""
+		Extend values with interesting functions.
+		@param values must be a dict, not None.
+		"""
+		engine = self
+		
+		def currency(amount):
+			#FIXME which locale ???
+			import locale
+			return locale.format("%.2f", float(amount), grouping=True)
+		values['fmt_currency'] = currency
+
+		def number(q):
+			#FIXME which locale ???
+			import locale
+			return locale.format("%.2g", float(q), grouping=True)
+		values['fmt_number'] = number
+
+		def date(date):
+			#FIXME which locale ???
+			try:
+				return date.strftime('%x')
+			except AttributeError:
+				# got a string instead of a datetime? Let's hope it's in default format.
+				import datetime
+				return datetime.datetime.strptime(str(date),'%Y-%m-%d').strftime('%x')
+		values['fmt_date'] = date
+
+		def time(time):
+			#FIXME which locale ???
+			try:
+				return time.strftime('%X')
+			except AttributeError:
+				# got a string instead of a datetime? Let's hope it's in default format.
+				import datetime
+				return datetime.datetime.strptime(str(time),'%H:%M:%S').strftime('%X')
+		values['fmt_time'] = time
+
+		def datetime(datetime):
+			#FIXME which locale ???
+			try:
+				return datetime.strftime('%x %X')
+			except AttributeError:
+				# got a string instead of a datetime? Let's hope it's in default format.
+				import datetime
+				return datetime.datetime.strptime(str(datetime),'%Y-%m-%d %H:%M:%S').strftime('%x %X')
+		values['fm_datetime'] = datetime
+
+		def b64encode(data):
+			import base64
+			return base64.b64encode(data)
+		values['fmt_b64encode'] = b64encode
+		
