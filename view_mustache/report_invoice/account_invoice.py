@@ -6,32 +6,74 @@ from odoo.addons import account
 import logging
 _logger = logging.getLogger(__name__)
 
-
+class FakeDict(dict):
+    def __init__(self, orig_dict={}):
+        super(FakeDict, self).__init__(orig_dict)
+    
+    def __getitem__(self, key):
+        try:
+            return super(FakeDict, self).__getitem__(key)
+        except KeyError:
+            if self.__hasattr__(key):
+                return self.display_title()    #FIXME ma con che contesto????
+            else:
+                raise KeyError(key)
+    
+    def display_title(self, invoice):
+        
+        _logger.info("QUI STO LEGGENDO display_title dal dict")
+        
+        return "TODO"
+    
+    
 class ReportAccountInvoice(models.AbstractModel):
     """
     Printing logic
     
-    Mako, as qweb, allows us to put logic directly inside report, however we think that's *bad*.
+    Extend invoice with missing attributes.
+    
+    Format all fields as required...
+    
     """
-    _name = 'report.view_mako.view_invoice_mako'    #MUST BE: report.<module name>.<report view name (=ID)>
-
+    _name = 'report.view_mustache.view_invoice_mustache'    #MUST BE: report.<module name>.<report view name (=ID)>
+    
     @api.model
     def render_html(self, docids, data=None):
-        report_name = 'view_mako.view_invoice_mako' #MUST BE: <module name>.<report view name (=ID)>
+        report_name = 'view_mustache.view_invoice_mustache' #MUST BE: <module name>.<report view name (=ID)>
         report_env = self.env['report']
         report = report_env._get_report_from_name(report_name)
-        #CHECK data is a dict, isn't it?
+        
+        orig_docs = self.env['account.invoice'].browse(docids)
+        docs = []
+        
+        #import pdb
+        #pdb.set_trace()
+
+        for doc in orig_docs:
+            #avoid undesired DB updates
+            doc.write = lambda self,data: self
+            
+            #doc.number = (doc.number or '')	#errore col lambda nel __set__
+            doc.display_title = self.display_title(doc)
+            doc.display_date_due = self.display_date_due(doc)
+            doc.display_discount = self.display_discount(doc)
+            doc.display_tax_amount_grouped = self.display_tax_amount_grouped(doc)
+            #doc_line.display_taxes = self.display_taxes(doc_line)
+            docs.append(doc)
+        
         docargs = {
             'doc_ids': docids,
             'doc_model': report.model,
-            'docs' : self.env['account.invoice'].browse(docids),
-            'report': self,
+            'docs' : docs,         #self.env['account.invoice'].browse(docids),
+            'company': self.env.user.company_id        # needed by hewader / footer partials
         }
         
         return report_env.render(report_name, docargs)
 
     def display_title(self, invoice):
         
+        _logger.info("QUI STO LEGGENDO _display_title")
+
         if invoice.type == 'out_invoice':
             #FIXME is there some kind of "switch" in Python?
             if invoice.state == 'open' or invoice.state == 'paid':
