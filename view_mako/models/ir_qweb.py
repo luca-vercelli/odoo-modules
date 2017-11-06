@@ -73,13 +73,19 @@ class Engine(models.AbstractModel):
 		def currency(amount):
 			#FIXME which locale ???
 			import locale
-			return locale.format("%.2f", amount, grouping=True)
+			try:
+				return locale.format("%.2f", amount, grouping=True)
+			except:
+				return ""
 		values['currency'] = currency
 
 		def number(q):
 			#FIXME which locale ???
 			import locale
-			return locale.format("%.2g", q, grouping=True)
+			try:
+				return locale.format("%.2g", q, grouping=True)
+			except:
+				return ""
 		values['number'] = number
 
 		def date(date):
@@ -89,7 +95,10 @@ class Engine(models.AbstractModel):
 			except AttributeError:
 				# got a string instead of a datetime? Let's hope it's in default format.
 				import datetime
-				return datetime.datetime.strptime(str(date),'%Y-%m-%d').strftime('%x')
+				try:
+					return datetime.datetime.strptime(str(date),'%Y-%m-%d').strftime('%x')
+				except:
+					return ""
 		values['date'] = date
 
 		def time(time):
@@ -99,7 +108,10 @@ class Engine(models.AbstractModel):
 			except AttributeError:
 				# got a string instead of a datetime? Let's hope it's in default format.
 				import datetime
-				return datetime.datetime.strptime(str(time),'%H:%M:%S').strftime('%X')
+				try:
+					return datetime.datetime.strptime(str(time),'%H:%M:%S').strftime('%X')
+				except:
+					return ""
 		values['time'] = time
 
 		def datetime(datetime):
@@ -109,7 +121,10 @@ class Engine(models.AbstractModel):
 			except AttributeError:
 				# got a string instead of a datetime? Let's hope it's in default format.
 				import datetime
-				return datetime.datetime.strptime(str(datetime),'%Y-%m-%d %H:%M:%S').strftime('%x %X')
+				try:
+					return datetime.datetime.strptime(str(datetime),'%Y-%m-%d %H:%M:%S').strftime('%x %X')
+				except:
+					return ""
 		values['datetime'] = datetime
 
 		def render(template_external_id, **more_values):
@@ -132,7 +147,13 @@ class Engine(models.AbstractModel):
 
 		def b64encode(data):
 			import base64
-			return base64.b64encode(data)
+			try:
+				return base64.b64encode(data)
+			except TypeError:
+				try:
+					return base64.b64encode(str(data))
+				except:
+					return ""
 		values['b64encode'] = b64encode
 
 

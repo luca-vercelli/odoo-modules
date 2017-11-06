@@ -250,7 +250,7 @@ ${render('view_mako.view_header_mako',company=(doc.company_id or res_company))}
         <div class="row">
             <div class="col-xs-3">
 				% if company.logo:
-                <img src="data:image/png;base64,${b64encode(company.logo)}" style="max-height: 45px;"/>
+                <img src="data:image/png;base64,${company.logo}" style="max-height: 45px;"/>
 				% endif
             </div>
             <div class="col-xs-9 text-right" style="margin-top:20px;" >${(company.rml_header1 and company.rml_header1.encode('ascii','replace')) or ''}</div> <!-- FIXME ASCII ?!?!?!?!? -->
