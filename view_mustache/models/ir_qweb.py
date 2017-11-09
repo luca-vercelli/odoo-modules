@@ -32,6 +32,7 @@ class PartialsDict(dict):
 			return super(PartialsDict, self).__getitem__(key)
 		except KeyError:
 			view_arch = self.engine._find_mustache_template(key)
+			#_logger.info("SEARCHED key="+str(key)+ " FOUND?"+str(view_arch))
 			if view_arch is not None:
 				self[key] = view_arch
 				return view_arch

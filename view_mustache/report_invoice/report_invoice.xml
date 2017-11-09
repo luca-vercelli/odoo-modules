@@ -20,10 +20,9 @@ t-lang="o.partner_id.lang"
 			<field name="arch" type="xml">
 <t>
 	{{#docs}}
-		{{>view_mustache.view_header_mustache}}
-		
 		<div class="page">
-		
+		{{>view_mustache.view_header_mustache}}
+				
 			<div class="row">
 				<div name="invoice_address" class="col-xs-5 col-xs-offset-7">
 					{{#partner_id}}
@@ -192,9 +191,9 @@ t-lang="o.partner_id.lang"
 				<span>{{.}}</span>
 			</p>
 			{{/fiscal_position_id.note}}
+		{{>view_mustache.view_footer_mustache}}
 		</div>
 		
-		{{>view_mustache.view_footer_mustache}}
 	{{/docs}}
 </t>
 			</field>

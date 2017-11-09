@@ -1,40 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
-from odoo.addons import account
 
 import logging
 _logger = logging.getLogger(__name__)
 
-class FakeDict(dict):
-    def __init__(self, orig_dict={}):
-        super(FakeDict, self).__init__(orig_dict)
-    
-    def __getitem__(self, key):
-        try:
-            return super(FakeDict, self).__getitem__(key)
-        except KeyError:
-            if self.__hasattr__(key):
-                return self.display_title()    #FIXME ma con che contesto????
-            else:
-                raise KeyError(key)
-    
-    def display_title(self, invoice):
-        
-        _logger.info("QUI STO LEGGENDO display_title dal dict")
-        
-        return "TODO"
-    
-    
 class ReportAccountInvoice(models.AbstractModel):
-    """
-    Printing logic
-    
-    Extend invoice with missing attributes.
-    
-    Format all fields as required...
-    
-    """
     _name = 'report.view_mustache.view_invoice_mustache'    #MUST BE: report.<module name>.<report view name (=ID)>
     
     @api.model
@@ -43,23 +14,7 @@ class ReportAccountInvoice(models.AbstractModel):
         report_env = self.env['report']
         report = report_env._get_report_from_name(report_name)
         
-        orig_docs = self.env['account.invoice'].browse(docids)
-        docs = []
-        
-        #import pdb
-        #pdb.set_trace()
-
-        for doc in orig_docs:
-            #avoid undesired DB updates
-            doc.write = lambda self,data: self
-            
-            #doc.number = (doc.number or '')	#errore col lambda nel __set__
-            doc.display_title = self.display_title(doc)
-            doc.display_date_due = self.display_date_due(doc)
-            doc.display_discount = self.display_discount(doc)
-            doc.display_tax_amount_grouped = self.display_tax_amount_grouped(doc)
-            #doc_line.display_taxes = self.display_taxes(doc_line)
-            docs.append(doc)
+        docs = self.env['account.invoice'].browse(docids)
         
         docargs = {
             'doc_ids': docids,
@@ -68,42 +23,57 @@ class ReportAccountInvoice(models.AbstractModel):
             'company': self.env.user.company_id        # needed by hewader / footer partials
         }
         
+        _logger.info("HERE docargs="+str(docargs))
+
         return report_env.render(report_name, docargs)
 
-    def display_title(self, invoice):
-        
-        _logger.info("QUI STO LEGGENDO _display_title")
+class AccountInvoice(models.Model):
+    """
+    Printing logic
+    """
+    _inherit = 'account.invoice'
 
-        if invoice.type == 'out_invoice':
-            #FIXME is there some kind of "switch" in Python?
-            if invoice.state == 'open' or invoice.state == 'paid':
-                return "Invoice"
-            elif invoice.state == 'proforma2':
-                return "PRO-FORMA"
-            elif invoice.state == 'draft':
-                return "Draft Invoice"
-            elif invoice.state == 'cancel':
-                return "Cancelled Invoice"
-        elif invoice.type == 'in_refund':
-            return "Vendor Refund"
-        elif invoice.type == 'in_invoice':
-            return "Vendor Invoice"
-        else:
-            return None
+    display_title = fields.Char('Display title', compute='_display_title')
+    @api.depends('type','state')
+    def _display_title(self):
+        for invoice in self:
+            if invoice.type == 'out_invoice':
+                #FIXME is there some kind of "switch" in Python?
+                if invoice.state == 'open' or invoice.state == 'paid':
+                    invoice.display_title = "Invoice"
+                elif invoice.state == 'proforma2':
+                    invoice.display_title = "PRO-FORMA"
+                elif invoice.state == 'draft':
+                    invoice.display_title = "Draft Invoice"
+                elif invoice.state == 'cancel':
+                    invoice.display_title = "Cancelled Invoice"
+            elif invoice.type == 'in_refund':
+                invoice.display_title = "Vendor Refund"
+            elif invoice.type == 'in_invoice':
+               invoice.display_title = "Vendor Invoice"
+            else:
+                invoice.display_title = None
 
-    #FIXME function or computed field?
-    def display_date_due(self, invoice):
-        return invoice.date_due and invoice.type == 'out_invoice' and (invoice.state == 'open' or invoice.state == 'paid')
+    display_date_due = fields.Boolean('Display date due', compute='_display_date_due')
+    @api.depends('type','state', 'date_due')
+    def _display_date_due(self):
+        for invoice in self:
+            invoice.display_date_due = invoice.date_due and invoice.type == 'out_invoice' and (invoice.state == 'open' or invoice.state == 'paid')
 
-    def display_discount(self, invoice):
-        return any([l.discount for l in invoice.invoice_line_ids])
+    display_discount = fields.Boolean('Display discount', compute='_display_discount')
+    @api.depends('invoice_line_ids')
+    def _display_discount(self):
+        for invoice in self:
+            invoice.display_discount = any([l.discount for l in invoice.invoice_line_ids])
 
-    def display_taxes(self, invoice_line):
-        return ', '.join(map(lambda x: (x.description or x.name), invoice_line.invoice_line_tax_ids))
-
-    def display_tax_amount_grouped(self, invoice):
-
+    #FIXME this is not working
+    display_tax_amount_grouped = fields.One2many('Display taxes table',compute='_display_tax_amount_grouped')
+    @api.depends('tax_line_ids')
+    @api.one
+    def _display_tax_amount_grouped(self):
         #cfr. _get_tax_amount_by_group()
+
+        invoice = self
 
         map0 = {}
         for line in invoice.tax_line_ids:
@@ -117,4 +87,17 @@ class ReportAccountInvoice(models.AbstractModel):
         #FIXME I don't understand this: if len(o.tax_line_ids) > 1 else (o.tax_line_ids.tax_id.description or o.tax_line_ids.tax_id.name)
 
         return map1
+
+class AccountInvoiceLine(models.Model):
+    """
+    Printing logic
+    """
+    _inherit = 'account.invoice.line'
+
+    display_taxes = fields.Char('Display taxes', compute='_display_taxes')
+    @api.depends('invoice_line_tax_ids')
+    def display_taxes(self):
+        for invoice_line in self:
+            invoice_line.display_taxes = ', '.join(map(lambda x: (x.description or x.name), invoice_line.invoice_line_tax_ids))
+
 
