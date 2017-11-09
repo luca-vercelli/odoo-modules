@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from odoo.tests.common import TransactionCase
-#import ViewDict ?
+#import PartialsDict ?
 
 import logging
 _logger= logging.getLogger(__name__)
 
 _logger.info("mustache_view: Reading class " + __name__)
 
-class TestViewDict(TransactionCase):
+class TestPartialsDict(TransactionCase):
 
 	def setUp(self):
 		_logger.info("mustache_view: Fucking set up")
@@ -16,7 +16,7 @@ class TestViewDict(TransactionCase):
 	def test_normal_dict(self):
 		_logger.info("mustache_view: Running test 0 ")
 		raise Exception("fuck 0")
-		x = ViewDict()
+		x = PartialsDict()
 		x['a'] = 12345
 		try:
 			self.assertEqual(x['a'] , 12345)
@@ -32,7 +32,7 @@ class TestViewDict(TransactionCase):
 	def test_view_dict(self):
 		_logger.info("mustache_view: Running test 1 ")
 		raise Exception("fuck 1")
-		x = ViewDict()
+		x = PartialsDict()
 		try:
 			y = x['view_report_invoice_mustache']
 			self.faile("DEBUG y="+str(y))
