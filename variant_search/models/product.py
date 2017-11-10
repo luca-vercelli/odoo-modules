@@ -27,8 +27,7 @@ class ProductProductExt(models.Model):
 	WARNING: we lose the "customer" description.
 	"""
 	_inherit = 'product.product'
-	var_desc = fields.Char(comment='Variant description', compute='_compute_var_desc', store=True)
-	#var_desc = fields.Char(comment='Variant description', store=True)
+	var_desc = fields.Char('Variant description', compute='_compute_var_desc', store=True)
 	
 	@api.multi
 	def name_get(self):

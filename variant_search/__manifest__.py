@@ -31,6 +31,9 @@
     "depends": [
         "product",
     ],
+    'data': [
+        'views/views.xml',
+    ],
     "init_xml": [],
     "update_xml": [],
     "demo_xml": [],
