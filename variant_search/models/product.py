@@ -108,7 +108,7 @@ class ProductProductExt(models.Model):
 		
 		return super(ProductProductExt, self).name_search(name=name, args=args, operator=operator, limit=limit)
 	
-	@api.depends('attribute_value_ids')
+	@api.depends('attribute_value_ids', 'name')
 	def _compute_var_desc(self):
 		#FIXME can avoid loop?
 		for rec in self:
