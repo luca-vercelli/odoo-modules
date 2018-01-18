@@ -98,7 +98,7 @@
 			view_id="view_views_list"
 			/>
 
-		<menuitem id="db_manager" name="Database manager" parent="base.menu_custom" sequence="99" />
+		<menuitem id="db_manager" name="Database manager" parent="base.menu_custom" sequence="99" groups="group_db_manager" />
 		<menuitem id="sql_commander" name="SQL Execute" action="action_main_form"  parent="db_manager" sequence="1" />
 		<menuitem id="tables_list" name="Tables list" action="action_tables_list"  parent="db_manager" sequence="2" />
 		<menuitem id="views_list" name="Views list" action="action_views_list"  parent="db_manager" sequence="3" />

@@ -20,6 +20,8 @@
         "base"
     ],
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/create_views.sql',
     ],
