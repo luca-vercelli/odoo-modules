@@ -100,6 +100,7 @@ class ProductProductExt(models.Model):
 				search_domains = [('var_desc', operator, piece) for piece in pieces]
 			else:
 				search_domains = [('var_desc', operator, name)]
+			search_domains += args
 			_logger.debug('Qui domains=%s ', str(search_domains))
 			products = self.search(search_domains)
 			_logger.debug('Qui products=%s ', str(products))
