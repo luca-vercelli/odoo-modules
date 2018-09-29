@@ -3,7 +3,7 @@
 from odoo import api, fields, models
 
 class ir_actions_report(models.Model):
-	_inherit = 'ir.actions.report.xml'
+	_inherit = 'ir.actions.report'
 
 	def allowed_associated_view_types(self):
 		"""
