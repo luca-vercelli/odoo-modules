@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="tax_marca_da_bollo" model="account.tax">
+            <field name="name">Marca da bollo</field>
+            <field name="description">Marca da bollo</field>
+            <field name="amount_type">fixed</field>
+            <field name="amount">2.0</field>
+            <field name="marca_da_bollo">True</field>
+            <field name="sequence">999</field>
+            <field name="min_for_stamp">77.47</field>
+        </record>
+    </data>
+</openerp>
