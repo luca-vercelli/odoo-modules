@@ -6,7 +6,7 @@ from odoo.addons import product
 import logging
 _logger = logging.getLogger(__name__)
 
-class ProductAttributevalue(models.Model):
+class ProductAttributeValue(models.Model):
 	"""
 	This is a bugfix to Odoo 10.0
 	Categories should not be ordered alphabetically.
@@ -115,3 +115,23 @@ class ProductProductExt(models.Model):
 		for rec in self:
 			idAndName = rec.name_get()[0]
 			rec.var_desc = idAndName[1] if idAndName else None
+
+	@api.multi
+	def write(self, vals):
+		super(ProductProductExt, self).write(vals)
+		if 'name' in vals:
+			for rec in self:
+				for companion in self.env['product.product'].search([('product_tmpl_id','=',rec.product_tmpl_id.id)]):
+					companion._compute_var_desc()
+
+class ProductTemplate(models.Model):
+	_inherit = 'product.template'
+
+	@api.multi
+	def write(self, vals):
+		super(ProductTemplate, self).write(vals)
+		if 'name' in vals:
+			for rec in self:
+				for companion in self.env['product.product'].search([('product_tmpl_id','=',rec.id)]):
+					companion._compute_var_desc()
+
