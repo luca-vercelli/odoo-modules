@@ -7,7 +7,7 @@
 
 {
     "name": "Marca da bollo.",
-    "version": "1.0",
+    "version": "1.1",
     "category": "Accounting",
     "description": """
       Addebita la marca da bollo in fattura, in maniera ingenua: sempre, se l'importo è sufficiente.

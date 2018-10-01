@@ -37,7 +37,7 @@ class account_invoice(models.Model):
                  'currency_id', 'company_id', 'date_invoice', 'type')
     def _compute_amount(self):
         super(account_invoice,self)._compute_amount()
-        print "Marca da bollo. Old amount: " + str(self.amount_total)
+        print("Marca da bollo. Old amount: " + str(self.amount_total))
         
         try:
             customer = self.partner_id
@@ -50,24 +50,24 @@ class account_invoice(models.Model):
                     if self.amount_total > tax.min_for_stamp:
                         self._create_line_marca_da_bollo(tax)
                         super(account_invoice,self)._compute_amount()
-                        print "Marca da bollo. Nuovo amount: " + str(self.amount_total)
+                        print("Marca da bollo. Nuovo amount: " + str(self.amount_total))
                     else:
-                        print "Marca da bollo non necessaria."
+                        print("Marca da bollo non necessaria.")
                 else:
                     if self.amount_total <= tax.min_for_stamp:
-                        print "Marca da bollo. Dovrei eliminarla, ma probabilmente verrà eliminata in automatico al giro dopo. " + str(self.amount_total)
+                        print("Marca da bollo. Dovrei eliminarla, ma probabilmente verrà eliminata in automatico al giro dopo. " + str(self.amount_total))
                     else:
-                        print "Marca da bollo già presente."
+                        print("Marca da bollo già presente.")
                     
         except Exception as e:
             import traceback
-            print traceback.format_exc()
-            print "Error adding Marca da bollo. Ignored."
+            print(traceback.format_exc())
+            print("Error adding Marca da bollo. Ignored.")
 
     def _create_line_marca_da_bollo(self, tax):
         currency = self.currency_id.with_context(date=self.date_invoice or fields.Date.context_today(self))
         if not tax.account_id:
-            print "Manca il conto sulla marca da bollo!"
+            print("Manca il conto sulla marca da bollo!")
             return 
         val = {
                         'invoice_id': self.id,

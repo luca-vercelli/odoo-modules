@@ -1,0 +1,3 @@
+sed -i -e 's/documentoSpesa/documentoSpesa/I' -e 's/cfProprietario/cfProprietario/I' prova
+
+
