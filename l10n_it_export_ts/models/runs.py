@@ -40,20 +40,20 @@ class exportts_run_registry(models.Model):
     status = fields.Char()
     xml = fields.Char()
 
-class exportts_export(models.TransientModel):n
-	_name = "exportts.export"
-	_description = "Estrai fatture in XML"
+class exportts_export(models.TransientModel):
+    _name = "exportts.export"
+    _description = "Estrai fatture in XML"
 
-	@api.one
-	def do_smthg(self):
+    @api.one
+    def do_smthg(self):
         pass
 
 class exportts_export(models.TransientModel):
-	_name = "exportts.send"
-	_description = "Invia XML a Sistema TS"
+    _name = "exportts.send"
+    _description = "Invia XML a Sistema TS"
 
-	@api.one
-	def do_smthg(self):
+    @api.one
+    def do_smthg(self):
         pass
 
 

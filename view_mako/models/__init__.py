@@ -1,5 +1,5 @@
-import ir_view
-import ir_qweb
-import ir_actions_report_xml
+from . import ir_view
+from . import ir_qweb
+from . import ir_actions_report_xml
 
 

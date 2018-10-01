@@ -123,7 +123,7 @@ class Client(object):
             are appended with a counter.
         """
         types = {}
-        for k, v in self._types.items():
+        for k, v in list(self._types.items()):
             short_name = xmlnamespace.get_local_name(k)
             if short_name in types:
                 counter = 1
@@ -171,7 +171,7 @@ class Client(object):
             create(l[0], 'service', self._services[l[0]])
         else:
             counter = 1
-            for k, v in self._services.items():
+            for k, v in list(self._services.items()):
                 attr_name = 'service_%d' % counter
                 counter += 1
                 create(k, attr_name, v)

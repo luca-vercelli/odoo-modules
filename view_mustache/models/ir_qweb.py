@@ -92,10 +92,10 @@ class Engine(models.AbstractModel):
 		"""
 		view_id = None
 		
-		if isinstance(id_or_xml_id, ( int, long ) ):
+		if isinstance(id_or_xml_id, int ):
 			view_id = self.env['ir.ui.view'].search([('id', '=', id_or_xml_id)])
 			#should check auth...
-		elif isinstance(id_or_xml_id, basestring):
+		elif isinstance(id_or_xml_id, str):
 			try:
 				view_id = self.env.ref(id_or_xml_id)
 			except ValueError:

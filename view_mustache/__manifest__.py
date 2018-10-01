@@ -7,7 +7,7 @@
 
 {
     "name": "Mustache views",
-    "version": "1.0",
+    "version": "1.1",
     "category": "Base",
     "author": "Luca Vercelli - Finsoft srl",
     "website": "",

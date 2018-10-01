@@ -13,7 +13,7 @@ import xml.etree.cElementTree as etree
 import base64
 import sys
 if sys.version_info[0] > 2:
-    unicode = str
+    str = str
 
 
 def get_local_type(xmltype):
@@ -395,7 +395,7 @@ class XMLString(XMLType, str):
 
     def to_xml(self, parent, name):
         element = etree.SubElement(parent, name)
-        element.text = unicode(self)
+        element.text = str(self)
 
     def from_xml(self, element):
         if element.text:
@@ -427,7 +427,7 @@ class XMLInteger(XMLType, int):
             try:
                 return int(element.text)
             except:
-                return long(element.text)
+                return int(element.text)
         return 0
 
 
@@ -579,7 +579,7 @@ class XMLStringEnumeration(XMLType):
         if self.value not in self._allowedValues:
             raise ValueError("Not allowed value for this enumeration: value = %s" % (self.value))
         element = etree.SubElement(parent, name)
-        element.text = unicode(self.value)
+        element.text = str(self.value)
 
     def from_xml(self, element):
         val = ""

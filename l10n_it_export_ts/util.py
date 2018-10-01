@@ -21,9 +21,9 @@
 
 #require sboz https://bitbucket.org/sboz/osa/wiki/Home
 try:
-	import osa
+	from . import osa
 except:
-	print "osa module not found. Try with: sudo pip install osa"
+	print("osa module not found. Try with: sudo pip install osa")
 
 #See:
 #http://www.rgs.mef.gov.it/VERSIONE-I/Attivit--i/Spesa-soci/Progetto-T/
@@ -311,7 +311,7 @@ def upperLowerCase(xml_filename):
 		SED += " -e s/%s/%s/I " % (tag, tag)
 	SED += xml_filename
 	try:
-		print "Executing ", SED
+		print("Executing ", SED)
 		os.system(SED)
 	except:
-		print "Errore nella conversione di maiuscole e minuscole, il file potrebbe venire rifiutato"
+		print("Errore nella conversione di maiuscole e minuscole, il file potrebbe venire rifiutato")

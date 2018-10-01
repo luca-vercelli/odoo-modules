@@ -57,7 +57,7 @@ class ReportAccountInvoice(models.AbstractModel):
         return any([l.discount for l in invoice.invoice_line_ids])
 
     def display_taxes(self, invoice_line):
-        return ', '.join(map(lambda x: (x.description or x.name), invoice_line.invoice_line_tax_ids))
+        return ', '.join([(x.description or x.name) for x in invoice_line.invoice_line_tax_ids])
 
     def display_tax_amount_grouped(self, invoice):
 
@@ -67,10 +67,10 @@ class ReportAccountInvoice(models.AbstractModel):
         for line in invoice.tax_line_ids:
             map0.setdefault(line.tax_id.tax_group_id, 0.0)
             map0[line.tax_id.tax_group_id] += line.amount
-        list0 = sorted(map0.items(), key=lambda l: l[0].sequence)
+        list0 = sorted(list(map0.items()), key=lambda l: l[0].sequence)
 
         #this line is different from _get_tax_amount_by_group:
-        map1 = map(lambda l: { 'name' : l[0].name, 'amount' : l[1]}, list0)
+        map1 = [{ 'name' : l[0].name, 'amount' : l[1]} for l in list0]
 
         #FIXME I don't understand this: if len(o.tax_line_ids) > 1 else (o.tax_line_ids.tax_id.description or o.tax_line_ids.tax_id.name)
 

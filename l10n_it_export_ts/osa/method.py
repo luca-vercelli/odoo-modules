@@ -9,7 +9,8 @@ from . import xmlnamespace
 from . import xmlparser
 import sys
 if sys.version_info[0] < 3:
-    from urllib2 import urlopen, Request, HTTPError
+    from urllib.request import urlopen, Request
+    from urllib.error import HTTPError
 else:
     from urllib.request import urlopen, Request, HTTPError
 import xml.etree.cElementTree as etree

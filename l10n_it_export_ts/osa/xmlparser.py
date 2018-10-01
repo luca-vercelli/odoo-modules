@@ -8,7 +8,8 @@
 import xml.etree.cElementTree as etree
 import sys
 if sys.version_info[0] < 3:
-    from urllib2 import urlopen, HTTPError
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
 else:
     from urllib.request import urlopen, HTTPError
 

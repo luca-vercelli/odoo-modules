@@ -1,2 +1,2 @@
-import sql_commander
-import tables_and_views
+from . import sql_commander
+from . import tables_and_views

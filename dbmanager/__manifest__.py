@@ -7,7 +7,7 @@
 
 {
     "name": "Database Manager",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "category": "Configuration",
     "description": """
 		Allow execution of arbitrary SQL commands on DB.

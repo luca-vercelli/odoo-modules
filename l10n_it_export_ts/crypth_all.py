@@ -24,14 +24,14 @@
 # Forse si potrebbe fare in un batch?
 
 import logging
-import urlparse
+import urllib.parse
 import uuid
 import psycopg2.extras
 import psycopg2.extensions
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT, ISOLATION_LEVEL_READ_COMMITTED, ISOLATION_LEVEL_REPEATABLE_READ
 from psycopg2.pool import PoolError
 
-import util
+from . import util
 
 if __name__ == "__main__":
 	dbusername = 'odoo'
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 	
 	for [id, name, enc] in dati:
 		query = "UPDATE res_partner SET fiscalcode_enc= '%s' WHERE id = %s " % (enc, id)
-		print "Encrypting customer n.", id, name
+		print("Encrypting customer n.", id, name)
 		cursor.execute(query)
 
 	connection.commit()

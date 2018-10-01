@@ -280,7 +280,7 @@ class WSDLParser(object):
                     continue  # no soap 11
                 loc = xaddr[0].get("location", "")
                 if b in bindings:
-                    for k, v in bindings[b].items():
+                    for k, v in list(bindings[b].items()):
                         v.location = loc
                     services[s_name] = bindings[b]
         return services

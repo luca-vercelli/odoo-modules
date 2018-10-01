@@ -20,7 +20,7 @@
 #
 ##############################################################################
 
-import util
+from . import util
 
 if __name__ == "__main__":
 
@@ -32,13 +32,13 @@ if __name__ == "__main__":
 	PINCODE_INVIANTE="3489543096"
 	TEST=True
 
-	print "Lettura file di configurazione..."
-	from properties import *
+	print("Lettura file di configurazione...")
+	from .properties import *
 
 	#solo ricevuta
 	if 1 == 2:
 		answer3, pdf_filename = util.call_ws_ricevuta(PINCODE_INVIANTE, 16122814390642472, CF_PROPRIETARIO, PASSWORD)
-		print "Ricevuta PDF salvata in:", pdf_filename
+		print("Ricevuta PDF salvata in:", pdf_filename)
 		import os
 		os.system("xdg-open " + str(pdf_filename))
 		die
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 	#solo dettaglio errori
 	if 1 == 2:
 		answer3, csv_filename = util.call_ws_dettaglio_errori(PINCODE_INVIANTE, 16122814390642472, CF_PROPRIETARIO, PASSWORD)
-		print "Ricevuta CSV salvata in:", csv_filename
+		print("Ricevuta CSV salvata in:", csv_filename)
 		import os
 		os.system("xdg-open " + str(csv_filename))
 		die
@@ -55,43 +55,43 @@ if __name__ == "__main__":
 		raise ValueError("FILENAME not set")
 	FILENAME = str(FILENAME)
 	if FILENAME.lower().endswith(".xml"):
-		print "Converting uppercase & lowercase..."
+		print("Converting uppercase & lowercase...")
 		util.upperLowerCase(FILENAME)
-		print "Validating..."
+		print("Validating...")
 		util.test_xsd(FILENAME)
-		print "Compressione dati..."
+		print("Compressione dati...")
 		zipfilename = util.zip_single_file(FILENAME)
 	elif FILENAME.lower().endswith(".zip"):
 		zipfilename = FILENAME
 	else:
 		raise ValueError("FILENAME must be .xml or .zip")
 	
-	print "Invio dati..."
+	print("Invio dati...")
 	answer = util.call_ws_invio(zipfilename, PINCODE_INVIANTE, CF_PROPRIETARIO, PASSWORD, TEST)
 
-	print "Invio concluso. Risposta:"
-	print answer
+	print("Invio concluso. Risposta:")
+	print(answer)
 
 	if answer.protocollo:
 		protocollo = answer.protocollo
 		
 		import time
 		time.sleep(4)
-		print "Esito invio:"
+		print("Esito invio:")
 		answer2 = util.call_ws_esito(PINCODE_INVIANTE, protocollo, CF_PROPRIETARIO, PASSWORD)
-		print answer2
+		print(answer2)
 		
 		answer3, pdf_filename = util.call_ws_ricevuta(PINCODE_INVIANTE, protocollo, CF_PROPRIETARIO, PASSWORD)
-		print "Ricevuta PDF salvata in:", pdf_filename
+		print("Ricevuta PDF salvata in:", pdf_filename)
 		import os
 		if pdf_filename is not None:
 			os.system("xdg-open " + str(pdf_filename))
 		
 		answer4, csv_filename = util.call_ws_dettaglio_errori(PINCODE_INVIANTE, protocollo, CF_PROPRIETARIO, PASSWORD)
-		print "Dettaglio errori CSV salvato in:", csv_filename
+		print("Dettaglio errori CSV salvato in:", csv_filename)
 		import os
 		if csv_filename is not None:
 			os.system("xdg-open " + str(csv_filename))
 
 #TRE INVII HANNO AVUTO SUCCESSO: 16122814390642472, 16122816595143484, 16122821562546770
-	print "Termino."
+	print("Termino.")
