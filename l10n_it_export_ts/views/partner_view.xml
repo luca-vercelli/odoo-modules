@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="product_normal_form_view" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field eval="8" name="priority"/>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="comment" position="after">
+                    <field name="opposizione_730"/> Opposizione alla dichiarazione STS per il 730
+                </field>
+            </field>
+        </record>
+
+	<!-- schedulable batch. Serve?
+		<record id="ir_cron_fiscalcode_enc" model="ir.cron">
+			<field eval="&quot;&quot;&quot;encrypt_all_fiscalcodes&quot;&quot;&quot;" name="function"/>
+			<field eval="&quot;&quot;&quot;work_days&quot;&quot;&quot;" name="interval_type"/>
+			<field name="user_id" ref="base.user_root"/>
+			<field eval="&quot;&quot;&quot;Fiscalcode encryption&quot;&quot;&quot;" name="name"/>
+			<field eval="-1" name="numbercall"/>
+			<field eval="&quot;&quot;&quot;2010-01-07 11:35:28&quot;&quot;&quot;" name="nextcall"/>
+			<field eval="5" name="priority"/>
+			<field eval="0" name="doall"/>
+			<field eval="False" name="true"/>
+			<field eval="1" name="interval_number"/>
+			<field eval="&quot;&quot;&quot;res.partner&quot;&quot;&quot;" name="model"/>
+		</record>
+	-->
+        <record id="view_encrypt_fiscalcodes_dialog" model="ir.ui.view"> <!-- maschera di lancio -->
+            <field name="name">Encrypt fiscal codes</field>
+            <field name="model">res.partner.encrypt</field>
+            <field name="arch" type="xml">
+                <form string="Encrypt now">
+                      <button name="encrypt_all_fiscalcodes" string="Encrypt" type="object" class="oe_highlight"/> or
+                      <button special="cancel" string="Cancel" class="oe_link"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_encrypt_fiscalcode" model="ir.actions.act_window">
+            <field name="name">Encrypt fiscal codes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.encrypt</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="Encrypt fiscal codes"
+            action="action_encrypt_fiscalcode"
+            id="menu_encrypt_fiscalcode"
+            groups="base.group_no_one"
+            parent="account.menu_finance"
+            sequence="200"/>
+            
+    </data>
+</openerp>
