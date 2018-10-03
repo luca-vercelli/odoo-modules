@@ -1,4 +1,6 @@
-#Export Invoices to Sistema TS
+Export Invoices to Sistema TS
+=============================
+
 Export a number of invoices in a XML format suitable for Italian 'Sistema Tessera Sanitaria (TS)'.
 
 Questo modulo aggiunge:
@@ -7,7 +9,8 @@ Questo modulo aggiunge:
 * Una voce di menù "Invii 730"
 * Una voce di menù "Encrypt fiscal codes" (in teoria inutile)
 
-##Utilizzo:
+Utilizzo
+--------
 questo modulo permette l'esportazione in formato XML opportuno delle fatture, come se fosse un report.
 Non esegue nè la compressione, nè l'invio.
 
@@ -19,10 +22,12 @@ Per inviare il file, da riga di comando (Linux) modificare il file properties.py
 Ho riscontrato problemi con i certificati SSL del server, nel caso eseguire prima export PYTHONHTTPSVERIFY=0
 (ignora tutti i certificati SSL...)
 
-##Stato dell'arte:
+Stato dell'arte
+---------------
 Il formato del file XML è estremamente limitato, funziona solo per gli psicologi privati.
 
-##Note
+Note
+----
 Questo modulo include una versione modificata di osa [2], che apparentemente non è più mantenuto.
 
 
