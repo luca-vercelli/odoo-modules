@@ -1,3 +1,6 @@
+Marca da bollo
+==============
+
 Handle revenue stamp (i.e. Italian "Marca da bollo" tax) in invoices.
 
 Dopo aver installato il modulo, occorre configurarlo:

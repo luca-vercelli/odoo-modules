@@ -1,3 +1,6 @@
+Search by variant attributes
+============================
+
 Enable search in product variants names instead then in product name only.
 	  
 This module has the following features and limits:
