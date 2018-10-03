@@ -36,7 +36,7 @@ class res_partner(models.Model):
 		This should encrypt fiscalcode "on the fly" during report export.
 		Bad choice.
 		"""
-		from .. import util
+		from . import util
 		for record in self:
 			if self.fiscalcode is None:
 				self.fiscalcode_enc = None
@@ -47,7 +47,7 @@ class res_partner(models.Model):
 		"""
 		This encrypts fiscalcode whenever it is changed and saved. 
 		"""
-		from .. import util
+		from . import util
 		for record in self:
 			if record.fiscalcode is None:
 				record.fiscalcode_enc = None
@@ -59,7 +59,7 @@ class res_partner(models.Model):
 		"""
 		This encrypts all fiscalcode on demand.
 		"""
-		from .. import util
+		from . import util
 		model = self.env['res.partner']
 		all_partners = model.search([])
 		for record in all_partners:
@@ -73,28 +73,10 @@ class res_partner(models.Model):
 		This encrypts all fiscalcode on demand, inside batch queue.
 		"""
 		#FIXME apparently, batches require API v7
-		from .. import util
+		from . import util
 		model = self.pool['res.partner']
 		ids = model.search(cr, uid, [], context=context)
 		for record in model.browse(cr, uid, ids, context=context):
-			if record.fiscalcode:
-				record.fiscalcode_enc = util.encrypt(record.fiscalcode)
-			else:
-				record.fiscalcode_enc = None
-
-class res_partner_encrypt(models.TransientModel):
-	_name = "res.partner.encrypt"
-	_description = "Encrypt fiscal codes"
-
-	@api.one
-	def encrypt_all_fiscalcodes(self):
-		"""
-		This encrypts all fiscalcode on demand.
-		"""
-		from . import util
-		model = self.env['res.partner']
-		all_partners = model.search([])
-		for record in all_partners:
 			if record.fiscalcode:
 				record.fiscalcode_enc = util.encrypt(record.fiscalcode)
 			else:

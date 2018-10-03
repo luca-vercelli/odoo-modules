@@ -8,4 +8,4 @@
 #
 ##############################################################################
 
-from . import partner, product, runs, config
+from . import partner, product, wizards, config, runs
