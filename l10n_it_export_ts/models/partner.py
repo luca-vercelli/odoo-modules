@@ -28,7 +28,7 @@ class res_partner(models.Model):
 
 	fiscalcode = fields.Char(inverse='_encrypt_fiscalcode_inverse')
 	fiscalcode_enc = fields.Char()
-	opposizione_730 = fields.Boolean()
+	opposizione_730 = fields.Boolean("Opposizione alla dichiarazione 730")
 
 	@api.depends('fiscalcode')	
 	def _encrypt_fiscalcode(self):

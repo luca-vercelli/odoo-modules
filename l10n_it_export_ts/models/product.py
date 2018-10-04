@@ -24,11 +24,9 @@ from odoo import models,fields,api
 #see /usr/lib/python2.7/dist-packages/openerp/addons/product/product.py
 
  
-class product_product(models.Model):
-    #_name = 'product.product'
-    _inherit = 'product.product'
-    #_description = 'Product'
+class product_template(models.Model):
+    _inherit = 'product.template'
 
     tipo_spesa_730 = fields.Char(default="SP", length=2)
-    #in realtà è un enumerato.
+    #in realtà è un enumerato, ma non ricordo tutti i valori
 

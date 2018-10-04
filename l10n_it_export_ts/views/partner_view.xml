@@ -2,19 +2,19 @@
 <openerp>
     <data>
 
-        <record id="product_normal_form_view" model="ir.ui.view">
+        <record id="view_partner_property_form" model="ir.ui.view">
             <field name="name">res.partner.form</field>
             <field name="model">res.partner</field>
             <field eval="8" name="priority"/>
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
-             <data>
-                <field name="property_account_position_id" position="after">
-                    <field name="opposizione_730" /> Opposizione alla dichiarazione STS per il 730
-                </field> <!-- TODO attrs="{'invisible':[('customer','=',False)], }" -->
-              </data>
+                <page name="accounting" position="inside">
+                    <group string="Sistema TS" name="sistema_ts">
+                        <field name="opposizione_730"/>
+                    </group>
+                </page>
             </field>
-        </record>
+        </record>  <!-- TODO attrs="{'invisible':[('customer','=',False)], }" -->
 
 	<!-- schedulable batch. Serve?
 		<record id="ir_cron_fiscalcode_enc" model="ir.cron">
@@ -30,8 +30,8 @@
 			<field eval="1" name="interval_number"/>
 			<field eval="&quot;&quot;&quot;res.partner&quot;&quot;&quot;" name="model"/>
 		</record>
-	-->
-        <record id="view_encrypt_fiscalcodes_dialog" model="ir.ui.view"> <!-- maschera di lancio -->
+-->	
+        <record id="view_encrypt_fiscalcodes_dialog" model="ir.ui.view">
             <field name="name">Encrypt fiscal codes</field>
             <field name="model">res.partner.encrypt</field>
             <field name="arch" type="xml">
@@ -58,6 +58,6 @@
             groups="base.group_no_one"
             parent="account.menu_finance"
             sequence="200"/>
-            
+
     </data>
 </openerp>

@@ -2,20 +2,20 @@
 <openerp>
     <data>
 
-<!-- TODO lst_price non esiste
-
-        <record id="product_template_only_form_view" model="ir.ui.view">
-            <field name="name">product.template.product.form</field>
+        <record id="product_template_form_view" model="ir.ui.view">
+            <field name="name">product.template.form.view</field>
             <field name="model">product.template</field>
             <field name="mode">primary</field>
             <field eval="8" name="priority"/>
-            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
             <field name="arch" type="xml">
-                <field name="lst_price" position="after">
-                    <field name="tipo_spesa_730"/>
-                </field>
+                <page name="invoicing" position="inside">
+                    <group string="Sistema TS" name="sistema_ts">
+                        <field name="tipo_spesa_730"/>
+                    </group>
+                </page>
             </field>
         </record>
--->
+
     </data>
 </openerp>
