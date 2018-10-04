@@ -52,12 +52,19 @@
         </record>
 
         <menuitem
+            name="Sistema TS"
+            id="menu_sistema_ts"
+            groups="base.group_no_one"
+            parent="account.menu_finance_receivables"
+            sequence="100"/>
+
+        <menuitem
             name="Encrypt fiscal codes"
             action="action_encrypt_fiscalcode"
             id="menu_encrypt_fiscalcode"
             groups="base.group_no_one"
-            parent="account.menu_finance"
-            sequence="200"/>
+            parent="menu_sistema_ts"
+            sequence="20"/>
 
     </data>
 </openerp>
