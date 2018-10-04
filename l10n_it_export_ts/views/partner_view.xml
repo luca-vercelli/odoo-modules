@@ -10,8 +10,8 @@
             <field name="arch" type="xml">
              <data>
                 <field name="property_account_position_id" position="after">
-                    <field name="opposizione_730" attrs="{'invisible':[('customer','=',False)], }"/> Opposizione alla dichiarazione STS per il 730
-                </field>
+                    <field name="opposizione_730" /> Opposizione alla dichiarazione STS per il 730
+                </field> <!-- TODO attrs="{'invisible':[('customer','=',False)], }" -->
               </data>
             </field>
         </record>

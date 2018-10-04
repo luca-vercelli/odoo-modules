@@ -14,9 +14,7 @@
     'name': 'Send Invoices to Sistema TS',
     'version': '1.1',
     'category': 'Accounting',
-    'description': """
-Export a number of invoices in a XML format suitable for Italian 'Sistema Tessera Sanitaria (TS)'.
-""",
+    'description': "",
     'author': 'Luca Vercelli',
     'depends': ['base','account','l10n_it_fiscalcode'],
     'data': [
@@ -29,5 +27,5 @@ Export a number of invoices in a XML format suitable for Italian 'Sistema Tesser
     'test': [],
     'installable': True,
     'auto_install': False,
-    'app': True,
+    'application': True,
 }

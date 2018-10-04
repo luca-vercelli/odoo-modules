@@ -41,7 +41,7 @@ class WizardExportToXML(models.TransientModel):
 		last_day_of_month = calendar.monthrange(date.year, date.month)[1]
 		datetime_last_day_of_month = date.datetime(date.year, date.month, last_day_of_month)
 		esportazione_id = self.env["exportts.export"].create({
-			'date' : datetime_last_day_of_month
+			'date' : datetime_last_day_of_month,
 			'status' : 'Exporting...'
 			})
 		
@@ -49,7 +49,7 @@ class WizardExportToXML(models.TransientModel):
 		#TODO EXPORT TO file
 		
 		esportazione_id.write({
-			xml_filename : filename
+			xml_filename : filename,
 			status : 'Exported'
 			})
 
