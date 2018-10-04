@@ -12,10 +12,12 @@
 
 {
     'name': 'Send Invoices to Sistema TS',
-    'version': '1.1',
+    'version': '1.2',
     'category': 'Accounting',
     'description': """
 Export a number of invoices in a XML format suitable for Italian 'Sistema Tessera Sanitaria (TS)'.
+
+QUESTO MODULO E' RIMOSSO PERCHE' ANCORA IN BETA
 """,
     'author': 'Luca Vercelli',
     'depends': ['base','account','l10n_it_fiscalcode'],
@@ -23,6 +25,7 @@ Export a number of invoices in a XML format suitable for Italian 'Sistema Tesser
         'views/invoice_report.xml',
         'views/product_view.xml',
         'views/partner_view.xml',
+        'views/runs_view.xml',
     ],
     'demo': [],
     'test': [],
