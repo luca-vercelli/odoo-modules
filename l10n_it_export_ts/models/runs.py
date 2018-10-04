@@ -30,5 +30,7 @@ class ExportRegistry(models.Model):
 
     date = fields.Date('Last day of month of run')
     status = fields.Char()
-    xml = fields.Char()
+    xml_filename = fields.Char()
+    pdf_filename = fields.Char()
+    csv_filename = fields.Char()
 
