@@ -12,13 +12,12 @@ Questo modulo aggiunge:
 
 Utilizzo
 --------
-questo modulo permette l'esportazione in formato XML opportuno delle fatture, come se fosse un report.
-Non esegue nè la compressione, nè l'invio.
 
-Per criptare i codici fiscali, usare la voce di menù "Encrypt fiscal codes" (anche se in teoria a ogni modifica del codice fiscale
+* (Teoricamente superfluo) Per criptare i codici fiscali, usare la voce di menù "Encrypt fiscal codes" (anche se in teoria a ogni modifica del codice fiscale
 dovrebbero criptarsi automaticamente il processo di criptatura).
+* Esportare le fatture in formato XML tramite l'apposita Azione, selezionando le fatture del mese
+* Andare nel menù Esportazioni TS e scegliere l'Azione "invia"
 
-Per inviare il file, da riga di comando (Linux) modificare il file properties.py e lanciare lo script ./client.py
 
 Ho riscontrato problemi con i certificati SSL del server, nel caso eseguire prima export PYTHONHTTPSVERIFY=0
 (ignora tutti i certificati SSL...)
