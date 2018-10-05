@@ -13,8 +13,7 @@ Questo modulo aggiunge:
 Utilizzo
 --------
 
-* (Teoricamente superfluo) Per criptare i codici fiscali, usare la voce di menù "Encrypt fiscal codes" (anche se in teoria a ogni modifica del codice fiscale
-dovrebbero criptarsi automaticamente il processo di criptatura).
+* (Teoricamente superfluo) Per criptare i codici fiscali, usare la voce di menù "Encrypt fiscal codes" (anche se in teoria a ogni modifica del codice fiscale dovrebbero criptarsi automaticamente il processo di criptatura).
 * Esportare le fatture in formato XML tramite l'apposita Azione, selezionando le fatture del mese
 * Andare nel menù Esportazioni TS e scegliere l'Azione "invia"
 
