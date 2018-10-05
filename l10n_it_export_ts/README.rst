@@ -23,11 +23,11 @@ Ho riscontrato problemi con i certificati SSL del server, nel caso eseguire prim
 
 Stato dell'arte
 ---------------
-Il formato del file XML è estremamente limitato, funziona solo per gli psicologi privati.
+**Il formato del file XML è estremamente limitato, funziona solo per gli psicologi privati.**
 
 Note
 ----
-**Questo modulo include una versione modificata di osa [2], che apparentemente non è più mantenuto.**
+Questo modulo include una versione modificata di osa [2], che apparentemente non è più mantenuto.
 
 
 [1] http://sistemats1.sanita.finanze.it/wps/content/Portale_Tessera_Sanitaria/STS_Sanita/Home/Sistema+TS+informa/730+-+Spese+Sanitarie/730+-+Spese+Sanitarie+-+Documenti+di+progetto+e+specifiche+tecniche/
