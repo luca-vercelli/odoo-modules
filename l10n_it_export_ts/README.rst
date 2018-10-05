@@ -4,6 +4,7 @@ Export Invoices to Sistema TS
 Export a number of invoices in a XML format suitable for Italian 'Sistema Tessera Sanitaria (TS)'.
 
 Questo modulo aggiunge:
+
 * un campo sul prodotto, per indicare il tipo di spesa;
 * due campi sul cliente, uno per il codice fiscale criptato e uno per l'eventuale opposizione del cliente alla dichiarazione 730
 * Una voce di menù "Invii 730"
