@@ -26,33 +26,6 @@ from odoo import models,fields,api
 import os
 
 
-class WizardExportToXML(models.TransientModel):
-	"""
-	Esporterei in cartella opportuna, come export-ts-YYYY-MM-DD.xml
-	"""
-	_name = "exportts.export"
-	_description = "Estrai fatture in XML"
-	
-	date = fields.Date('Last day of month of run')
-	
-	@api.one
-	def export(self):
-		import date, calendar
-		last_day_of_month = calendar.monthrange(date.year, date.month)[1]
-		datetime_last_day_of_month = date.datetime(date.year, date.month, last_day_of_month)
-		esportazione_id = self.env["exportts.export"].create({
-			'date' : datetime_last_day_of_month,
-			'status' : 'Exporting...'
-			})
-		
-		filename = 'export-ts-' + date.strftime('YYYY-MM-DD', datetime_last_day_of_month) + '.xml'
-		#TODO EXPORT TO file
-		
-		esportazione_id.write({
-			xml_filename : filename,
-			status : 'Exported'
-			})
-
 class WizardSendToTS(models.TransientModel):
 	_name = "exportts.send"
 	_description = "Invia XML a Sistema TS"
