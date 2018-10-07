@@ -38,10 +38,13 @@ class WizardExportInvoices(models.TransientModel):
         filename = 'export-ts-' + now + '.xml'
 
         #TODO EXPORT TO file
-        
+        #come passo i numeri di fatture? spero siano nel context
+        result = self.env['ir.actions.report'].render_template('l10n_it_export_ts.qweb_invoice_xml_ts')
+        print("SONO QUI", str(result))
+
         self.env['exportts.export.registry'].create({
             'status' : 'Exported',
-            'xml_filename' : filename,
+            'xml' : result,
             'date_export' : now
             })
 
@@ -73,16 +76,25 @@ class WizardSendToTS(models.TransientModel):
         print("Ricevuta CSV salvata in:", csv_filename)
         #os.system("xdg-open " + str(csv_filename))
 
+    def write_to_file(self, data):
+        import tempfile
+        xmlfile = tempfile.NamedTemporaryFile()
+        xmlfile.write(data)
+        xmlfile.close()
+        return xmlfile.name
+        
     @api.one
     def send(self):
+        xmlfilename = self.write_to_file(self.esportazione_id.xml)
+        
         from . import util
         print("Converting uppercase & lowercase...")
         #TODO spostare altrove?
-        util.upperLowerCase(self.esportazione_id.xml_filename)
+        util.upperLowerCase(xmlfilename)
         print("Validating...")
-        util.test_xsd(self.esportazione_id.xml_filename)
+        util.test_xsd(xmlfilename)
         print("Compressione dati...")
-        zipfilename = util.zip_single_file(self.esportazione_id.xml_filename)
+        zipfilename = util.zip_single_file(xmlfilename)
         
         print("Invio dati...")
         answer = util.call_ws_invio(zipfilename, self.pincode_inviante, self.cf_proprietario, self.password_inviante, TEST)

@@ -10,9 +10,9 @@
                         <field name="date_export"/>
                         <field name="date_send"/>
                         <field name="status"/>
-                        <field name="xml_filename"/>
                         <field name="pdf_filename"/>
                         <field name="csv_filename"/>
+                        <field name="xml"/>
                     </group>
                 </form>
             </field>
