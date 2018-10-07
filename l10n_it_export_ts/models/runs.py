@@ -28,37 +28,11 @@ class ExportRegistry(models.Model):
     _name = 'exportts.export.registry'
     _description = 'Esportazioni TS'
 
-    date_run = fields.Date('Mese')
-    status = fields.Char(readonly=True)
-    xml_filename = fields.Char(readonly=True)
-    pdf_filename = fields.Char(readonly=True)
-    csv_filename = fields.Char(readonly=True)
+    status = fields.Char('Status', readonly=True)
+    date_export = fields.Datetime('Timestamp estrazione', readonly=True)
+    date_send = fields.Datetime('Timestamp spedizione', readonly=True)
+    xml_filename = fields.Char('File XML', readonly=True)
+    pdf_filename = fields.Char('File PDF ricevuta', readonly=True)
+    csv_filename = fields.Char('File CSV dettaglio errori', readonly=True)
 
-    
-    @api.model
-    @api.returns('self', lambda value: value.id)
-    def create(self, vals):
-        obj = super(ExportRegistry, self).create(vals)
-        obj.fix_date()
-        #obj.export()
-        return obj
-
-    @api.one
-    def fix_date(self):
-        import datetime, calendar
-        #date_run_dt = datetime.date.fromisoformat(self.date_run)
-        date_run_dt = datetime.datetime.strptime(self.date_run,"%Y-%m-%d")
-        last_day_of_month = calendar.monthrange(date_run_dt.year, date_run_dt.month)[1]
-        self.date_run = fields.Date.from_string(str(date_run_dt.year)+"-"+str(date_run_dt.month)+"-"+str(last_day_of_month))
-
-    @api.one
-    def export(self):
-
-        filename = 'export-ts-' + date.strftime('YYYY-MM-DD', self.date_run) + '.xml'
-        #TODO EXPORT TO file
-        
-        self.write({
-            xml_filename : filename,
-            status : 'Exported'
-            })
 
