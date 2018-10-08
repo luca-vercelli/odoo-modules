@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.exportts</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Export TS" string="Export TS" data-key="l10n_it_export_ts">
+
+                        <h2>Taxes</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box" title="These taxes are set in any new product created.">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Default Taxes</span>
+                                    <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
+                                    <div class="text-muted">
+                                        Default taxes applied to local transactions
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="default_cf_proprietario" class="col-lg-3 o_light_label"/>
+                                            <field name="default_cf_proprietario" />
+                                        </div>
+                                        <div class="row mt16">
+                                            <label for="default_pi_proprietario" class="col-lg-3 o_light_label"/>
+                                            <field name="default_pi_proprietario" />
+                                        </div>
+                                        <div class="row mt16">
+                                            <label for="default_pincode_inviante" class="col-lg-3 o_light_label"/>
+                                            <field name="default_pincode_inviante" />
+                                        </div>
+                                        <div class="row mt16">
+                                            <label for="default_password_inviante" class="col-lg-3 o_light_label"/>
+                                            <field name="default_password_inviante" />
+                                        </div>
+                                        <div class="row mt16">
+                                            <label for="default_url" class="col-lg-3 o_light_label"/>
+                                            <field name="default_url" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_exportts_config" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'l10n_it_export_ts'}</field>
+        </record>
+
+        <menuitem id="menu_exportts_config" name="Settings" parent="menu_sistema_ts"
+            sequence="40" action="action_exportts_config" groups="base.group_system"/>
+    </data>
+</odoo>

@@ -25,9 +25,11 @@ from odoo import api, fields, models
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    default_cf_proprietario = fields.Char('C.F. Proprietario')
-    default_pi_proprietario = fields.Char('P.IVA Proprietario')
-    default_pincode_inviante = fields.Integer('PINCODE inviante')
-    default_password_inviante = fields.Char('Password')
-    default_url = fields.Char('URL', default='http://example.com')
+    #TODO i default potrebbero essere presi dall'azienda
+     
+    default_cf_proprietario = fields.Char('C.F. Proprietario', default_model='exportts.wizard.send')
+    default_pi_proprietario = fields.Char('P.IVA Proprietario', default_model='exportts.wizard.send')
+    default_pincode_inviante = fields.Integer('PINCODE inviante', default_model='exportts.wizard.send')
+    default_password_inviante = fields.Char('Password', default_model='exportts.wizard.send')
+    default_url = fields.Char('URL', default='http://example.com', default_model='exportts.wizard.send')
     

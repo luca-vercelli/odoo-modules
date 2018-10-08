@@ -22,6 +22,7 @@
         'views/product_view.xml',
         'views/partner_view.xml',
         'views/runs_view.xml',
+        'views/res_config_view.xml',
         'views/wizards_view.xml',
     ],
     'demo': [],

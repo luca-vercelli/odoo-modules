@@ -8,4 +8,4 @@
 #
 ##############################################################################
 
-from . import partner, product, wizards, config, runs
+from . import partner, product, runs, res_config, wizards
