@@ -13,6 +13,7 @@ Questo modulo aggiunge:
 Utilizzo
 --------
 
+* Occorre ottenere password e pincode [2]
 * (Teoricamente superfluo) Per criptare i codici fiscali, usare la voce di menù "Encrypt fiscal codes" (anche se in teoria a ogni modifica del codice fiscale dovrebbero criptarsi automaticamente il processo di criptatura).
 * Esportare le fatture in formato XML tramite l'apposita Azione, selezionando le fatture del mese
 * Andare nel menù Esportazioni TS e scegliere l'Azione "invia"
@@ -23,13 +24,16 @@ Ho riscontrato problemi con i certificati SSL del server, nel caso eseguire prim
 
 Stato dell'arte
 ---------------
-**Il formato del file XML è estremamente limitato, funziona solo per gli psicologi privati.**
+**Il formato del file XML è estremamente limitato, e' stato testato solo per gli psicologi privati, e solo per le fatture (no note di credito).**
 
 Note
 ----
-Questo modulo include una versione modificata di osa [2], che apparentemente non è più mantenuto.
+Questo modulo include una versione modificata di osa [3], che apparentemente non è più mantenuto.
 
 
 [1] http://sistemats1.sanita.finanze.it/wps/content/Portale_Tessera_Sanitaria/STS_Sanita/Home/Sistema+TS+informa/730+-+Spese+Sanitarie/730+-+Spese+Sanitarie+-+Documenti+di+progetto+e+specifiche+tecniche/
 
-[2] https://bitbucket.org/sboz/osa
+[2] https://sistemats4.sanita.finanze.it/simossHome/login.jsp
+
+[3] https://bitbucket.org/sboz/osa
+
