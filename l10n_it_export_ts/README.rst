@@ -31,7 +31,7 @@ Note
 Questo modulo include una versione modificata di osa [3], che apparentemente non è più mantenuto.
 
 
-[1] http://sistemats1.sanita.finanze.it/wps/content/Portale_Tessera_Sanitaria/STS_Sanita/Home/Sistema+TS+informa/730+-+Spese+Sanitarie/730+-+Spese+Sanitarie+-+Documenti+di+progetto+e+specifiche+tecniche/
+[1] https://sistemats1.sanita.finanze.it/portale/invio-telematico-documenti-e-specifiche-tecniche
 
 [2] https://sistemats4.sanita.finanze.it/simossHome/login.jsp
 

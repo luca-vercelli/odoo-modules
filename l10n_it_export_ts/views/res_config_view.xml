@@ -38,8 +38,8 @@
                                             <field name="default_password_inviante" />
                                         </div>
                                         <div class="row mt16">
-                                            <label for="default_url" class="col-lg-3 o_light_label"/>
-                                            <field name="default_url" />
+                                            <label for="default_endpoint" class="col-lg-3 o_light_label"/>
+                                            <field name="default_endpoint" />
                                         </div>
                                     </div>
                                 </div>

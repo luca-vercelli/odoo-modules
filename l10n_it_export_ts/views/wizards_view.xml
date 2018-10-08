@@ -32,6 +32,16 @@
                     <p class="oe_grey">
                         L'XML ora verrà compresso e inviato a Sistema TS.
                     </p>
+                                            <label for="cf_proprietario" class="col-lg-3 o_light_label"/>
+                                            <field name="cf_proprietario" />
+                                            <label for="pi_proprietario" class="col-lg-3 o_light_label"/>
+                                            <field name="pi_proprietario" />
+                                            <label for="pincode_inviante" class="col-lg-3 o_light_label"/>
+                                            <field name="pincode_inviante" />
+                                            <label for="password_inviante" class="col-lg-3 o_light_label"/>
+                                            <field name="password_inviante" />
+                                            <label for="endpoint" class="col-lg-3 o_light_label"/>
+                                            <field name="endpoint" />
                     <footer>
                         <button string="Send" name="send" type="object" default_focus="1" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>

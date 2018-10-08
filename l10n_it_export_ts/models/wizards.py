@@ -54,10 +54,10 @@ class WizardSendToTS(models.TransientModel):
 
     cf_proprietario = fields.Char('C.F. Proprietario', required=True)
     pi_proprietario = fields.Char('P.IVA Proprietario', required=True)
-    pincode_inviante = fields.Integer('PINCODE inviante', required=True)
+    pincode_inviante = fields.Char('PINCODE inviante', required=True)
     password_inviante = fields.Char('Password', required=True)
-    url = fields.Char('URL', default='http://example.com', required=True)
-    esportazione_id = fields.Many2one('exportts.export.registry', 'Esportazione', required=True)
+    endpoint = fields.Selection([('P','Produzione'),('T','Test')], required=True)
+    #esportazione_id = fields.Many2one('exportts.export.registry', 'Esportazione', required=True)
     
     
     @api.one
@@ -86,7 +86,8 @@ class WizardSendToTS(models.TransientModel):
     @api.one
     def send(self):
         xmlfilename = self.write_to_file(self.esportazione_id.xml)
-        
+        TEST = (self.endpoint == 'T')
+
         from . import util
         print("Converting uppercase & lowercase...")
         #TODO spostare altrove?

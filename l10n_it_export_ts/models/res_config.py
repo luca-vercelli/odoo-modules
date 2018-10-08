@@ -29,7 +29,7 @@ class ResConfigSettings(models.TransientModel):
      
     default_cf_proprietario = fields.Char('C.F. Proprietario', default_model='exportts.wizard.send')
     default_pi_proprietario = fields.Char('P.IVA Proprietario', default_model='exportts.wizard.send')
-    default_pincode_inviante = fields.Integer('PINCODE inviante', default_model='exportts.wizard.send')
+    default_pincode_inviante = fields.Char('Pincode inviante', default_model='exportts.wizard.send')
     default_password_inviante = fields.Char('Password', default_model='exportts.wizard.send')
-    default_url = fields.Char('URL', default='http://example.com', default_model='exportts.wizard.send')
+    default_endpoint = fields.Selection([('P','Produzione'),('T','Test')], default='T', default_model='exportts.wizard.send')
     
