@@ -37,10 +37,12 @@ class WizardExportInvoices(models.TransientModel):
         now = fields.Datetime.now()
         filename = 'export-ts-' + now + '.xml'
 
+        import pdb
+        pdb.set_trace()
+
         #TODO EXPORT TO file
-        #come passo i numeri di fatture? spero siano nel context
+        #come passo i numeri di fatture? in self.env.context.active_ids
         result = self.env['ir.actions.report'].render_template('l10n_it_export_ts.qweb_invoice_xml_ts')
-        print("SONO QUI", str(result))
 
         self.env['exportts.export.registry'].create({
             'status' : 'Exported',
