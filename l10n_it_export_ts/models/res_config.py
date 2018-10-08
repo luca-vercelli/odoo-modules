@@ -25,7 +25,7 @@ from odoo import api, fields, models
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    #TODO i default potrebbero essere presi dall'azienda
+    #TODO i default potrebbero essere presi dall'azienda, res_company.partner_id.fiscalcode
      
     default_cf_proprietario = fields.Char('C.F. Proprietario', default_model='exportts.wizard.send')
     default_pi_proprietario = fields.Char('P.IVA Proprietario', default_model='exportts.wizard.send')

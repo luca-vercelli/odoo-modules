@@ -9,17 +9,16 @@
             <field name="inherit_id" ref="base.res_config_settings_view_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[hasclass('settings')]" position="inside">
-                    <div class="app_settings_block" data-string="Export TS" string="Export TS" data-key="l10n_it_export_ts">
+                    <div class="app_settings_block" data-string="Sistema TS" string="Sistema TS" data-key="l10n_it_export_ts">
 
-                        <h2>Taxes</h2>
+                        <h2>Sistema TS</h2>
                         <div class="row mt16 o_settings_container">
                             <div class="col-12 col-lg-6 o_setting_box" title="These taxes are set in any new product created.">
                                 <div class="o_setting_left_pane"/>
                                 <div class="o_setting_right_pane">
-                                    <span class="o_form_label">Default Taxes</span>
-                                    <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
+                                    <span class="o_form_label">Sistema TS</span>
                                     <div class="text-muted">
-                                        Default taxes applied to local transactions
+                                        Imposta i parametri per l'invio delle fatture verso Sistema TS
                                     </div>
                                     <div class="content-group">
                                         <div class="row mt16">
@@ -45,6 +44,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </xpath>
             </field>
