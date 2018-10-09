@@ -37,14 +37,14 @@ class WizardExportInvoices(models.TransientModel):
         now = fields.Datetime.now()
         filename = 'export-ts-' + now + '.xml'
 
-        invoices = self.env['account.invoice'].browse(self.env.context.active_ids):
+        invoices = self.env['account.invoice'].browse(self.env.context.active_ids)
         companies = [i.number for i in invoices if i.partner_id.is_company]
         oppositions = [i.number for i in invoices if i.partner_id.opposizione_730]
         messages = ""
         if companies:
             messages = messages + "Fatture ignorate perchè non intestate a persone fisiche: " + str(companies) + "\r\n"
         if oppositions:
-            messages = messages + "Fatture ignorate perchè gli intestatari si sono opporti alla dichiarazione TS: " + str(oppositions) + "\r\n"
+            messages = messages + "Fatture ignorate perchè intestatario oppostosi alla dichiarazione TS: " + str(oppositions) + "\r\n"
         
         #import pdb
         #pdb.set_trace()
