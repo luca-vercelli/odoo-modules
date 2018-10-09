@@ -78,11 +78,11 @@
 
 <template id="report_invoice_riga_xml_ts">
 
-<!-- TODO fare un ciclo for sulle righe, o.product_id.tipo_spesa_ssn
+<!-- TODO fare un ciclo for sulle righe
 da chiarire fiscalmente cosa succede quando ci sono più righe di spesa diverse e ad es. la marca da bollo... -->
   <voceSpesa>
       <!-- tipologia di spesa. SP=Prestazioni Sanitarie -->
-      <tipoSpesa><t t-raw="o.product_id.tipo_spesa_ssn"/></tipoSpesa>
+      <tipoSpesa><t t-raw="o.product_id.tipo_spesa_730"/></tipoSpesa>
       <importo><t t-raw="o.amount"/></importo>
   </voceSpesa>
 </template>
