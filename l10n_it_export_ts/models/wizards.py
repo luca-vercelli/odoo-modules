@@ -35,9 +35,8 @@ class WizardExportInvoices(models.TransientModel):
         I can export many invoices, neverthless I get a single Export object
         """
         now = fields.Datetime.now()
-        filename = 'export-ts-' + now + '.xml'
-
-        invoices = self.env['account.invoice'].browse(self.env.context.active_ids)
+ 
+        invoices = self.env['account.invoice'].browse(self.env.context['active_ids'])
         companies = [i.number for i in invoices if i.partner_id.is_company]
         oppositions = [i.number for i in invoices if i.partner_id.opposizione_730]
         messages = ""
@@ -49,7 +48,7 @@ class WizardExportInvoices(models.TransientModel):
         #import pdb
         #pdb.set_trace()
 
-        #come passo i numeri di fatture? in self.env.context.active_ids
+        #come passo i numeri di fatture? in self.env.context['active_ids']
         result = self.env['ir.actions.report'].render_template('l10n_it_export_ts.qweb_invoice_xml_ts')
 
         self.env['exportts.export.registry'].create({
@@ -87,7 +86,7 @@ class WizardSendToTS(models.TransientModel):
         print("Ricevuta CSV salvata in:", csv_filename)
         #os.system("xdg-open " + str(csv_filename))
 
-    def write_to_file(self, data):
+    def write_to_new_tempfile(self, data):
         import tempfile
         xmlfile = tempfile.NamedTemporaryFile()
         xmlfile.write(data)
@@ -96,7 +95,8 @@ class WizardSendToTS(models.TransientModel):
         
     @api.one
     def send(self):
-        xmlfilename = self.write_to_file(self.esportazione_id.xml)
+        export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
+        xmlfilename = self.write_to_new_tempfile(export.xml)
         TEST = (self.endpoint == 'T')
 
         from . import util
