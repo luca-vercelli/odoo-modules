@@ -13,6 +13,7 @@
                         <field name="pdf_filename"/>
                         <field name="csv_filename"/>
                         <field name="xml"/>
+                        <field name="messages"/>
                     </group>
                 </form>
             </field>

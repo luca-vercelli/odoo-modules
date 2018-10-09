@@ -31,8 +31,9 @@ class ExportRegistry(models.Model):
     status = fields.Char('Status', readonly=True)
     date_export = fields.Datetime('Timestamp estrazione', readonly=True)
     date_send = fields.Datetime('Timestamp spedizione', readonly=True)
-    xml = fields.Char('XML')
+    xml = fields.Text('XML')
     pdf_filename = fields.Char('File PDF ricevuta', readonly=True)
     csv_filename = fields.Char('File CSV dettaglio errori', readonly=True)
+    messages = fields.Text('Messages', readonly=True)
 
 
