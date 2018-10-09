@@ -20,9 +20,6 @@
 ##############################################################################
 
 from odoo import models,fields,api
-
-#see /usr/lib/python2.7/dist-packages/openerp/addons/product/product.py
-
  
 class ExportRegistry(models.Model):
     _name = 'exportts.export.registry'
