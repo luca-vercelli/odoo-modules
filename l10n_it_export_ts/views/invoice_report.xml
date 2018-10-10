@@ -69,7 +69,9 @@
 
 <template id="report_invoice_riga_xml_ts">
 <!--
-Sto assumendo che le righe di spesa siano esentasse e che l'eventuale addebito di marca da bollo non sia detraibile
+Le righe di spesa dovrebbero essere esentasse
+Se ci fossero delle tasse, qui le sto contando
+Sto assumendo che l'eventuale addebito di marca da bollo non sia detraibile
 -->
   <voceSpesa>
       <!-- tipologia di spesa. SP=Prestazioni Sanitarie -->
