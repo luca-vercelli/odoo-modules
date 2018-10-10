@@ -7,7 +7,7 @@
 
 {
     "name": "Database Manager",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "category": "Configuration",
     "description": "",
     "author": "Luca Vercelli - Finsoft srl",
