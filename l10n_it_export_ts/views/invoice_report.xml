@@ -18,8 +18,7 @@
 
 <template id="qweb_invoice_xml_ts">
 <t r-raw="'&gt;?xml version=1.0?>'" />
-<t t-name="l10n_it_export_ts.qweb_invoice_xml_ts">
-<precompilata>
+<t t-name="l10n_it_export_ts.qweb_invoice_xml_ts"><precompilata>
     <!-- Multicompany -->
 <!-- dalla v.11 qui trovo: docs e doc_ids, non o -->
     <t t-call="l10n_it_export_ts.header_xml_ts"/>
@@ -27,8 +26,7 @@
         <!--t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'l10n_it_export_ts.report_invoice_document_xml_ts')"/-->
         <t t-call="l10n_it_export_ts.report_invoice_document_xml_ts"/>
     </t>
-</precompilata>
-</t>
+</precompilata></t>
 </template>
 
 <template id="header_xml_ts">
@@ -62,16 +60,7 @@
   <flagOperazione><t t-raw="'I'"/></flagOperazione>
   <!-- da crittografare -->
   <cfCittadino><t t-raw="o.partner_id.fiscalcode_enc"/></cfCittadino>
-  <!-- in teoria, ce ne vorrebbe uno diverso per ogni riga di fattura. Faccio il totale. -->
-  <voceSpesa>
-      <!-- tipologia di spesa. SP=Prestazioni Sanitarie -->
-      <tipoSpesa><t t-raw="'SP'"/></tipoSpesa>
-      <importo><t t-raw="'%.2f' % o.amount_total"/></importo>
-  </voceSpesa>
-NUOVA VERSIONE
-  <t t-foreach="o.invoice_line_ids" t-as="o">
-        <t t-call="l10n_it_export_ts.report_invoice_riga_xml_ts"/>
-  </t>
+  <t t-foreach="o.invoice_line_ids" t-as="o"><t t-call="l10n_it_export_ts.report_invoice_riga_xml_ts"/></t>
 </documentoSpesa>
 </t>
 
@@ -79,13 +68,13 @@ NUOVA VERSIONE
 </template>
 
 <template id="report_invoice_riga_xml_ts">
-
-<!-- TODO fare un ciclo for sulle righe
-da chiarire fiscalmente cosa succede quando ci sono più righe di spesa diverse e ad es. la marca da bollo... -->
+<!--
+Sto assumendo che le righe di spesa siano esentasse e che l'eventuale addebito di marca da bollo non sia detraibile
+-->
   <voceSpesa>
       <!-- tipologia di spesa. SP=Prestazioni Sanitarie -->
       <tipoSpesa><t t-raw="o.product_id.tipo_spesa_730"/></tipoSpesa>
-      <importo><t t-raw="o.amount"/></importo>
+      <importo><t t-raw="o.price_total"/></importo>
   </voceSpesa>
 </template>
 
