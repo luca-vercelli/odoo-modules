@@ -45,11 +45,14 @@ class WizardExportInvoices(models.TransientModel):
         if oppositions:
             messages = messages + "Fatture ignorate perchè intestatario oppostosi alla dichiarazione TS: " + str(oppositions) + "\r\n"
         
-        #import pdb
-        #pdb.set_trace()
+        ctx = self.env.context
+        values = {
+            'doc_ids' : ctx['active_ids'],
+            'doc_model' : ctx['active_model'],
+            'docs' : self.env[ctx['active_model']].browse(ctx['active_ids'])
+        }
 
-        #come passo i numeri di fatture? in self.env.context['active_ids']
-        result = self.env['ir.actions.report'].render_template('l10n_it_export_ts.qweb_invoice_xml_ts')
+        result = self.env['ir.actions.report'].render_template('l10n_it_export_ts.qweb_invoice_xml_ts', values)
 
         self.env['exportts.export.registry'].create({
             'status' : 'Exported',
