@@ -95,10 +95,14 @@ def encrypt(message):
 	#padding PKCS1_v1_5 = sequenza causale di byte per raggiungere la lunghezza della chiave RSA
 	#base64 = binary to ASCII
 
-	try:
-		message = str(message)
-	except UnicodeDecodeError:
-		message = message.encode('ascii','replace')
+	#Python 2:
+	#try:
+	#	message = str(message)
+	#except UnicodeDecodeError:
+	#	message = message.encode('ascii','replace')
+
+	#Python 3:
+	message = message.encode()
 
 	from Crypto.Cipher import PKCS1_v1_5
 	from Crypto.Hash import SHA
