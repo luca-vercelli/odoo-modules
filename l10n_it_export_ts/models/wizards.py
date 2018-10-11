@@ -52,13 +52,13 @@ class WizardExportInvoices(models.TransientModel):
             'doc_ids' : ctx['active_ids'],
             'doc_model' : ctx['active_model'],
             'docs' : self.env[ctx['active_model']].browse(ctx['active_ids']),
-            'proprietario' : proprietario_id
+            'proprietario' : self.proprietario_id
         }
 
         result = self.env['ir.actions.report'].render_template('l10n_it_export_ts.qweb_invoice_xml_ts', values)
 
         self.env['exportts.export.registry'].create({
-            'proprietario_id' : proprietario_id.id,
+            'proprietario_id' : self.proprietario_id.id,
             'status' : 'Exported',
             'xml' : result,
             'date_export' : now,

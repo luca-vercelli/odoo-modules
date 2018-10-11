@@ -32,10 +32,6 @@
                     <p class="oe_grey">
                         L'XML ora verrà compresso e inviato a Sistema TS.
                     </p>
-                                            <label for="cf_proprietario" class="col-lg-3 o_light_label"/>
-                                            <field name="cf_proprietario" />
-                                            <label for="pi_proprietario" class="col-lg-3 o_light_label"/>
-                                            <field name="pi_proprietario" />
                                             <label for="pincode_inviante" class="col-lg-3 o_light_label"/>
                                             <field name="pincode_inviante" />
                                             <label for="password_inviante" class="col-lg-3 o_light_label"/>
@@ -55,6 +51,39 @@
             key2="client_action_multi" name="Invia fatture a TS"
             res_model="exportts.wizard.send" src_model="exportts.export.registry"
             view_mode="form" target="new" view_type="form" />
+
+        <record id="view_encrypt_fiscalcodes_dialog" model="ir.ui.view">
+            <field name="name">Encrypt fiscal codes</field>
+            <field name="model">res.partner.encrypt</field>
+            <field name="arch" type="xml">
+                <form string="Encrypt now">
+                    <p class="oe_grey">
+                        Tutti i codici fiscali verranno criptati usando la chiave pubblica di Sistema TS.
+                    </p>
+                    <footer>
+                      <button name="encrypt_all_fiscalcodes" string="Encrypt" type="object" class="oe_highlight"/> or
+                      <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_encrypt_fiscalcode" model="ir.actions.act_window">
+            <field name="name">Encrypt fiscal codes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.encrypt</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="Encrypt fiscal codes"
+            action="action_encrypt_fiscalcode"
+            id="menu_encrypt_fiscalcode"
+            groups="base.group_no_one"
+            parent="menu_sistema_ts"
+            sequence="20"/>
 
     </data>
 </openerp>

@@ -30,4 +30,8 @@
     'installable': True,
     'auto_install': False,
     'application': True,
+	'license' : 'LGPL-3',
+    'external_dependencies': {
+        'python': ['pycrypto'],
+    }
 }
