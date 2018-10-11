@@ -22,12 +22,8 @@
                                     </div>
                                     <div class="content-group">
                                         <div class="row mt16">
-                                            <label for="default_cf_proprietario" class="col-lg-3 o_light_label"/>
-                                            <field name="default_cf_proprietario" />
-                                        </div>
-                                        <div class="row mt16">
-                                            <label for="default_pi_proprietario" class="col-lg-3 o_light_label"/>
-                                            <field name="default_pi_proprietario" />
+                                            <label for="default_proprietario_id" class="col-lg-3 o_light_label"/>
+                                            <field name="default_proprietario_id" />
                                         </div>
                                         <div class="row mt16">
                                             <label for="default_pincode_inviante" class="col-lg-3 o_light_label"/>

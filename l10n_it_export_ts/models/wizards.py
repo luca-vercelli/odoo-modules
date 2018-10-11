@@ -29,6 +29,8 @@ class WizardExportInvoices(models.TransientModel):
     _name = "exportts.wizard.export"
     _description = "Esporta fatture in XML"
 
+    proprietario_id = fields.Many2one('res.partner',string='Proprietario')
+
     @api.multi
     def export(self):
         """
@@ -49,12 +51,14 @@ class WizardExportInvoices(models.TransientModel):
         values = {
             'doc_ids' : ctx['active_ids'],
             'doc_model' : ctx['active_model'],
-            'docs' : self.env[ctx['active_model']].browse(ctx['active_ids'])
+            'docs' : self.env[ctx['active_model']].browse(ctx['active_ids']),
+            'proprietario' : proprietario_id
         }
 
         result = self.env['ir.actions.report'].render_template('l10n_it_export_ts.qweb_invoice_xml_ts', values)
 
         self.env['exportts.export.registry'].create({
+            'proprietario_id' : proprietario_id.id,
             'status' : 'Exported',
             'xml' : result,
             'date_export' : now,
@@ -65,8 +69,6 @@ class WizardSendToTS(models.TransientModel):
     _name = "exportts.wizard.send"
     _description = "Invia XML a Sistema TS"
 
-    cf_proprietario = fields.Char('C.F. Proprietario', required=True)
-    pi_proprietario = fields.Char('P.IVA Proprietario', required=True)
     pincode_inviante = fields.Char('PINCODE inviante', required=True)
     password_inviante = fields.Char('Password', required=True)
     endpoint = fields.Selection([('P','Produzione'),('T','Test')], required=True)
@@ -75,16 +77,20 @@ class WizardSendToTS(models.TransientModel):
     
     @api.one
     def solo_ricevuta(self): #non usato?
+        export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
+        cf_proprietario = export.proprietario_id.fiscalcode # TODO puoi prendere quello già criptato
         from . import util
-        answer3, pdf_filename = util.call_ws_ricevuta(self.pincode_inviante, 16122814390642472, self.cf_proprietario, self.password_inviante)
+        answer3, pdf_filename = util.call_ws_ricevuta(self.pincode_inviante, 16122814390642472, cf_proprietario, self.password_inviante)
         self.pdf_filename = pdf_filename
         print("Ricevuta PDF salvata in:", pdf_filename)
         #os.system("xdg-open " + str(pdf_filename))
 
     @api.one
     def solo_dettaglio_errori(self): #non usato?
+        export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
+        cf_proprietario = export.proprietario_id.fiscalcode # TODO puoi prendere quello già criptato
         from . import util
-        answer3, csv_filename = util.call_ws_dettaglio_errori(self.pincode_inviante, 16122814390642472, self.cf_proprietario, self.password_inviante)
+        answer3, csv_filename = util.call_ws_dettaglio_errori(self.pincode_inviante, 16122814390642472, cf_proprietario, self.password_inviante)
         self.csv_filename = csv_filename
         print("Ricevuta CSV salvata in:", csv_filename)
         #os.system("xdg-open " + str(csv_filename))
@@ -99,6 +105,7 @@ class WizardSendToTS(models.TransientModel):
     @api.one
     def send(self):
         export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
+        cf_proprietario = export.proprietario_id.fiscalcode # TODO puoi prendere quello già criptato
         xmlfilename = self.write_to_new_tempfile(export.xml)
         TEST = (self.endpoint == 'T')
 
@@ -112,7 +119,7 @@ class WizardSendToTS(models.TransientModel):
         zipfilename = util.zip_single_file(xmlfilename)
         
         print("Invio dati...")
-        answer = util.call_ws_invio(zipfilename, self.pincode_inviante, self.cf_proprietario, self.password_inviante, TEST)
+        answer = util.call_ws_invio(zipfilename, self.pincode_inviante, cf_proprietario, self.password_inviante, TEST)
 
         print("Invio concluso. Risposta:")
         print(answer)
@@ -123,17 +130,17 @@ class WizardSendToTS(models.TransientModel):
             import time
             time.sleep(4)
             print("Esito invio:")
-            answer2 = util.call_ws_esito(self.pincode_inviante, protocollo, self.cf_proprietario, self.password_inviante)
+            answer2 = util.call_ws_esito(self.pincode_inviante, protocollo, cf_proprietario, self.password_inviante)
             print(answer2)
             
-            answer3, pdf_filename = util.call_ws_ricevuta(self.pincode_inviante, protocollo, self.cf_proprietario, self.password_inviante)
+            answer3, pdf_filename = util.call_ws_ricevuta(self.pincode_inviante, protocollo, cf_proprietario, self.password_inviante)
             print("Ricevuta PDF salvata in:", pdf_filename)
             self.pdf_filename = pdf_filename
             #import os
             #if pdf_filename is not None:
             #    os.system("xdg-open " + str(pdf_filename))
             
-            answer4, csv_filename = util.call_ws_dettaglio_errori(self.pincode_inviante, protocollo, self.cf_proprietario, self.password_inviante)
+            answer4, csv_filename = util.call_ws_dettaglio_errori(self.pincode_inviante, protocollo, cf_proprietario, self.password_inviante)
             print("Dettaglio errori CSV salvato in:", csv_filename)
             self.csv_filename = csv_filename
             #import os

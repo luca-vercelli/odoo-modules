@@ -25,11 +25,12 @@ from odoo import api, fields, models
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    #TODO i default potrebbero essere presi dall'azienda, res_company.partner_id.fiscalcode
+    #TODO i default potrebbero essere presi dall'azienda, res_company.partner_id
      
-    default_cf_proprietario = fields.Char('C.F. Proprietario', default_model='exportts.wizard.send')
-    default_pi_proprietario = fields.Char('P.IVA Proprietario', default_model='exportts.wizard.send')
-    default_pincode_inviante = fields.Char('Pincode inviante', default_model='exportts.wizard.send')
-    default_password_inviante = fields.Char('Password', default_model='exportts.wizard.send')
+    default_proprietario_id = fields.Many2one('res.partner',string='Proprietario',
+        help='Verranno presi dal partner la P.IVA e il C.F. criptato',
+        default_model='exportts.wizard.export')
+    default_pincode_inviante = fields.Char('Pincode inviante', help='Assegnato da Sistema TS', default_model='exportts.wizard.send')
+    default_password_inviante = fields.Char('Password', help='Assegnata da Sistema TS', default_model='exportts.wizard.send')
     default_endpoint = fields.Selection([('P','Produzione'),('T','Test')], default='T', default_model='exportts.wizard.send')
     

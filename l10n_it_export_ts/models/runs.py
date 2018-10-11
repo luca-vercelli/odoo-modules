@@ -26,6 +26,7 @@ class ExportRegistry(models.Model):
     _description = 'Esportazioni TS'
 
     status = fields.Char('Status', readonly=True)
+    proprietario_id = fields.Many2one('res.partner',string='Proprietario')
     date_export = fields.Datetime('Timestamp estrazione', readonly=True)
     date_send = fields.Datetime('Timestamp spedizione', readonly=True)
     xml = fields.Text('XML')
