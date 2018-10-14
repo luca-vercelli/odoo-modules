@@ -101,7 +101,8 @@ class WizardSendToTS(models.TransientModel):
     pincode_inviante = fields.Char('PINCODE inviante', required=True)
     password_inviante = fields.Char('Password', required=True)
     endpoint = fields.Selection([('P','Produzione'),('T','Test')], required=True)
-    #esportazione_id = fields.Many2one('exportts.export.registry', 'Esportazione', required=True)
+    folder = fields.Char('Backup Directory', help='Absolute path for storing files', required='True',
+                         default='/odoo/backups/sistemats')
     
     
     @api.one

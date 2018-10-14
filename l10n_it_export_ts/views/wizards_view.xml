@@ -38,6 +38,8 @@
                                             <field name="password_inviante" />
                                             <label for="endpoint" class="col-lg-3 o_light_label"/>
                                             <field name="endpoint" />
+                                            <label for="folder" class="col-lg-3 o_light_label"/>
+                                            <field name="folder" />
                     <footer>
                         <button string="Send" name="send" type="object" default_focus="1" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>

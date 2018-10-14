@@ -26,7 +26,7 @@ class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
     #TODO i default potrebbero essere presi dall'azienda, res_company.partner_id
-     
+    
     default_proprietario_id = fields.Many2one('res.partner',string='Proprietario',
         help='Verranno presi dal partner la P.IVA e il C.F. criptato',
         default_model='exportts.wizard.export')
