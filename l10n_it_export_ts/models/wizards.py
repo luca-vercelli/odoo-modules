@@ -140,6 +140,7 @@ class WizardSendToTS(models.TransientModel):
 
         from . import util
         print("Validating...")
+        global XSD_FILENAME
         util.test_xsd(xmlfilename, XSD_FILENAME)
         print("Compressione dati...")
         zipfilename = util.zip_single_file(xmlfilename)
@@ -174,35 +175,35 @@ class WizardSendToTS(models.TransientModel):
             #    os.system("xdg-open " + str(csv_filename))
 
     def call_ws_invio(self, zipfilename, pincode_inviante, cf_proprietario, pwd, if_test):
-	    """
-	    Call the webservice "inviaFileMtom()".
-	    Fill all required parameters: file name, file content, owner data, basic auth. credentials
-	    Currently, require a modified version of osa (as we need Basic Authentication)
-	    Currently, MTOM protocol is not used, file is sent as part of the message.
-	    
-	    @return webservice answer, which is an object of type "inviaFileMtomResponse"
-	    """
+        """
+        Call the webservice "inviaFileMtom()".
+        Fill all required parameters: file name, file content, owner data, basic auth. credentials
+        Currently, require a modified version of osa (as we need Basic Authentication)
+        Currently, MTOM protocol is not used, file is sent as part of the message.
+        
+        @return webservice answer, which is an object of type "inviaFileMtomResponse"
+        """
 
         from .. import osa
 
-	    global WSDL_PROD, WSDL_TEST
-	    if if_test:
-		    wsdl = WSDL_TEST
-	    else:
-		    wsdl = WSDL_PROD
+        global WSDL_PROD, WSDL_TEST
+        if if_test:
+            wsdl = WSDL_TEST
+        else:
+            wsdl = WSDL_PROD
 
-	    cl = osa.Client(wsdl)
+        cl = osa.Client(wsdl)
 
-	    parameters = cl.types.inviaFileMtom()
-	    parameters.nomeFileAllegato = os.path.basename(zipfilename)
-	    parameters.pincodeInvianteCifrato = encrypt(pincode_inviante)
-	    parameters.datiProprietario = cl.types.proprietario()
-	    parameters.datiProprietario.cfProprietario = cf_proprietario	#cleartext
-	    parameters.documento = open(zipfilename, "r").read()
+        parameters = cl.types.inviaFileMtom()
+        parameters.nomeFileAllegato = os.path.basename(zipfilename)
+        parameters.pincodeInvianteCifrato = encrypt(pincode_inviante)
+        parameters.datiProprietario = cl.types.proprietario()
+        parameters.datiProprietario.cfProprietario = cf_proprietario    #cleartext
+        parameters.documento = open(zipfilename, "r").read()
 
-	    cl.service.inviaFileMtom.set_auth(cf_proprietario, pwd)
+        cl.service.inviaFileMtom.set_auth(cf_proprietario, pwd)
 
-	    return cl.service.inviaFileMtom(parameters)
+        return cl.service.inviaFileMtom(parameters)
 
     #Questa era una delle risposte:
     #(ricevutaInvio){
@@ -216,29 +217,29 @@ class WizardSendToTS(models.TransientModel):
     #}
 
     def call_ws_esito(self, pincode_inviante, protocollo, cf_proprietario, pwd):
-	    """
-	    Call the webservice "EsitoInvii()".
-	    Restituisce l'esito dell'invio corrispondente al numero di protocollo dato
-	    @return webservice answer
-	    """
-	    global WSDL_ESITO
+        """
+        Call the webservice "EsitoInvii()".
+        Restituisce l'esito dell'invio corrispondente al numero di protocollo dato
+        @return webservice answer
+        """
+        global WSDL_ESITO
 
         from .. import osa
 
-	    wsdl = WSDL_ESITO
-	    cl = osa.Client(wsdl)
+        wsdl = WSDL_ESITO
+        cl = osa.Client(wsdl)
 
-	    parameters = cl.types.EsitoInvii()
-	    parameters.DatiInputRichiesta = cl.types.datiInput()
-	    parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
-	    parameters.DatiInputRichiesta.protocollo = protocollo
-	    #alternativi al protocollo:
-	    #parameters.DatiInputRichiesta.dataInizio = '24-12-2016'
-	    #parameters.DatiInputRichiesta.dataFine = '26-12-2016'
+        parameters = cl.types.EsitoInvii()
+        parameters.DatiInputRichiesta = cl.types.datiInput()
+        parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
+        parameters.DatiInputRichiesta.protocollo = protocollo
+        #alternativi al protocollo:
+        #parameters.DatiInputRichiesta.dataInizio = '24-12-2016'
+        #parameters.DatiInputRichiesta.dataFine = '26-12-2016'
 
-	    cl.service.EsitoInvii.set_auth(cf_proprietario, pwd)
+        cl.service.EsitoInvii.set_auth(cf_proprietario, pwd)
 
-	    return cl.service.EsitoInvii(parameters)
+        return cl.service.EsitoInvii(parameters)
 
     #Questa era una delle risposte:
     #(datiOutput){
@@ -262,38 +263,38 @@ class WizardSendToTS(models.TransientModel):
     #}
 
     def call_ws_dettaglio_errori(self, pincode_inviante, protocollo, cf_proprietario, pwd):
-	    """
-	    Call the webservice "DettaglioErrori()".
-	    Restituisce un CSV contenente il dettaglio degli errori di importazione
-	    @return (webservice answer, csv_filename)
-	    """
-	    global WSDL_DET_ERRORI
+        """
+        Call the webservice "DettaglioErrori()".
+        Restituisce un CSV contenente il dettaglio degli errori di importazione
+        @return (webservice answer, csv_filename)
+        """
+        global WSDL_DET_ERRORI
 
         from .. import osa
 
-	    wsdl = WSDL_DET_ERRORI
-	    cl = osa.Client(wsdl)
+        wsdl = WSDL_DET_ERRORI
+        cl = osa.Client(wsdl)
 
-	    parameters = cl.types.DettaglioErrori()
-	    parameters.DatiInputRichiesta = cl.types.datiInput()
-	    parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
-	    parameters.DatiInputRichiesta.protocollo = protocollo
+        parameters = cl.types.DettaglioErrori()
+        parameters.DatiInputRichiesta = cl.types.datiInput()
+        parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
+        parameters.DatiInputRichiesta.protocollo = protocollo
 
-	    cl.service.DettaglioErrori.set_auth(cf_proprietario, pwd)
+        cl.service.DettaglioErrori.set_auth(cf_proprietario, pwd)
 
-	    answer = cl.service.DettaglioErrori(parameters)
+        answer = cl.service.DettaglioErrori(parameters)
 
-	    csv_filename = None
-	    try:
-		    if answer.esitiPositivi.dettagliEsito.csv:
-			    import tempfile
-			    boh, csv_filename = tempfile.mkstemp(prefix="errori", suffix=".csv.zip")
-			    fd = open(csv_filename,"w")
-			    fd.write(answer.esitiPositivi.dettagliEsito.csv)
-			    fd.close()
-	    except:
-		    pass
-	    return (answer, csv_filename)
+        csv_filename = None
+        try:
+            if answer.esitiPositivi.dettagliEsito.csv:
+                import tempfile
+                boh, csv_filename = tempfile.mkstemp(prefix="errori", suffix=".csv.zip")
+                fd = open(csv_filename,"w")
+                fd.write(answer.esitiPositivi.dettagliEsito.csv)
+                fd.close()
+        except:
+            pass
+        return (answer, csv_filename)
 
     #Questa era una delle risposte:
     #(datiOutput){
@@ -310,36 +311,36 @@ class WizardSendToTS(models.TransientModel):
     #}
 
     def call_ws_ricevuta(self, pincode_inviante, protocollo, cf_proprietario, pwd):
-	    """
-	    Call the webservice "RicevutaPdf()".
-	    Restituisce la ricevuta dell'invio corrispondente al numero di protocollo dato
-	    @return (webservice answer, local PDF temp file)
-	    """
-	    global WSDL_RICEVUTE
+        """
+        Call the webservice "RicevutaPdf()".
+        Restituisce la ricevuta dell'invio corrispondente al numero di protocollo dato
+        @return (webservice answer, local PDF temp file)
+        """
+        global WSDL_RICEVUTE
 
         from .. import osa
 
-	    wsdl = WSDL_RICEVUTE
-	    cl = osa.Client(wsdl)
+        wsdl = WSDL_RICEVUTE
+        cl = osa.Client(wsdl)
 
-	    parameters = cl.types.RicevutaPdf()
-	    parameters.DatiInputRichiesta = cl.types.datiInput()
-	    parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
-	    parameters.DatiInputRichiesta.protocollo = protocollo
+        parameters = cl.types.RicevutaPdf()
+        parameters.DatiInputRichiesta = cl.types.datiInput()
+        parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
+        parameters.DatiInputRichiesta.protocollo = protocollo
 
-	    cl.service.RicevutaPdf.set_auth(cf_proprietario, pwd)
+        cl.service.RicevutaPdf.set_auth(cf_proprietario, pwd)
 
-	    answer = cl.service.RicevutaPdf(parameters)
+        answer = cl.service.RicevutaPdf(parameters)
 
-	    pdf_filename = None
-	    if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
-		    import tempfile
-		    boh, pdf_filename = tempfile.mkstemp(prefix="ricevuta", suffix=".pdf")
-		    fd = open(pdf_filename,"w")
-		    fd.write(answer.esitiPositivi.dettagliEsito.pdf)
-		    fd.close()
-	    
-	    return (answer, pdf_filename)
+        pdf_filename = None
+        if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
+            import tempfile
+            boh, pdf_filename = tempfile.mkstemp(prefix="ricevuta", suffix=".pdf")
+            fd = open(pdf_filename,"w")
+            fd.write(answer.esitiPositivi.dettagliEsito.pdf)
+            fd.close()
+        
+        return (answer, pdf_filename)
 
 
 class WizardEncryptAllFiscalCodes(models.TransientModel):

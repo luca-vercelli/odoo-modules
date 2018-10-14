@@ -32,6 +32,6 @@
     'application': True,
 	'license' : 'LGPL-3',
     'external_dependencies': {
-        'python': ['pycrypto'],
+        'python': ['Crypto'],  #pip install pycryptho
     }
 }

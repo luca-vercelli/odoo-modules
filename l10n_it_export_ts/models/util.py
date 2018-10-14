@@ -25,7 +25,7 @@ DIRNAME = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUBLIC_KEY_PEM_FILENAME = os.path.join(DIRNAME, "data", "SanitelCF.cer")
 PUBLIC_KEY = None
 
-def get_pubkey(PUBLIC_KEY_PEM_FILENAME):
+def get_pubkey():
 	"""
 	Extract public RSA key from X.509 PEM certificate specified by PUBLIC_KEY_PEM_FILENAME
 	"""
