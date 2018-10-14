@@ -82,6 +82,17 @@ def encrypt(message):
 	msg_enc = cipher.encrypt(message)
 	return base64.encodestring(msg_enc)
 	
+def write_to_new_tempfile(self, data, prefix='', suffix='.tmp', dir=None, delete=True):
+    """
+    Create a new file, write 'data' into it, close it
+    @return filename
+    """
+    import tempfile
+    fd = tempfile.NamedTemporaryFile(prefix=prefix, suffix=suffix, dir=dir, delete=delete)
+    fd.write(data)
+    fd.close()
+    return fd.name
+
 def zip_single_file(orig_filename):
 	"""
 	Compress single file to a temporary location.

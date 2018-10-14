@@ -24,6 +24,8 @@ from odoo import models,fields,api
 #see /usr/lib/python2.7/dist-packages/openerp/addons/product/product.py
 
 import os
+from . import util
+from .. import osa
 
 class WizardExportInvoices(models.TransientModel):
     _name = "exportts.wizard.export"
@@ -65,7 +67,6 @@ class WizardExportInvoices(models.TransientModel):
             'messages': messages
             })
 
-#See:
 
 # <<Il trattamento e la conservazione del codice fiscale dell'assistito,
 #rilevato dalla Tessera Sanitaria, crittografato secondo le
@@ -104,12 +105,6 @@ class WizardSendToTS(models.TransientModel):
     folder = fields.Char('Backup Directory', help='Absolute path for storing files', required='True',
                          default='/odoo/backups/sistemats')
     
-    def write_to_new_tempfile(self, data):
-        import tempfile
-        xmlfile = tempfile.NamedTemporaryFile()
-        xmlfile.write(data)
-        xmlfile.close()
-        return xmlfile.name
         
     @api.one
     def send(self):
@@ -117,13 +112,12 @@ class WizardSendToTS(models.TransientModel):
         self.cf_proprietario = export.proprietario_id.fiscalcode            # TODO usare quello già criptato
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
         self.p_iva = export.proprietario_id.vat
-        self.xmlfilename = self.write_to_new_tempfile(export.xml)
+        self.xmlfilename = util.write_to_new_tempfile(export.xml, prefix='invoices', suffix='.xml')
         self.use_test_url = (self.endpoint == 'T')
 
-        from . import util
         print("Validating...")
         global XSD_FILENAME
-        util.test_xsd(xmlfilename, XSD_FILENAME)
+        util.test_xsd(self.xmlfilename, XSD_FILENAME)
         print("Compressione dati...")
         self.zipfilename = util.zip_single_file(self.xmlfilename)
         
@@ -149,7 +143,7 @@ class WizardSendToTS(models.TransientModel):
             #if pdf_filename is not None:
             #    os.system("xdg-open " + str(pdf_filename))
             
-            answer4, csv_filename = util.call_ws_dettaglio_errori()
+            answer4, csv_filename = self.call_ws_dettaglio_errori()
             print("Dettaglio errori CSV salvato in:", csv_filename)
             self.csv_filename = csv_filename
             #import os
@@ -166,10 +160,9 @@ class WizardSendToTS(models.TransientModel):
         @return webservice answer, which is an object of type "inviaFileMtomResponse"
         """
 
-        from .. import osa
 
         global WSDL_PROD, WSDL_TEST
-        if use_test_url:
+        if self.use_test_url:
             wsdl = WSDL_TEST
         else:
             wsdl = WSDL_PROD
@@ -205,8 +198,6 @@ class WizardSendToTS(models.TransientModel):
         @return webservice answer
         """
         global WSDL_ESITO
-
-        from .. import osa
 
         wsdl = WSDL_ESITO
         cl = osa.Client(wsdl)
@@ -252,8 +243,6 @@ class WizardSendToTS(models.TransientModel):
         """
         global WSDL_DET_ERRORI
 
-        from .. import osa
-
         wsdl = WSDL_DET_ERRORI
         cl = osa.Client(wsdl)
 
@@ -269,11 +258,8 @@ class WizardSendToTS(models.TransientModel):
         csv_filename = None
         try:
             if answer.esitiPositivi.dettagliEsito.csv:
-                import tempfile
-                boh, csv_filename = tempfile.mkstemp(prefix="errori", suffix=".csv.zip")
-                fd = open(csv_filename,"w")
-                fd.write(answer.esitiPositivi.dettagliEsito.csv)
-                fd.close()
+                csv_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.csv,
+                        prefix="errori", suffix=".csv.zip", dir=self.folder, delete=False)
         except:
             pass
         return (answer, csv_filename)
@@ -300,8 +286,6 @@ class WizardSendToTS(models.TransientModel):
         """
         global WSDL_RICEVUTE
 
-        from .. import osa
-
         wsdl = WSDL_RICEVUTE
         cl = osa.Client(wsdl)
 
@@ -316,11 +300,8 @@ class WizardSendToTS(models.TransientModel):
 
         pdf_filename = None
         if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
-            import tempfile
-            boh, pdf_filename = tempfile.mkstemp(prefix="ricevuta", suffix=".pdf")
-            fd = open(pdf_filename,"w")
-            fd.write(answer.esitiPositivi.dettagliEsito.pdf)
-            fd.close()
+            pdf_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.csv,
+                                        prefix="ricevuta", suffix=".pdf", dir=self.folder, delete=False)
         
         return (answer, pdf_filename)
 
@@ -334,7 +315,6 @@ class WizardEncryptAllFiscalCodes(models.TransientModel):
         """
         This encrypts all fiscalcode on demand.
         """
-        from . import util
         model = self.env['res.partner']
         all_partners = model.search([])
         for record in all_partners:
