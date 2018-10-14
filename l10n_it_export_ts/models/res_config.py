@@ -33,6 +33,6 @@ class ResConfigSettings(models.TransientModel):
     default_pincode_inviante = fields.Char('Pincode inviante', help='Assegnato da Sistema TS', default_model='exportts.wizard.send')
     default_password_inviante = fields.Char('Password', help='Assegnata da Sistema TS', default_model='exportts.wizard.send')
     default_endpoint = fields.Selection([('P','Produzione'),('T','Test')], default='T', default_model='exportts.wizard.send')
-    default_folder = fields.Char('Backup Directory', help='Absolute path for storing files', required='True',
+    default_folder = fields.Char('Backup Directory', help='Absolute path for storing files',
                          default='/odoo/backups/sistemats', default_model='exportts.wizard.send')
 

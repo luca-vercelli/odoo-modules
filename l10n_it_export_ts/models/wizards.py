@@ -104,27 +104,6 @@ class WizardSendToTS(models.TransientModel):
     folder = fields.Char('Backup Directory', help='Absolute path for storing files', required='True',
                          default='/odoo/backups/sistemats')
     
-    
-    @api.one
-    def solo_ricevuta(self): #non usato?
-        export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
-        cf_proprietario = export.proprietario_id.fiscalcode # TODO puoi prendere quello già criptato
-        from . import util
-        answer3, pdf_filename = self.call_ws_ricevuta(self.pincode_inviante, 16122814390642472, cf_proprietario, self.password_inviante)
-        self.pdf_filename = pdf_filename
-        print("Ricevuta PDF salvata in:", pdf_filename)
-        #os.system("xdg-open " + str(pdf_filename))
-
-    @api.one
-    def solo_dettaglio_errori(self): #non usato?
-        export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
-        cf_proprietario = export.proprietario_id.fiscalcode # TODO puoi prendere quello già criptato
-        from . import util
-        answer3, csv_filename = self.call_ws_dettaglio_errori(self.pincode_inviante, 16122814390642472, cf_proprietario, self.password_inviante)
-        self.csv_filename = csv_filename
-        print("Ricevuta CSV salvata in:", csv_filename)
-        #os.system("xdg-open " + str(csv_filename))
-
     def write_to_new_tempfile(self, data):
         import tempfile
         xmlfile = tempfile.NamedTemporaryFile()
@@ -135,47 +114,49 @@ class WizardSendToTS(models.TransientModel):
     @api.one
     def send(self):
         export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
-        cf_proprietario = export.proprietario_id.fiscalcode # TODO puoi prendere quello già criptato
-        xmlfilename = self.write_to_new_tempfile(export.xml)
-        TEST = (self.endpoint == 'T')
+        self.cf_proprietario = export.proprietario_id.fiscalcode            # TODO usare quello già criptato
+        self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
+        self.p_iva = export.proprietario_id.vat
+        self.xmlfilename = self.write_to_new_tempfile(export.xml)
+        self.use_test_url = (self.endpoint == 'T')
 
         from . import util
         print("Validating...")
         global XSD_FILENAME
         util.test_xsd(xmlfilename, XSD_FILENAME)
         print("Compressione dati...")
-        zipfilename = util.zip_single_file(xmlfilename)
+        self.zipfilename = util.zip_single_file(self.xmlfilename)
         
         print("Invio dati...")
-        answer = self.call_ws_invio(zipfilename, self.pincode_inviante, cf_proprietario, self.password_inviante, TEST)
+        answer = self.call_ws_invio()
 
         print("Invio concluso. Risposta:")
         print(answer)
 
         if answer.protocollo:
-            protocollo = answer.protocollo
+            self.protocollo = answer.protocollo
             
             import time
             time.sleep(4)
             print("Esito invio:")
-            answer2 = self.call_ws_esito(self.pincode_inviante, protocollo, cf_proprietario, self.password_inviante)
+            answer2 = self.call_ws_esito()
             print(answer2)
             
-            answer3, pdf_filename = self.call_ws_ricevuta(self.pincode_inviante, protocollo, cf_proprietario, self.password_inviante)
+            answer3, pdf_filename = self.call_ws_ricevuta()
             print("Ricevuta PDF salvata in:", pdf_filename)
             self.pdf_filename = pdf_filename
             #import os
             #if pdf_filename is not None:
             #    os.system("xdg-open " + str(pdf_filename))
             
-            answer4, csv_filename = util.call_ws_dettaglio_errori(self.pincode_inviante, protocollo, cf_proprietario, self.password_inviante)
+            answer4, csv_filename = util.call_ws_dettaglio_errori()
             print("Dettaglio errori CSV salvato in:", csv_filename)
             self.csv_filename = csv_filename
             #import os
             #if csv_filename is not None:
             #    os.system("xdg-open " + str(csv_filename))
 
-    def call_ws_invio(self, zipfilename, pincode_inviante, cf_proprietario, pwd, if_test):
+    def call_ws_invio(self):  #zipfilename, self.pincode_inviante, cf_proprietario, self.password_inviante, use_test_url
         """
         Call the webservice "inviaFileMtom()".
         Fill all required parameters: file name, file content, owner data, basic auth. credentials
@@ -188,7 +169,7 @@ class WizardSendToTS(models.TransientModel):
         from .. import osa
 
         global WSDL_PROD, WSDL_TEST
-        if if_test:
+        if use_test_url:
             wsdl = WSDL_TEST
         else:
             wsdl = WSDL_PROD
@@ -196,13 +177,13 @@ class WizardSendToTS(models.TransientModel):
         cl = osa.Client(wsdl)
 
         parameters = cl.types.inviaFileMtom()
-        parameters.nomeFileAllegato = os.path.basename(zipfilename)
-        parameters.pincodeInvianteCifrato = encrypt(pincode_inviante)
+        parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
+        parameters.pincodeInvianteCifrato = encrypt(self.pincode_inviante)
         parameters.datiProprietario = cl.types.proprietario()
-        parameters.datiProprietario.cfProprietario = cf_proprietario    #cleartext
+        parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
         parameters.documento = open(zipfilename, "r").read()
 
-        cl.service.inviaFileMtom.set_auth(cf_proprietario, pwd)
+        cl.service.inviaFileMtom.set_auth(self.cf_proprietario, self.password_inviante)
 
         return cl.service.inviaFileMtom(parameters)
 
@@ -217,7 +198,7 @@ class WizardSendToTS(models.TransientModel):
     #    idErrore = 
     #}
 
-    def call_ws_esito(self, pincode_inviante, protocollo, cf_proprietario, pwd):
+    def call_ws_esito(self):
         """
         Call the webservice "EsitoInvii()".
         Restituisce l'esito dell'invio corrispondente al numero di protocollo dato
@@ -232,13 +213,13 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.types.EsitoInvii()
         parameters.DatiInputRichiesta = cl.types.datiInput()
-        parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
-        parameters.DatiInputRichiesta.protocollo = protocollo
+        parameters.DatiInputRichiesta.pinCode = util.encrypt(self.pincode_inviante)
+        parameters.DatiInputRichiesta.protocollo = self.protocollo
         #alternativi al protocollo:
         #parameters.DatiInputRichiesta.dataInizio = '24-12-2016'
         #parameters.DatiInputRichiesta.dataFine = '26-12-2016'
 
-        cl.service.EsitoInvii.set_auth(cf_proprietario, pwd)
+        cl.service.EsitoInvii.set_auth(self.cf_proprietario, self.password_inviante)
 
         return cl.service.EsitoInvii(parameters)
 
@@ -263,7 +244,7 @@ class WizardSendToTS(models.TransientModel):
     #    esitiNegativi = None (esitiNegativi)
     #}
 
-    def call_ws_dettaglio_errori(self, pincode_inviante, protocollo, cf_proprietario, pwd):
+    def call_ws_dettaglio_errori(self):
         """
         Call the webservice "DettaglioErrori()".
         Restituisce un CSV contenente il dettaglio degli errori di importazione
@@ -278,10 +259,10 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.types.DettaglioErrori()
         parameters.DatiInputRichiesta = cl.types.datiInput()
-        parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
-        parameters.DatiInputRichiesta.protocollo = protocollo
+        parameters.DatiInputRichiesta.pinCode = util.encrypt(self.pincode_inviante)
+        parameters.DatiInputRichiesta.protocollo = self.protocollo
 
-        cl.service.DettaglioErrori.set_auth(cf_proprietario, pwd)
+        cl.service.DettaglioErrori.set_auth(self.cf_proprietario, self.password_inviante)
 
         answer = cl.service.DettaglioErrori(parameters)
 
@@ -311,7 +292,7 @@ class WizardSendToTS(models.TransientModel):
     #                    }
     #}
 
-    def call_ws_ricevuta(self, pincode_inviante, protocollo, cf_proprietario, pwd):
+    def call_ws_ricevuta(self):
         """
         Call the webservice "RicevutaPdf()".
         Restituisce la ricevuta dell'invio corrispondente al numero di protocollo dato
@@ -326,10 +307,10 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.types.RicevutaPdf()
         parameters.DatiInputRichiesta = cl.types.datiInput()
-        parameters.DatiInputRichiesta.pinCode = encrypt(pincode_inviante)
+        parameters.DatiInputRichiesta.pinCode = encrypt(self.pincode_inviante)
         parameters.DatiInputRichiesta.protocollo = protocollo
 
-        cl.service.RicevutaPdf.set_auth(cf_proprietario, pwd)
+        cl.service.RicevutaPdf.set_auth(self.cf_proprietario, self.password_inviante)
 
         answer = cl.service.RicevutaPdf(parameters)
 
