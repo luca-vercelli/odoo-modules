@@ -24,7 +24,7 @@ Ho riscontrato problemi con i certificati SSL del server, nel caso eseguire prim
 
 Stato dell'arte
 ---------------
-**Il formato del file XML è estremamente limitato, e' stato testato solo per gli psicologi privati, e solo per le fatture (no note di credito).**
+**Il formato del file XML è estremamente limitato, e' stato testato solo per gli psicologi privati**
 
 Note
 ----
