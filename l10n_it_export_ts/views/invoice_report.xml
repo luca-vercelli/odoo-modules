@@ -57,7 +57,7 @@
   <!-- regime dei minimi: data pagamento=data fattura -->
   <dataPagamento><t t-raw="o.date_invoice"/></dataPagamento>
   <!-- I=inserimento,R=rimborso,V=variazione,C=cancellazione    out_invoice=fattura,out_refund=nota di credito-->
-  <flagOperazione><t t-raw="'I' if o.type='out_invoice' else 'R'"/></flagOperazione>
+  <flagOperazione><t t-raw="'I' if o.type=='out_invoice' else 'R'"/></flagOperazione>
   <!-- da crittografare -->
   <cfCittadino><t t-raw="o.partner_id.fiscalcode_enc"/></cfCittadino>
   <t t-foreach="o.invoice_line_ids" t-as="o"><t t-call="l10n_it_export_ts.report_invoice_riga_xml_ts"/></t>
