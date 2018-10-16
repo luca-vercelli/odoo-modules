@@ -112,6 +112,10 @@ class WizardSendToTS(models.TransientModel):
         self.cf_proprietario = export.proprietario_id.fiscalcode            # TODO usare quello già criptato
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
         self.p_iva = export.proprietario_id.vat
+        
+        import pdb
+        pdb.set_trace()
+
         self.xmlfilename = util.write_to_new_tempfile(export.xml, prefix='invoices', suffix='.xml')
         self.use_test_url = (self.endpoint == 'T')
 
@@ -259,7 +263,7 @@ class WizardSendToTS(models.TransientModel):
         try:
             if answer.esitiPositivi.dettagliEsito.csv:
                 csv_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.csv,
-                        prefix="errori", suffix=".csv.zip", dir=self.folder, delete=False)
+                        prefix="errori", suffix=".csv.zip", dir=self.folder)
         except:
             pass
         return (answer, csv_filename)
@@ -301,7 +305,7 @@ class WizardSendToTS(models.TransientModel):
         pdf_filename = None
         if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
             pdf_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.csv,
-                                        prefix="ricevuta", suffix=".pdf", dir=self.folder, delete=False)
+                                        prefix="ricevuta", suffix=".pdf", dir=self.folder)
         
         return (answer, pdf_filename)
 

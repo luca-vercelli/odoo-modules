@@ -40,13 +40,10 @@
 
 <template id="report_invoice_document_xml_ts">
 <t t-name="report_invoice_document_xml_ts">
-    <!-- Multicompany -->
-    <t t-if="o and 'company_id' in o"><t t-set="company" t-value="o.company_id"/></t>
-    <t t-if="not o or not 'company_id' in o"><t t-set="company" t-value="res_company"/></t>
 <t t-if="(not o.partner_id.opposizione_730) and (not o.partner_id.is_company)" > <!--FIXME se non persona fisica è corretto escluderlo? -->
 <documentoSpesa>
   <idSpesa>
-       <pIva><t t-if="company.partner_id.vat"><t t-raw="company.partner_id.vat[2:]"/></t></pIva>
+       <pIva><t t-if="proprietario.vat"><t t-raw="proprietario.vat[2:]"/></t></pIva>
        <dataEmissione><t t-raw="o.date_invoice"/></dataEmissione>
        <numDocumentoFiscale>
           <!--registratore di cassa. 1 = fattura -->
