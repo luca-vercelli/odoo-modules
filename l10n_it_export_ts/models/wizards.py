@@ -112,9 +112,6 @@ class WizardSendToTS(models.TransientModel):
         self.cf_proprietario = export.proprietario_id.fiscalcode            # TODO usare quello già criptato
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
         self.p_iva = export.proprietario_id.vat
-        
-        import pdb
-        pdb.set_trace()
 
         self.xmlfilename = util.write_to_new_tempfile(export.xml, prefix='invoices', suffix='.xml')
         self.use_test_url = (self.endpoint == 'T')
