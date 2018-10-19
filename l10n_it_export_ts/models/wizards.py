@@ -26,6 +26,9 @@ from odoo import models,fields,api
 import os
 from . import util
 from .. import osa
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class WizardExportInvoices(models.TransientModel):
     _name = "exportts.wizard.export"
@@ -116,36 +119,40 @@ class WizardSendToTS(models.TransientModel):
         self.xmlfilename = util.write_to_new_tempfile(export.xml, prefix='invoices', suffix='.xml')
         self.use_test_url = (self.endpoint == 'T')
 
-        print("Validating...")
+        _logger.info("Validating...")
         global XSD_FILENAME
+        
+        import os
+        _logger.info("PWD=", os.getcwd())
+
         util.test_xsd(self.xmlfilename, XSD_FILENAME)
-        print("Compressione dati...")
+        _logger.info("Compressione dati...")
         self.zipfilename = util.zip_single_file(self.xmlfilename)
         
-        print("Invio dati...")
+        _logger.info("Invio dati...")
         answer = self.call_ws_invio()
 
-        print("Invio concluso. Risposta:")
-        print(answer)
+        _logger.info("Invio concluso. Risposta:")
+        _logger.info(answer)
 
         if answer.protocollo:
             self.protocollo = answer.protocollo
             
             import time
             time.sleep(4)
-            print("Esito invio:")
+            _logger.info("Esito invio:")
             answer2 = self.call_ws_esito()
-            print(answer2)
+            _logger.info(answer2)
             
             answer3, pdf_filename = self.call_ws_ricevuta()
-            print("Ricevuta PDF salvata in:", pdf_filename)
+            _logger.info("Ricevuta PDF salvata in:", pdf_filename)
             self.pdf_filename = pdf_filename
             #import os
             #if pdf_filename is not None:
             #    os.system("xdg-open " + str(pdf_filename))
             
             answer4, csv_filename = self.call_ws_dettaglio_errori()
-            print("Dettaglio errori CSV salvato in:", csv_filename)
+            _logger.info("Dettaglio errori CSV salvato in:", csv_filename)
             self.csv_filename = csv_filename
             #import os
             #if csv_filename is not None:
