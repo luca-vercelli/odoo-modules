@@ -67,18 +67,4 @@ class res_partner(models.Model):
 				record.fiscalcode_enc = util.encrypt(record.fiscalcode)
 			else:
 				record.fiscalcode_enc = None
-	@api.v7
-	def encrypt_all_fiscalcodes_v7(self, cr, uid, context={}):
-		"""
-		This encrypts all fiscalcode on demand, inside batch queue.
-		"""
-		#FIXME apparently, batches require API v7
-		from . import util
-		model = self.pool['res.partner']
-		ids = model.search(cr, uid, [], context=context)
-		for record in model.browse(cr, uid, ids, context=context):
-			if record.fiscalcode:
-				record.fiscalcode_enc = util.encrypt(record.fiscalcode)
-			else:
-				record.fiscalcode_enc = None
 
