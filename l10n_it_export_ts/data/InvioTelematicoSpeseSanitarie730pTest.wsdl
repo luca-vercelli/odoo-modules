@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><definitions name="InvioTelematicoSpeseSanitarie730pService" targetNamespace="http://ejb.invioTelematicoSS730p.sanita.finanze.it/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ejb.invioTelematicoSS730p.sanita.finanze.it/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <types>
     <xsd:schema>
-      <!--xsd:import namespace="http://ejb.invioTelematicoSS730p.sanita.finanze.it/" schemaLocation="./data/InvioTelematicoSpeseSanitarie730p_schema1.xsd"/-->
-      <xsd:import namespace="http://ejb.invioTelematicoSS730p.sanita.finanze.it/" />
+      <xsd:import namespace="http://ejb.invioTelematicoSS730p.sanita.finanze.it/" schemaLocation="InvioTelematicoSpeseSanitarie730p_schema1.xsd"/>
     </xsd:schema>
   </types>
   <message name="inviaFileMtom">

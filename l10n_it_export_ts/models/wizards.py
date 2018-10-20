@@ -87,14 +87,15 @@ class WizardExportInvoices(models.TransientModel):
 # quindi abbiamo i due file WSDL in locale:
 
 import os
-DIRNAME = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PARENT_FOLDER = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_FOLDER = os.path.join(PARENT_FOLDER, "data")
 
-XSD_FILENAME = os.path.join(DIRNAME, "data", "730_precompilata.xsd")
-WSDL_PROD = os.path.join(DIRNAME, "data", "InvioTelematicoSpeseSanitarie730p.wsdl")
-WSDL_TEST = os.path.join(DIRNAME, "data", "InvioTelematicoSpeseSanitarie730pTest.wsdl")
-WSDL_ESITO = os.path.join(DIRNAME, "data", "EsitoInvioDatiSpesa730Service.wsdl")
-WSDL_DET_ERRORI = os.path.join(DIRNAME, "data", "DettaglioErrori730Service.wsdl")
-WSDL_RICEVUTE = os.path.join(DIRNAME, "data", "RicevutaPdf730Service.wsdl")
+XSD_FILENAME = os.path.join(DATA_FOLDER, "730_precompilata.xsd")
+WSDL_PROD = os.path.join(DATA_FOLDER, "InvioTelematicoSpeseSanitarie730p.wsdl")
+WSDL_TEST = os.path.join(DATA_FOLDER, "InvioTelematicoSpeseSanitarie730pTest.wsdl")
+WSDL_ESITO = os.path.join(DATA_FOLDER, "EsitoInvioDatiSpesa730Service.wsdl")
+WSDL_DET_ERRORI = os.path.join(DATA_FOLDER, "DettaglioErrori730Service.wsdl")
+WSDL_RICEVUTE = os.path.join(DATA_FOLDER, "RicevutaPdf730Service.wsdl")
 
 
 
@@ -115,16 +116,18 @@ class WizardSendToTS(models.TransientModel):
         self.cf_proprietario = export.proprietario_id.fiscalcode            # TODO usare quello già criptato
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
         self.p_iva = export.proprietario_id.vat
+        #TODO il pincode va criptato una volta sola....
 
         self.xmlfilename = util.write_to_new_tempfile(export.xml, prefix='invoices', suffix='.xml')
         self.use_test_url = (self.endpoint == 'T')
 
+        #chdir because I need to find the schema file
+        os.chdir(DATA_FOLDER)
+        _logger.info("Now changed dir to %s", os.getcwd())
+
         _logger.info("Validating...")
         global XSD_FILENAME
         
-        import os
-        _logger.info("PWD=", os.getcwd())
-
         util.test_xsd(self.xmlfilename, XSD_FILENAME)
         _logger.info("Compressione dati...")
         self.zipfilename = util.zip_single_file(self.xmlfilename)
@@ -145,14 +148,14 @@ class WizardSendToTS(models.TransientModel):
             _logger.info(answer2)
             
             answer3, pdf_filename = self.call_ws_ricevuta()
-            _logger.info("Ricevuta PDF salvata in:", pdf_filename)
+            _logger.info("Ricevuta PDF salvata in: %s", pdf_filename)
             self.pdf_filename = pdf_filename
             #import os
             #if pdf_filename is not None:
             #    os.system("xdg-open " + str(pdf_filename))
             
             answer4, csv_filename = self.call_ws_dettaglio_errori()
-            _logger.info("Dettaglio errori CSV salvato in:", csv_filename)
+            _logger.info("Dettaglio errori CSV salvato in: %s", csv_filename)
             self.csv_filename = csv_filename
             #import os
             #if csv_filename is not None:
@@ -179,10 +182,10 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.types.inviaFileMtom()
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
-        parameters.pincodeInvianteCifrato = encrypt(self.pincode_inviante)
+        parameters.pincodeInvianteCifrato = util.encrypt(self.pincode_inviante)
         parameters.datiProprietario = cl.types.proprietario()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
-        parameters.documento = open(zipfilename, "r").read()
+        parameters.documento = open(self.zipfilename, "r").read()
 
         cl.service.inviaFileMtom.set_auth(self.cf_proprietario, self.password_inviante)
 
@@ -299,7 +302,7 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.types.RicevutaPdf()
         parameters.DatiInputRichiesta = cl.types.datiInput()
-        parameters.DatiInputRichiesta.pinCode = encrypt(self.pincode_inviante)
+        parameters.DatiInputRichiesta.pinCode = util.encrypt(self.pincode_inviante)
         parameters.DatiInputRichiesta.protocollo = protocollo
 
         cl.service.RicevutaPdf.set_auth(self.cf_proprietario, self.password_inviante)
