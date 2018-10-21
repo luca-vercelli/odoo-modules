@@ -49,7 +49,7 @@ class res_partner(models.Model):
 		"""
 		from . import util
 		for record in self:
-			if record.fiscalcode is None:
+			if not record.fiscalcode:
 				record.fiscalcode_enc = None
 			else:
 				record.fiscalcode_enc = util.encrypt(record.fiscalcode)
