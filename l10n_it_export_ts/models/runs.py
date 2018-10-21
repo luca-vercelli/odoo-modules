@@ -25,6 +25,7 @@ class ExportRegistry(models.Model):
     _name = 'exportts.export.registry'
     _description = 'Esportazioni TS'
 
+    name = fields.Char('Nome', compute='_compute_name')
     status = fields.Char('Status', readonly=True)
     proprietario_id = fields.Many2one('res.partner',string='Proprietario')
     date_export = fields.Datetime('Timestamp estrazione', readonly=True)
@@ -34,4 +35,8 @@ class ExportRegistry(models.Model):
     csv_filename = fields.Char('File CSV dettaglio errori', readonly=True)
     messages = fields.Text('Messages', readonly=True)
 
+    @api.multi
+    def _compute_name(self):
+        for rec in self:
+            rec.name = str(rec.id)
 
