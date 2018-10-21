@@ -38,5 +38,5 @@ class ExportRegistry(models.Model):
     @api.multi
     def _compute_name(self):
         for rec in self:
-            rec.name = str(rec.id)
+            rec.name = str(rec.date_export)
 
