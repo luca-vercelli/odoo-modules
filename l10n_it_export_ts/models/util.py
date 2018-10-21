@@ -80,7 +80,8 @@ def encrypt(message):
 	key = get_pubkey()
 	cipher = PKCS1_v1_5.new(key)
 	msg_enc = cipher.encrypt(message)
-	return base64.encodestring(msg_enc)
+
+	return base64.encodestring(msg_enc)     # perche'xxx non va piu?  forse  .replace(b'\n',b'')
 	
 def write_to_new_tempfile(data, mode='w+', prefix='', suffix='.tmp', dir=None, delete=False):
     """

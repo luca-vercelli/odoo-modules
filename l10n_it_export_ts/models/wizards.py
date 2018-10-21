@@ -108,7 +108,6 @@ class WizardSendToTS(models.TransientModel):
     endpoint = fields.Selection([('P','Produzione'),('T','Test')], required=True)
     folder = fields.Char('Backup Directory', help='Absolute path for storing files', required='True',
                          default='/odoo/backups/sistemats')
-    
         
     @api.one
     def send(self):
@@ -185,7 +184,7 @@ class WizardSendToTS(models.TransientModel):
         parameters.pincodeInvianteCifrato = util.encrypt(self.pincode_inviante)
         parameters.datiProprietario = cl.types.proprietario()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
-        parameters.documento = open(self.zipfilename, "r").read()
+        parameters.documento = open(self.zipfilename, "rb").read()
 
         cl.service.inviaFileMtom.set_auth(self.cf_proprietario, self.password_inviante)
 
