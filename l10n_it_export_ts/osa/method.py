@@ -65,8 +65,9 @@ class Method(object):
         if username is not None:
             if password is None:
                 password = ""
+            plaintext_string = ('%s:%s' % (username, password)).encode()
             import base64
-            base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
+            base64string = base64.encodestring(plaintext_string).replace(b'\n', b'')
             self.auth = "Basic %s" % base64string
 
 
