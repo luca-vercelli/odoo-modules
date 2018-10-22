@@ -157,7 +157,7 @@ class XMLType(object):
 
             # do constraints checking
             n = 0  # number of values for constraints checking
-            if hasattr(val, "__iter__") and val.__class__.__name__ != "str":
+            if hasattr(val, "__iter__") and val.__class__.__name__ != "str" and val.__class__.__name__ != "bytes":
                 n = len(val)
             elif val is not None:
                 n = 1

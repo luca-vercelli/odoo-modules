@@ -184,7 +184,8 @@ class WizardSendToTS(models.TransientModel):
         parameters.pincodeInvianteCifrato = util.encrypt(self.pincode_inviante)
         parameters.datiProprietario = cl.types.proprietario()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
-        parameters.documento = open(self.zipfilename, "rb").read()
+        #parameters.documento = open(self.zipfilename, "r").read()  # Python 2
+        parameters.documento = open(self.zipfilename, "rb").read().decode(errors='ignore') # Python3 
 
         cl.service.inviaFileMtom.set_auth(self.cf_proprietario, self.password_inviante)
 

@@ -81,7 +81,7 @@ def encrypt(message):
 	cipher = PKCS1_v1_5.new(key)
 	msg_enc = cipher.encrypt(message)
 
-	return base64.encodestring(msg_enc)     # perche'xxx non va piu?  forse  .replace(b'\n',b'')
+	return base64.encodestring(msg_enc).decode()
 	
 def write_to_new_tempfile(data, mode='w+', prefix='', suffix='.tmp', dir=None, delete=False):
     """
@@ -106,7 +106,7 @@ def zip_single_file(orig_filename):
 	fd, zip_filename = tempfile.mkstemp(prefix=orig_filename, suffix=".zip")
 	from zipfile import ZipFile
 	zf = ZipFile(zip_filename, "w") #overwrite if exists
-	zf.write(orig_filename)
+	zf.write(orig_filename) #FIXME cartella /tmp !?!
 	zf.close()
 	return zip_filename
 
