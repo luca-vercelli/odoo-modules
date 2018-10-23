@@ -115,7 +115,7 @@ class WizardSendToTS(models.TransientModel):
         self.cf_proprietario = export.proprietario_id.fiscalcode            # TODO usare quello già criptato
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
         self.p_iva = export.proprietario_id.vat
-        #TODO il pincode va criptato una volta sola....
+        self.pincode_inviante_enc = util.encrypt(self.pincode_inviante)
 
         self.xmlfilename = util.write_to_new_tempfile(export.xml, prefix='invoices', suffix='.xml')
         self.use_test_url = (self.endpoint == 'T')
@@ -180,7 +180,7 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.get_type("inviaFileMtom")()
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
-        parameters.pincodeInvianteCifrato = util.encrypt(self.pincode_inviante)
+        parameters.pincodeInvianteCifrato = self.pincode_inviante_enc
         parameters.datiProprietario = cl.get_type("proprietario")()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
         #parameters.documento = open(self.zipfilename, "r").read()  # Python 2
@@ -219,7 +219,7 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.get_type("EsitoInvii")()
         parameters.DatiInputRichiesta = cl.get_type("datiInput")()
-        parameters.DatiInputRichiesta.pinCode = util.encrypt(self.pincode_inviante)
+        parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
         #alternativi al protocollo:
         #parameters.DatiInputRichiesta.dataInizio = '24-12-2016'
@@ -268,7 +268,7 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.get_type("DettaglioErrori")()
         parameters.DatiInputRichiesta = cl.get_type("datiInput")()
-        parameters.DatiInputRichiesta.pinCode = util.encrypt(self.pincode_inviante)
+        parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
 
         answer = cl.service.DettaglioErrori(parameters)
@@ -316,7 +316,7 @@ class WizardSendToTS(models.TransientModel):
 
         parameters = cl.get_type("RicevutaPdf")()
         parameters.DatiInputRichiesta = cl.get_type("datiInput")()
-        parameters.DatiInputRichiesta.pinCode = util.encrypt(self.pincode_inviante)
+        parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = protocollo
 
         answer = cl.service.RicevutaPdf(parameters)
