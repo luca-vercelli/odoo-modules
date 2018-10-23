@@ -28,7 +28,7 @@ Stato dell'arte
 
 Note tecniche
 -------------
-Questo modulo utilizza zeep [3] come client SOAP, da installare con pip install zeep.
+Questo modulo utilizza zeep [3] come client SOAP, e altre dipendenze da installare con `pip install pycryptho zeep requests`.
 
 
 [1] https://sistemats1.sanita.finanze.it/portale/invio-telematico-documenti-e-specifiche-tecniche

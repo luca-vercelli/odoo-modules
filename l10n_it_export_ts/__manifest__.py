@@ -32,6 +32,6 @@
     'application': True,
 	'license' : 'LGPL-3',
     'external_dependencies': {
-        'python': ['Crypto', 'zeep', 'requests'],  #pip install pycryptho && pip install zeep
+        'python': ['Crypto', 'zeep', 'requests'],  #pip install pycryptho zeep requests
     }
 }
