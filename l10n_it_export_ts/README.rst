@@ -26,14 +26,14 @@ Stato dell'arte
 ---------------
 **Il formato del file XML è estremamente limitato, e' stato testato solo per gli psicologi privati**
 
-Note
-----
-Questo modulo include una versione modificata di osa [3], che apparentemente non è più mantenuto.
+Note tecniche
+-------------
+Questo modulo utilizza zeep [3] come client SOAP, da installare con pip install zeep.
 
 
 [1] https://sistemats1.sanita.finanze.it/portale/invio-telematico-documenti-e-specifiche-tecniche
 
 [2] https://sistemats4.sanita.finanze.it/simossHome/login.jsp
 
-[3] https://bitbucket.org/sboz/osa
+[3] https://python-zeep.readthedocs.io/en/master/
 

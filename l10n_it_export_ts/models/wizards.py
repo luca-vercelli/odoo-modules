@@ -24,9 +24,9 @@ from odoo import models,fields,api
 #see /usr/lib/python2.7/dist-packages/openerp/addons/product/product.py
 
 import os
-from . import util
-from .. import osa
 import logging
+
+from . import util
 
 _logger = logging.getLogger(__name__)
 
@@ -169,7 +169,7 @@ class WizardSendToTS(models.TransientModel):
         
         @return webservice answer, which is an object of type "inviaFileMtomResponse"
         """
-
+        from zeep import Client
 
         global WSDL_PROD, WSDL_TEST
         if self.use_test_url:
@@ -177,7 +177,7 @@ class WizardSendToTS(models.TransientModel):
         else:
             wsdl = WSDL_PROD
 
-        cl = osa.Client(wsdl)
+        cl = Client(wsdl)
 
         parameters = cl.types.inviaFileMtom()
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
@@ -208,10 +208,12 @@ class WizardSendToTS(models.TransientModel):
         Restituisce l'esito dell'invio corrispondente al numero di protocollo dato
         @return webservice answer
         """
+        from zeep import Client
+        
         global WSDL_ESITO
 
         wsdl = WSDL_ESITO
-        cl = osa.Client(wsdl)
+        cl = Client(wsdl)
 
         parameters = cl.types.EsitoInvii()
         parameters.DatiInputRichiesta = cl.types.datiInput()
@@ -252,10 +254,12 @@ class WizardSendToTS(models.TransientModel):
         Restituisce un CSV contenente il dettaglio degli errori di importazione
         @return (webservice answer, csv_filename)
         """
+        from zeep import Client
+        
         global WSDL_DET_ERRORI
 
         wsdl = WSDL_DET_ERRORI
-        cl = osa.Client(wsdl)
+        cl = Client(wsdl)
 
         parameters = cl.types.DettaglioErrori()
         parameters.DatiInputRichiesta = cl.types.datiInput()
@@ -295,10 +299,12 @@ class WizardSendToTS(models.TransientModel):
         Restituisce la ricevuta dell'invio corrispondente al numero di protocollo dato
         @return (webservice answer, local PDF temp file)
         """
+        from zeep import Client
+        
         global WSDL_RICEVUTE
 
         wsdl = WSDL_RICEVUTE
-        cl = osa.Client(wsdl)
+        cl = Client(wsdl)
 
         parameters = cl.types.RicevutaPdf()
         parameters.DatiInputRichiesta = cl.types.datiInput()
