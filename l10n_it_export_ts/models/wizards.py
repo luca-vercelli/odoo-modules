@@ -177,11 +177,11 @@ class WizardSendToTS(models.TransientModel):
             wsdl = WSDL_PROD
 
         cl = Client(wsdl, transport=Transport(session=session))
-
-        parameters = cl.get_type("inviaFileMtom")()
+        
+        parameters = cl.get_type("ns0:inviaFileMtom")()
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
         parameters.pincodeInvianteCifrato = self.pincode_inviante_enc
-        parameters.datiProprietario = cl.get_type("proprietario")()
+        parameters.datiProprietario = cl.get_type("ns0:proprietario")()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
         #parameters.documento = open(self.zipfilename, "r").read()  # Python 2
         parameters.documento = open(self.zipfilename, "rb").read().decode(errors='ignore') # Python3 
@@ -217,8 +217,8 @@ class WizardSendToTS(models.TransientModel):
         wsdl = WSDL_ESITO
         cl = Client(wsdl, transport=Transport(session=session))
 
-        parameters = cl.get_type("EsitoInvii")()
-        parameters.DatiInputRichiesta = cl.get_type("datiInput")()
+        parameters = cl.get_type("ns0:EsitoInvii")()
+        parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
         #alternativi al protocollo:
@@ -266,8 +266,8 @@ class WizardSendToTS(models.TransientModel):
         wsdl = WSDL_DET_ERRORI
         cl = Client(wsdl, transport=Transport(session=session))
 
-        parameters = cl.get_type("DettaglioErrori")()
-        parameters.DatiInputRichiesta = cl.get_type("datiInput")()
+        parameters = cl.get_type("ns0:DettaglioErrori")()
+        parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
 
@@ -314,8 +314,8 @@ class WizardSendToTS(models.TransientModel):
         wsdl = WSDL_RICEVUTE
         cl = Client(wsdl, transport=Transport(session=session))
 
-        parameters = cl.get_type("RicevutaPdf")()
-        parameters.DatiInputRichiesta = cl.get_type("datiInput")()
+        parameters = cl.get_type("ns0:RicevutaPdf")()
+        parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = protocollo
 
