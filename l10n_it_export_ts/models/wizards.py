@@ -112,7 +112,7 @@ class WizardSendToTS(models.TransientModel):
     @api.one
     def send(self):
         export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
-        self.cf_proprietario = export.proprietario_id.fiscalcode            # TODO usare quello già criptato
+        self.cf_proprietario = export.proprietario_id.fiscalcode
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
         self.p_iva = export.proprietario_id.vat
         self.pincode_inviante_enc = util.encrypt(self.pincode_inviante)
@@ -125,7 +125,6 @@ class WizardSendToTS(models.TransientModel):
         _logger.info("Now changed dir to %s", os.getcwd())
 
         _logger.info("Validating...")
-        global XSD_FILENAME
         
         util.test_xsd(self.xmlfilename, XSD_FILENAME)
         _logger.info("Compressione dati...")
@@ -167,7 +166,7 @@ class WizardSendToTS(models.TransientModel):
         session.auth = HTTPBasicAuth(self.cf_proprietario, self.password_inviante)
         return Transport(session=session)
         
-    def call_ws_invio(self):  #zipfilename, self.pincode_inviante, cf_proprietario, self.password_inviante, use_test_url
+    def call_ws_invio(self):
         """
         Call the webservice "inviaFileMtom()".
         Fill all required parameters: file name, file content, owner data, basic auth. credentials
@@ -177,14 +176,10 @@ class WizardSendToTS(models.TransientModel):
         @return webservice answer, which is an object of type "inviaFileMtomResponse"
         """
         from zeep import Client
-
-        global WSDL_PROD, WSDL_TEST
-        if self.use_test_url:
-            wsdl = WSDL_TEST
-        else:
-            wsdl = WSDL_PROD
-
-        cl = Client(wsdl, transport=self._create_transport())
+        
+        wsdl = WSDL_TEST if self.use_test_url else WSDL_PROD
+        
+        cl = Client(wsdl=wsdl, transport=self._create_transport())
         cl_factory = cl.factory("ns0")
         
         parameters = cl_factory.inviaFileMtom()
@@ -215,11 +210,8 @@ class WizardSendToTS(models.TransientModel):
         @return webservice answer
         """
         from zeep import Client
-        
-        global WSDL_ESITO
 
-        wsdl = WSDL_ESITO
-        cl = Client(wsdl, transport=self._create_transport())
+        cl = Client(wsdl=WSDL_ESITO, transport=self._create_transport())
         cl_factory = cl.factory("ns0")
 
         parameters = cl_factory.EsitoInvii()
@@ -260,11 +252,8 @@ class WizardSendToTS(models.TransientModel):
         @return (webservice answer, csv_filename)
         """
         from zeep import Client
-        
-        global WSDL_DET_ERRORI
 
-        wsdl = WSDL_DET_ERRORI
-        cl = Client(wsdl, transport=self._create_transport())
+        cl = Client(wsdl=WSDL_DET_ERRORI, transport=self._create_transport())
         cl_factory = cl.factory("ns0")
 
         parameters = cl_factory.DettaglioErrori()
@@ -304,11 +293,8 @@ class WizardSendToTS(models.TransientModel):
         @return (webservice answer, local PDF temp file)
         """
         from zeep import Client
-        
-        global WSDL_RICEVUTE
 
-        wsdl = WSDL_RICEVUTE
-        cl = Client(wsdl, transport=self._create_transport())
+        cl = Client(wsdl=WSDL_RICEVUTE, transport=self._create_transport())
         cl_factory = cl.factory("ns0")
 
         parameters = cl_factory.RicevutaPdf()
