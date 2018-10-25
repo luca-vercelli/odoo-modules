@@ -154,6 +154,19 @@ class WizardSendToTS(models.TransientModel):
             _logger.info("Dettaglio errori CSV salvato in: %s", csv_filename)
             self.csv_filename = csv_filename
 
+    def _create_transport(self):
+        """
+        Create a new Transport with HTTP Authentication
+        as required by all webservices
+        """
+        from requests import Session
+        from requests.auth import HTTPBasicAuth
+        from zeep.transports import Transport
+        
+        session = Session()
+        session.auth = HTTPBasicAuth(self.cf_proprietario, self.password_inviante)
+        return Transport(session=session)
+
     def call_ws_invio(self):  #zipfilename, self.pincode_inviante, cf_proprietario, self.password_inviante, use_test_url
         """
         Call the webservice "inviaFileMtom()".
@@ -164,11 +177,6 @@ class WizardSendToTS(models.TransientModel):
         @return webservice answer, which is an object of type "inviaFileMtomResponse"
         """
         from zeep import Client
-        from requests import Session
-        from requests.auth import HTTPBasicAuth
-        from zeep.transports import Transport
-        session = Session()
-        session.auth = HTTPBasicAuth(self.cf_proprietario, self.password_inviante)
 
         global WSDL_PROD, WSDL_TEST
         if self.use_test_url:
@@ -176,7 +184,7 @@ class WizardSendToTS(models.TransientModel):
         else:
             wsdl = WSDL_PROD
 
-        cl = Client(wsdl, transport=Transport(session=session))
+        cl = Client(wsdl, transport=self._create_transport())
         
         parameters = cl.get_type("ns0:inviaFileMtom")()
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
@@ -206,16 +214,11 @@ class WizardSendToTS(models.TransientModel):
         @return webservice answer
         """
         from zeep import Client
-        from requests import Session
-        from requests.auth import HTTPBasicAuth
-        from zeep.transports import Transport
-        session = Session()
-        session.auth = HTTPBasicAuth(self.cf_proprietario, self.password_inviante)
         
         global WSDL_ESITO
 
         wsdl = WSDL_ESITO
-        cl = Client(wsdl, transport=Transport(session=session))
+        cl = Client(wsdl, transport=self._create_transport())
 
         parameters = cl.get_type("ns0:EsitoInvii")()
         parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
@@ -255,16 +258,11 @@ class WizardSendToTS(models.TransientModel):
         @return (webservice answer, csv_filename)
         """
         from zeep import Client
-        from requests import Session
-        from requests.auth import HTTPBasicAuth
-        from zeep.transports import Transport
-        session = Session()
-        session.auth = HTTPBasicAuth(self.cf_proprietario, self.password_inviante)
         
         global WSDL_DET_ERRORI
 
         wsdl = WSDL_DET_ERRORI
-        cl = Client(wsdl, transport=Transport(session=session))
+        cl = Client(wsdl, transport=self._create_transport())
 
         parameters = cl.get_type("ns0:DettaglioErrori")()
         parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
@@ -303,16 +301,11 @@ class WizardSendToTS(models.TransientModel):
         @return (webservice answer, local PDF temp file)
         """
         from zeep import Client
-        from requests import Session
-        from requests.auth import HTTPBasicAuth
-        from zeep.transports import Transport
-        session = Session()
-        session.auth = HTTPBasicAuth(self.cf_proprietario, self.password_inviante)
         
         global WSDL_RICEVUTE
 
         wsdl = WSDL_RICEVUTE
-        cl = Client(wsdl, transport=Transport(session=session))
+        cl = Client(wsdl, transport=self._create_transport())
 
         parameters = cl.get_type("ns0:RicevutaPdf")()
         parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
