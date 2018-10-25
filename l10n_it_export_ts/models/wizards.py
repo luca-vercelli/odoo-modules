@@ -166,7 +166,7 @@ class WizardSendToTS(models.TransientModel):
         session = Session()
         session.auth = HTTPBasicAuth(self.cf_proprietario, self.password_inviante)
         return Transport(session=session)
-
+        
     def call_ws_invio(self):  #zipfilename, self.pincode_inviante, cf_proprietario, self.password_inviante, use_test_url
         """
         Call the webservice "inviaFileMtom()".
@@ -185,11 +185,12 @@ class WizardSendToTS(models.TransientModel):
             wsdl = WSDL_PROD
 
         cl = Client(wsdl, transport=self._create_transport())
+        cl_factory = cl.factory("ns0")
         
-        parameters = cl.get_type("ns0:inviaFileMtom")()
+        parameters = cl_factory.inviaFileMtom()
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
         parameters.pincodeInvianteCifrato = self.pincode_inviante_enc
-        parameters.datiProprietario = cl.get_type("ns0:proprietario")()
+        parameters.datiProprietario = cl_factory.proprietario()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
         #parameters.documento = open(self.zipfilename, "r").read()  # Python 2
         parameters.documento = open(self.zipfilename, "rb").read().decode(errors='ignore') # Python3 
@@ -219,9 +220,10 @@ class WizardSendToTS(models.TransientModel):
 
         wsdl = WSDL_ESITO
         cl = Client(wsdl, transport=self._create_transport())
+        cl_factory = cl.factory("ns0")
 
-        parameters = cl.get_type("ns0:EsitoInvii")()
-        parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
+        parameters = cl_factory.EsitoInvii()
+        parameters.DatiInputRichiesta = cl_factory.datiInput()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
         #alternativi al protocollo:
@@ -263,9 +265,10 @@ class WizardSendToTS(models.TransientModel):
 
         wsdl = WSDL_DET_ERRORI
         cl = Client(wsdl, transport=self._create_transport())
+        cl_factory = cl.factory("ns0")
 
-        parameters = cl.get_type("ns0:DettaglioErrori")()
-        parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
+        parameters = cl_factory.DettaglioErrori()
+        parameters.DatiInputRichiesta = cl_factory.datiInput()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
 
@@ -306,9 +309,10 @@ class WizardSendToTS(models.TransientModel):
 
         wsdl = WSDL_RICEVUTE
         cl = Client(wsdl, transport=self._create_transport())
+        cl_factory = cl.factory("ns0")
 
-        parameters = cl.get_type("ns0:RicevutaPdf")()
-        parameters.DatiInputRichiesta = cl.get_type("ns0:datiInput")()
+        parameters = cl_factory.RicevutaPdf()
+        parameters.DatiInputRichiesta = cl_factory.datiInput()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = protocollo
 
