@@ -179,18 +179,18 @@ class WizardSendToTS(models.TransientModel):
         
         wsdl = WSDL_TEST if self.use_test_url else WSDL_PROD
         
-        cl = Client(wsdl=wsdl, transport=self._create_transport())
-        cl_factory = cl.factory("ns0")
+        client = Client(wsdl=wsdl, transport=self._create_transport())
+        client_factory = client.type_factory("ns0")
         
-        parameters = cl_factory.inviaFileMtom()
+        parameters = client_factory.inviaFileMtom()
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
         parameters.pincodeInvianteCifrato = self.pincode_inviante_enc
-        parameters.datiProprietario = cl_factory.proprietario()
+        parameters.datiProprietario = client_factory.proprietario()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
         #parameters.documento = open(self.zipfilename, "r").read()  # Python 2
         parameters.documento = open(self.zipfilename, "rb").read().decode(errors='ignore') # Python3 
 
-        return cl.service.inviaFileMtom(parameters)
+        return client.service.inviaFileMtom(parameters)
 
     #Questa era una delle risposte:
     #(ricevutaInvio){
@@ -211,18 +211,18 @@ class WizardSendToTS(models.TransientModel):
         """
         from zeep import Client
 
-        cl = Client(wsdl=WSDL_ESITO, transport=self._create_transport())
-        cl_factory = cl.factory("ns0")
+        client = Client(wsdl=WSDL_ESITO, transport=self._create_transport())
+        client_factory = client.type_factory("ns0")
 
-        parameters = cl_factory.EsitoInvii()
-        parameters.DatiInputRichiesta = cl_factory.datiInput()
+        parameters = client_factory.EsitoInvii()
+        parameters.DatiInputRichiesta = client_factory.datiInput()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
         #alternativi al protocollo:
         #parameters.DatiInputRichiesta.dataInizio = '24-12-2016'
         #parameters.DatiInputRichiesta.dataFine = '26-12-2016'
 
-        return cl.service.EsitoInvii(parameters)
+        return client.service.EsitoInvii(parameters)
 
     #Questa era una delle risposte:
     #(datiOutput){
@@ -253,15 +253,15 @@ class WizardSendToTS(models.TransientModel):
         """
         from zeep import Client
 
-        cl = Client(wsdl=WSDL_DET_ERRORI, transport=self._create_transport())
-        cl_factory = cl.factory("ns0")
+        client = Client(wsdl=WSDL_DET_ERRORI, transport=self._create_transport())
+        client_factory = client.type_factory("ns0")
 
-        parameters = cl_factory.DettaglioErrori()
-        parameters.DatiInputRichiesta = cl_factory.datiInput()
+        parameters = client_factory.DettaglioErrori()
+        parameters.DatiInputRichiesta = client_factory.datiInput()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = self.protocollo
 
-        answer = cl.service.DettaglioErrori(parameters)
+        answer = client.service.DettaglioErrori(parameters)
 
         csv_filename = None
         try:
@@ -294,15 +294,15 @@ class WizardSendToTS(models.TransientModel):
         """
         from zeep import Client
 
-        cl = Client(wsdl=WSDL_RICEVUTE, transport=self._create_transport())
-        cl_factory = cl.factory("ns0")
+        client = Client(wsdl=WSDL_RICEVUTE, transport=self._create_transport())
+        client_factory = client.type_factory("ns0")
 
-        parameters = cl_factory.RicevutaPdf()
-        parameters.DatiInputRichiesta = cl_factory.datiInput()
+        parameters = client_factory.RicevutaPdf()
+        parameters.DatiInputRichiesta = client_factory.datiInput()
         parameters.DatiInputRichiesta.pinCode = self.pincode_inviante_enc
         parameters.DatiInputRichiesta.protocollo = protocollo
 
-        answer = cl.service.RicevutaPdf(parameters)
+        answer = client.service.RicevutaPdf(parameters)
 
         pdf_filename = None
         if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
