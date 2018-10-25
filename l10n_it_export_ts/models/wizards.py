@@ -116,7 +116,6 @@ class WizardSendToTS(models.TransientModel):
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
         self.p_iva = export.proprietario_id.vat
         self.pincode_inviante_enc = util.encrypt(self.pincode_inviante)
-
         self.xmlfilename = util.write_to_new_tempfile(export.xml, prefix='invoices', suffix='.xml')
         self.use_test_url = (self.endpoint == 'T')
 
@@ -183,12 +182,13 @@ class WizardSendToTS(models.TransientModel):
         client_factory = client.type_factory("ns0")
         
         parameters = client_factory.inviaFileMtom()
+        
         parameters.nomeFileAllegato = os.path.basename(self.zipfilename)
         parameters.pincodeInvianteCifrato = self.pincode_inviante_enc
         parameters.datiProprietario = client_factory.proprietario()
         parameters.datiProprietario.cfProprietario = self.cf_proprietario    #cleartext
         #parameters.documento = open(self.zipfilename, "r").read()  # Python 2
-        parameters.documento = open(self.zipfilename, "rb").read().decode(errors='ignore') # Python3 
+        parameters.documento = open(self.zipfilename, "rb").read() # Python3 
 
         return client.service.inviaFileMtom(parameters)
 
