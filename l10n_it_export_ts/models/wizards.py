@@ -131,6 +131,7 @@ class WizardSendToTS(models.TransientModel):
         
         _logger.info("Invio dati...")
         answer = self.call_ws_invio()
+        export.status = "sent"
 
         _logger.info("Invio concluso. Risposta:")
         _logger.info(answer)
@@ -143,14 +144,16 @@ class WizardSendToTS(models.TransientModel):
             _logger.info("Esito invio:")
             answer2 = self.call_ws_esito()
             _logger.info(answer2)
+            #FIXME capire come distinguere gli errori
+            export.status = "accepted" if answer2.esitiPositivi and answer2.esitiPositivi.dettagliEsito and answer2.esitiPositivi.dettagliEsito[0].stato == 0 else "rejected"
             
             answer3, pdf_filename = self.call_ws_ricevuta()
             _logger.info("Ricevuta PDF salvata in: %s", pdf_filename)
-            self.pdf_filename = pdf_filename
+            export.pdf_filename = pdf_filename
             
             answer4, csv_filename = self.call_ws_dettaglio_errori()
             _logger.info("Dettaglio errori CSV salvato in: %s", csv_filename)
-            self.csv_filename = csv_filename
+            export.csv_filename = csv_filename
 
     def _create_transport(self):
         """
@@ -297,7 +300,7 @@ class WizardSendToTS(models.TransientModel):
 
         pdf_filename = None
         if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
-            pdf_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.csv,
+            pdf_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.pdf,
                                         prefix="ricevuta", suffix=".pdf", dir=self.folder)
         
         return (answer, pdf_filename)

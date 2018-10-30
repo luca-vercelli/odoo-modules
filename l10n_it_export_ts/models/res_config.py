@@ -27,6 +27,8 @@ class ResConfigSettings(models.TransientModel):
 
     #TODO i default potrebbero essere presi dall'azienda, res_company.partner_id
     
+    #TODO check folder exist!    
+
     default_proprietario_id = fields.Many2one('res.partner',string='Proprietario',
         help='Verranno presi dal partner la P.IVA e il C.F. criptato',
         default_model='exportts.wizard.export')
