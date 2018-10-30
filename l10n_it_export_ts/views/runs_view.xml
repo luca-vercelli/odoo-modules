@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_export_registry_form" model="ir.ui.view">
+            <field name="name">export.registry.form</field>
+            <field name="model">exportts.export.registry</field>
+            <field name="arch" type="xml">
+                <form string="Esportazioni TS">
+                    <group col="2">
+                        <field name="date_export"/>
+                        <field name="date_send"/>
+                        <field name="status"/>
+                        <field name="pdf_filename"/>
+                        <field name="csv_filename"/>
+                        <field name="xml"/>
+                        <field name="messages"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_export_registry_tree" model="ir.ui.view">
+            <field name="name">export.registry.form</field>
+            <field name="model">exportts.export.registry</field>
+            <field name="arch" type="xml">
+                <tree string="Esportazioni TS">
+                    <field name="date_export"/>
+                    <field name="date_send"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_export_registry" model="ir.actions.act_window"> <!-- azione da associare al menù -->
+            <field name="name">Esportazioni TS</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">exportts.export.registry</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="action_export_registry_form" model="ir.actions.act_window.view"> <!-- sotto-azione 'form' -->
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_export_registry_form"/>
+            <field name="act_window_id" ref="action_export_registry"/>
+        </record>
+        <record id="action_export_registry_tree" model="ir.actions.act_window.view"> <!-- sotto-azione 'tree'=griglia -->
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_export_registry_tree"/>
+            <field name="act_window_id" ref="action_export_registry"/>
+        </record>
+
+        <menuitem
+            name="Esportazioni TS"
+            action="action_export_registry"
+            id="menu_export_registry"
+            groups="base.group_no_one"
+            parent="menu_sistema_ts"
+            sequence="10"/>
+    </data>
+</openerp>

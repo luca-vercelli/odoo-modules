@@ -14,11 +14,7 @@
     'name': 'Send Invoices to Sistema TS',
     'version': '1.2',
     'category': 'Accounting',
-    'description': """
-Export a number of invoices in a XML format suitable for Italian 'Sistema Tessera Sanitaria (TS)'.
-
-QUESTO MODULO E' RIMOSSO PERCHE' ANCORA IN BETA
-""",
+    'description': "",
     'author': 'Luca Vercelli',
     'depends': ['base','account','l10n_it_fiscalcode'],
     'data': [
@@ -26,10 +22,16 @@ QUESTO MODULO E' RIMOSSO PERCHE' ANCORA IN BETA
         'views/product_view.xml',
         'views/partner_view.xml',
         'views/runs_view.xml',
+        'views/res_config_view.xml',
+        'views/wizards_view.xml',
     ],
     'demo': [],
     'test': [],
     'installable': True,
     'auto_install': False,
-    'app': True,
+    'application': True,
+	'license' : 'LGPL-3',
+    'external_dependencies': {
+        'python': ['Crypto', 'zeep', 'requests'],  #pip install pycryptho zeep requests
+    }
 }

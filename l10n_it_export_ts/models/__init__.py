@@ -8,4 +8,4 @@
 #
 ##############################################################################
 
-from . import models,osa
+from . import partner, product, runs, res_config, wizards
