@@ -2,7 +2,7 @@
 <definitions name="EsitoInvioDatiSpesa730Service" targetNamespace="http://esitoinvio.p730.sanita.sogei.it/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://esitoinvio.p730.sanita.sogei.it/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <types>
     <xsd:schema>
-      <xsd:import namespace="http://esitoinvio.p730.sanita.sogei.it/" schemaLocation="./data/EsitoInvioDatiSpesa730Service_schema.xsd"/>
+      <xsd:import namespace="http://esitoinvio.p730.sanita.sogei.it/" schemaLocation="EsitoInvioDatiSpesa730Service_schema.xsd"/>
     </xsd:schema>
   </types>
   <message name="Exception_Exception">

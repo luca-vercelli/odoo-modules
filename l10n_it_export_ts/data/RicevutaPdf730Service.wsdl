@@ -7,7 +7,7 @@
            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <types>
     <xsd:schema>
-      <xsd:import namespace="http://ricevutapdf.p730.sanita.sogei.it/" schemaLocation="./data/RicevutaPdf730Service_schema.xsd"/>
+      <xsd:import namespace="http://ricevutapdf.p730.sanita.sogei.it/" schemaLocation="RicevutaPdf730Service_schema.xsd"/>
     </xsd:schema>
   </types>
   

@@ -7,7 +7,7 @@
            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <types>
     <xsd:schema>
-      <xsd:import namespace="http://dettaglioerrori.p730.sanita.sogei.it/" schemaLocation="./data/DettaglioErrori730Service_schema.xsd"/>
+      <xsd:import namespace="http://dettaglioerrori.p730.sanita.sogei.it/" schemaLocation="DettaglioErrori730Service_schema.xsd"/>
     </xsd:schema>
   </types>
   
