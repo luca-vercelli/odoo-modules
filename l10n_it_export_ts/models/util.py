@@ -83,13 +83,15 @@ def encrypt(message):
 
 	return base64.encodestring(msg_enc).decode()
 	
-def write_to_new_tempfile(data, mode='w+', prefix='', suffix='.tmp', dir=None, delete=False):
+def write_to_new_tempfile(data, mode=None, prefix='', suffix='.tmp', dir=None, delete=False):
     """
     Create a new file, write 'data' into it, close it
-    @param data is a str, so file is opened as ASCII
+    @param data can be a str or a bytes-like object, mode should be set according to that
     @return filename
     """
     import tempfile
+    if mode is None:
+        mode = 'wb+' if isinstance(data, (bytes, bytearray)) else 'w+'
     fd = tempfile.NamedTemporaryFile(mode=mode, prefix=prefix, suffix=suffix, dir=dir, delete=delete)
     fd.write(data)
     fd.close()
