@@ -1,2 +1,0 @@
-import sql_commander
-import tables_and_views
