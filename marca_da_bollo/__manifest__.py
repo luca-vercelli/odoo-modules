@@ -7,7 +7,7 @@
 
 {
     "name": "Marca da bollo.",
-    "version": "1.3",
+    "version": "1.4",
     "category": "Accounting",
     "description": "",
     "author": "Luca Vercelli",
