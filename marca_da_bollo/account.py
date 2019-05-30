@@ -55,9 +55,9 @@ class account_invoice(models.Model):
                         print("Marca da bollo non necessaria.")
                 else:
                     if self.amount_total <= tax.min_for_stamp:
-                        print("Marca da bollo. Dovrei eliminarla, ma probabilmente verrà eliminata in automatico al giro dopo. " + str(self.amount_total))
+                        print("Marca da bollo. Dovrei eliminarla, ma probabilmente verra' eliminata in automatico al giro dopo. " + str(self.amount_total))
                     else:
-                        print("Marca da bollo già presente.")
+                        print("Marca da bollo gia' presente.")
                     
         except Exception as e:
             import traceback
