@@ -20,8 +20,9 @@
 ##############################################################################
 
 from odoo import models,fields,api
+from odoo.exceptions import UserError
 
-#see /usr/lib/python2.7/dist-packages/openerp/addons/product/product.py
+#see /odoo/odoo-server/addons/product/models/product.py
 
 import os
 import logging
@@ -111,6 +112,8 @@ class WizardSendToTS(models.TransientModel):
         
     @api.one
     def send(self):
+        if not os.path.exists(self.folder):
+            raise UserError("Folder " + self.folder + " does not exist!")
         export = self.env['exportts.export.registry'].browse(self.env.context['active_id'])
         self.cf_proprietario = export.proprietario_id.fiscalcode
         self.cf_proprietario_enc = export.proprietario_id.fiscalcode_enc
@@ -144,8 +147,14 @@ class WizardSendToTS(models.TransientModel):
             _logger.info("Esito invio:")
             answer2 = self.call_ws_esito()
             _logger.info(answer2)
-            #FIXME capire come distinguere gli errori
-            export.status = "accepted" if answer2.esitiPositivi and answer2.esitiPositivi.dettagliEsito and answer2.esitiPositivi.dettagliEsito[0].stato == 0 else "rejected"
+            if answer2.esitiPositivi and answer2.esitiPositivi.dettagliEsito:
+                dettagli = answer2.esitiPositivi.dettagliEsito[0]
+                if dettagli.nInviati == dettagli.nAccolti:
+                    export.status = "Accepted"
+                elif dettagli.nAccolti == 0:
+                    export.status = "Rejected"
+                else:
+                    export.status = "Some rejected"
             
             answer3, pdf_filename = self.call_ws_ricevuta()
             _logger.info("Ricevuta PDF salvata in: %s", pdf_filename)
@@ -259,7 +268,7 @@ class WizardSendToTS(models.TransientModel):
                 'pinCode' : self.pincode_inviante_enc,
                 'protocollo' : self.protocollo
             })
-
+        _logger.info(answer)
         csv_filename = None
         try:
             if answer.esitiPositivi.dettagliEsito.csv:
@@ -298,11 +307,14 @@ class WizardSendToTS(models.TransientModel):
                 'protocollo' : self.protocollo
             })
 
+        _logger.info(answer)
         pdf_filename = None
-        if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
-            pdf_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.pdf,
+        try:
+            if answer.esitiPositivi and answer.esitiPositivi.dettagliEsito and answer.esitiPositivi.dettagliEsito.pdf:
+                pdf_filename = util.write_to_new_tempfile(answer.esitiPositivi.dettagliEsito.pdf,
                                         prefix="ricevuta", suffix=".pdf", dir=self.folder)
-        
+        except:
+            pass
         return (answer, pdf_filename)
 
 
