@@ -55,8 +55,8 @@
             name="Esportazioni TS"
             action="action_export_registry"
             id="menu_export_registry"
-            groups="base.group_no_one"
             parent="menu_sistema_ts"
             sequence="10"/>
+
     </data>
 </openerp>

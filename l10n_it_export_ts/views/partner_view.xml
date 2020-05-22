@@ -34,7 +34,6 @@
         <menuitem
             name="Sistema TS"
             id="menu_sistema_ts"
-            groups="base.group_no_one"
             parent="account.menu_finance_receivables"
             sequence="100"/>
 

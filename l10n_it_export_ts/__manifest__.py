@@ -12,15 +12,11 @@
 
 {
     'name': 'Send Invoices to Sistema TS',
-    'version': '1.5',
+    'version': '1.3',
     'category': 'Accounting',
     'description': "",
     'author': 'Luca Vercelli',
-    'depends': [
-        'base',                 # LGPL-3
-        'account',              # LGPL-3
-        'l10n_it_fiscalcode'    # AGPL-3, so we are forced to use AGPL-3
-        ],
+    'depends': ['base','account','l10n_it_fiscalcode'],
     'data': [
         'views/invoice_report.xml',
         'views/product_view.xml',
@@ -34,7 +30,7 @@
     'installable': True,
     'auto_install': False,
     'application': True,
-	'license' : 'AGPL-3',
+	'license' : 'LGPL-3',
     'external_dependencies': {
         'python': ['Crypto', 'zeep', 'requests'],  #pip install pycryptho zeep requests
     }

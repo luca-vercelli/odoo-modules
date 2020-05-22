@@ -149,10 +149,12 @@ class WizardSendToTS(models.TransientModel):
             _logger.info(answer2)
             if answer2.esitiPositivi and answer2.esitiPositivi.dettagliEsito:
                 dettagli = answer2.esitiPositivi.dettagliEsito[0]
-                if dettagli.nInviati == dettagli.nAccolti:
-                    export.status = "Accepted"
-                elif dettagli.nAccolti == 0:
+                if dettagli.nAccolti == 0:
                     export.status = "Rejected"
+                elif dettagli.nInviati == dettagli.nAccolti:
+                    export.status = "Accepted"
+                elif export.nWarnings > 0:
+                    export.status = "Accepted with warnings"
                 else:
                     export.status = "Some rejected"
             

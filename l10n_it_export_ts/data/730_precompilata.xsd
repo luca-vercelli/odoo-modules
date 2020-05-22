@@ -46,6 +46,14 @@
 								</xs:simpleType>
 							</xs:element>
 							<xs:element name="cfCittadino" type="cfType"/>
+							<xs:element name="pagamentoTracciato" minOccurs="0"> 
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="SI"/> <!-- PAGAMENTO TRACCIATO -->					
+										<xs:enumeration value="NO"/> <!-- PAGAMENTO NON TRACCIATO -->
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
 							<xs:element name="voceSpesa" maxOccurs="unbounded">
 								<xs:complexType>
 									<xs:sequence>

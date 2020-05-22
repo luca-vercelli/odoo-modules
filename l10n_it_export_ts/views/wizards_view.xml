@@ -83,7 +83,6 @@
             name="Encrypt fiscal codes"
             action="action_encrypt_fiscalcode"
             id="menu_encrypt_fiscalcode"
-            groups="base.group_no_one"
             parent="menu_sistema_ts"
             sequence="20"/>
 
