@@ -30,7 +30,7 @@
     'installable': True,
     'auto_install': False,
     'application': True,
-	'license' : 'LGPL-3',
+	'license' : 'AGPL-3',
     'external_dependencies': {
         'python': ['Crypto', 'zeep', 'requests'],  #pip install pycryptho zeep requests
     }
