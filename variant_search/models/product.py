@@ -14,7 +14,6 @@ class ProductAttributevalue(models.Model):
 	"""
 	_inherit = 'product.attribute.value'
 
-	@api.multi
 	def _variant_name(self, variable_attributes):
 		return ", ".join([v.name for v in self.sorted(key=lambda r: r.attribute_id.sequence) if v.attribute_id in variable_attributes])
 	
@@ -29,8 +28,7 @@ class ProductProductExt(models.Model):
 	_inherit = 'product.product'
 	var_desc = fields.Char(comment='Variant description', compute='_compute_var_desc', store=True)
 	#var_desc = fields.Char(comment='Variant description', store=True)
-	
-	@api.multi
+
 	def name_get(self):
 		"""
 		By default, "display only the attributes with multiple possible values on the template".
@@ -59,7 +57,7 @@ class ProductProductExt(models.Model):
 		for product in self.sudo():
 			# display all the attributes 
 			variable_attributes = product.attribute_line_ids.mapped('attribute_id')
-			variant = product.attribute_value_ids._variant_name(variable_attributes)
+			variant = product.product_template_attribute_value_ids._variant_name(variable_attributes)
 
 			name = variant and "%s (%s)" % (product.name, variant) or product.name
 			sellers = []
@@ -109,7 +107,7 @@ class ProductProductExt(models.Model):
 		
 		return super(ProductProductExt, self).name_search(name=name, args=args, operator=operator, limit=limit)
 	
-	@api.depends('attribute_value_ids')
+	@api.depends('product_template_attribute_value_ids')
 	def _compute_var_desc(self):
 		#FIXME can avoid loop?
 		for rec in self:
