@@ -6,13 +6,13 @@ from odoo.addons import product
 import logging
 _logger = logging.getLogger(__name__)
 
-class ProductAttributevalue(models.Model):
+class ProductTemplateAttributeValue(models.Model):
 	"""
 	This is a bugfix to Odoo 10.0
 	Categories should not be ordered alphabetically.
 	Categories should be ordered according to their choosen order (i.e. sequence field).
 	"""
-	_inherit = 'product.attribute.value'
+	_inherit = 'product.template.attribute.value'
 
 	def _variant_name(self, variable_attributes):
 		return ", ".join([v.name for v in self.sorted(key=lambda r: r.attribute_id.sequence) if v.attribute_id in variable_attributes])
@@ -92,16 +92,15 @@ class ProductProductExt(models.Model):
 		if not args:
 			args = []
 		products = None
-		
 		if name:
 			if operator in ['like', 'ilike']:
 				pieces = name.split(' ')
 				search_domains = [('var_desc', operator, piece) for piece in pieces]
 			else:
 				search_domains = [('var_desc', operator, name)]
-			_logger.debug('Qui domains=%s ', str(search_domains))
+			_logger.debug('Here domains=%s ', str(search_domains))
 			products = self.search(search_domains)
-			_logger.debug('Qui products=%s ', str(products))
+			_logger.debug('Here products=%s ', str(products))
 			if products:
 				return products.name_get()
 		
