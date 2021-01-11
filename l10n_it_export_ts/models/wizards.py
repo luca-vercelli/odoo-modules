@@ -51,7 +51,7 @@ class WizardExportInvoices(models.TransientModel):
         if companies:
             messages = messages + "Fatture ignorate perchè non intestate a persone fisiche: " + str(companies) + "\r\n"
         if oppositions:
-            messages = messages + "Fatture ignorate perchè intestatario oppostosi alla dichiarazione TS: " + str(oppositions) + "\r\n"
+            messages = messages + "Fatture con opposizione alla dichiarazione TS: " + str(oppositions) + "\r\n"
         
         ctx = self.env.context
         values = {
