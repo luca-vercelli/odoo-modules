@@ -60,7 +60,7 @@
   <!-- I=inserimento,R=rimborso,V=variazione,C=cancellazione    out_invoice=fattura,out_refund=nota di credito-->
   <flagOperazione><t t-raw="'I' if o.type=='out_invoice' else 'R'"/></flagOperazione>
   <!-- da crittografare -->
-  <cfCittadino><t t-raw="o.partner_id.fiscalcode_enc if (not o.partner_id.opposizione_730) else ''"/></cfCittadino>
+  <cfCittadino t-if="not o.partner_id.opposizione_730"><t t-raw="o.partner_id.fiscalcode_enc"/></cfCittadino>
   <pagamentoTracciato><t t-raw="'SI' if (not o.partner_id.opposizione_730) else 'NO'"/></pagamentoTracciato>
   <tipoDocumento><t t-raw="'F'"/></tipoDocumento>
   <flagOpposizione><t t-raw="'1' if o.partner_id.opposizione_730 else '0'"/></flagOpposizione>
