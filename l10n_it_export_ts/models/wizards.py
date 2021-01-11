@@ -153,7 +153,7 @@ class WizardSendToTS(models.TransientModel):
                     export.status = "Rejected"
                 elif dettagli.nInviati == dettagli.nAccolti:
                     export.status = "Accepted"
-                elif export.nWarnings > 0:
+                elif dettagli.nWarnings > 0:
                     export.status = "Accepted with warnings"
                 else:
                     export.status = "Some rejected"
