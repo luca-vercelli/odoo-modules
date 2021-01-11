@@ -81,7 +81,7 @@ Sto assumendo che l'eventuale addebito di marca da bollo non sia detraibile
       <!-- tipologia di spesa. SP=Prestazioni Sanitarie -->
       <tipoSpesa><t t-raw="o.product_id.tipo_spesa_730"/></tipoSpesa>
       <importo><t t-raw="'{0:.2f}'.format(o.price_total)"/></importo>
-      <naturaIva><t t-raw="'N2'"/></naturaIva>
+      <naturaIVA><t t-raw="'N2'"/></naturaIVA>
   </voceSpesa>
 </template>
 
