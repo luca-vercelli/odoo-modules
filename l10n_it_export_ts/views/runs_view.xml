@@ -11,7 +11,9 @@
                         <field name="date_send"/>
                         <field name="status"/>
                         <field name="pdf_filename"/>
+                        <field name="pdf_link" widget="url"/>
                         <field name="csv_filename"/>
+                        <field name="csv_link" widget="url"/>
                         <field name="xml"/>
                         <field name="messages"/>
                     </group>
