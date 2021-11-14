@@ -7,7 +7,7 @@
 
 {
     "name": "Product variant search",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.1.0",
     "category": "Sales",
     "description": """
 		Enable search in product variants names instead then in product name only.
@@ -37,5 +37,5 @@
     "test": [],
     "installable": True,
     "active": False,
-	'license' : 'LGPL-3',
+    "license" : 'LGPL-3',
 }
