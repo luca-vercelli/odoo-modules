@@ -1,0 +1,327 @@
+
+
+
+<precompilata>
+    
+    
+    
+
+  <proprietario>
+  <cfProprietario>s7cr9vl0jlHcqxXtvLWRAO3OY0WDtz8DaZh2MCgl8J+On+9YwltyVe8WFNW1AuE9LUVD1qGZZG6c
+MIGUHyb8GRyhTzfYsbL9l2amo0gXnRDht66t/U7K5ghuq6+1GvyQId/bK5PM3owJJL/x1iDW/5U6
+esjI5u5dS/OulYDDIys=
+</cfProprietario>
+  </proprietario>
+
+
+    
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-12-21</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0035</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-12-21</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>jhiOZ0OmYz3QnvAs5hJQgamJhoKZH/B/+o4AmUMCdqPiou690IK7L/JNLLRUoUBSXXtQEo2JGwoT
+qwyBzoldIAe+6GtvgJkWNCc+YOU5zWXbQMwJ9dg4oreYyor6hswMGxbmu3cKN6DGhwyCol7Kchjv
+Pemfk/97I/+4N7vYCZ8=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>227.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-11-19</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0029</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-11-19</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>jhiOZ0OmYz3QnvAs5hJQgamJhoKZH/B/+o4AmUMCdqPiou690IK7L/JNLLRUoUBSXXtQEo2JGwoT
+qwyBzoldIAe+6GtvgJkWNCc+YOU5zWXbQMwJ9dg4oreYyor6hswMGxbmu3cKN6DGhwyCol7Kchjv
+Pemfk/97I/+4N7vYCZ8=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>317.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-11-09</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0027</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-11-09</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>GT4/2p44rtm/iTaofa6iJbqbIKqphlRdSEA3arI8q8OcuP1SKR/fp5k3eAouiVzP6PALZi/pVWrW
+HCUQ5LSLfkZ2RejpxKEh/TJ8rG4lXtJjRKBMPZIiTYIJvH5hhU/2GkC9zeOP4oFQZdC5Udo0fiA9
+yLEvzKa+394d+OHz3A4=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>139.70</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-11-16</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0024</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-11-16</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>OJ49yqLkG1auMR0pwT4opaP+PEetN7Pbg+fMSP8MCRctB1jg0ZOgIYGmWKnD8RSDKSVGXZ8n8+wM
+18IsU0BWrG82I4Esu2sMjoXiP0YWSvfxOtA4dcN9VU1cQUDr3VegAWW1kp/0XugSj4xU7wYbQE5f
+W2Uvfhtp1CzcoKjTFdQ=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>182.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-10-22</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0022</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-10-22</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>WaUU/OxaTln1tZTsE+FjqNVLmD05VNnrX7oRFsXMfHPiNls7nEwjUId9/vTT5B1UPzoBNqXBVoLX
+dbuEb2um+VK8m3iEq6GVeu1fKWfQEVc2Zc7E/Z+nBN0sMnW5A5ZKsfQe72CMid+zQtisdgEcgJ3I
+kXYU1BazYrte+6tqXOw=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>252.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-10-05</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0020</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-10-05</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>jhiOZ0OmYz3QnvAs5hJQgamJhoKZH/B/+o4AmUMCdqPiou690IK7L/JNLLRUoUBSXXtQEo2JGwoT
+qwyBzoldIAe+6GtvgJkWNCc+YOU5zWXbQMwJ9dg4oreYyor6hswMGxbmu3cKN6DGhwyCol7Kchjv
+Pemfk/97I/+4N7vYCZ8=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>227.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-07-13</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0015</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-07-13</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>jhiOZ0OmYz3QnvAs5hJQgamJhoKZH/B/+o4AmUMCdqPiou690IK7L/JNLLRUoUBSXXtQEo2JGwoT
+qwyBzoldIAe+6GtvgJkWNCc+YOU5zWXbQMwJ9dg4oreYyor6hswMGxbmu3cKN6DGhwyCol7Kchjv
+Pemfk/97I/+4N7vYCZ8=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>227.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-07-09</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0014</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-07-09</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>OJ49yqLkG1auMR0pwT4opaP+PEetN7Pbg+fMSP8MCRctB1jg0ZOgIYGmWKnD8RSDKSVGXZ8n8+wM
+18IsU0BWrG82I4Esu2sMjoXiP0YWSvfxOtA4dcN9VU1cQUDr3VegAWW1kp/0XugSj4xU7wYbQE5f
+W2Uvfhtp1CzcoKjTFdQ=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>227.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-06-08</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0007</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-06-08</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>jhiOZ0OmYz3QnvAs5hJQgamJhoKZH/B/+o4AmUMCdqPiou690IK7L/JNLLRUoUBSXXtQEo2JGwoT
+qwyBzoldIAe+6GtvgJkWNCc+YOU5zWXbQMwJ9dg4oreYyor6hswMGxbmu3cKN6DGhwyCol7Kchjv
+Pemfk/97I/+4N7vYCZ8=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>182.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-06-01</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0005</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-06-01</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>WaUU/OxaTln1tZTsE+FjqNVLmD05VNnrX7oRFsXMfHPiNls7nEwjUId9/vTT5B1UPzoBNqXBVoLX
+dbuEb2um+VK8m3iEq6GVeu1fKWfQEVc2Zc7E/Z+nBN0sMnW5A5ZKsfQe72CMid+zQtisdgEcgJ3I
+kXYU1BazYrte+6tqXOw=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>352.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+        
+
+    
+    
+<documentoSpesa>
+  <idSpesa>
+       <pIva>10356220011</pIva>
+       <dataEmissione>2016-05-04</dataEmissione>
+       <numDocumentoFiscale>
+          <dispositivo>1</dispositivo>
+          <numDocumento>2016/0004</numDocumento>
+       </numDocumentoFiscale>
+  </idSpesa>
+  <dataPagamento>2016-05-04</dataPagamento>
+  <flagOperazione>I</flagOperazione>
+  <cfCittadino>jhiOZ0OmYz3QnvAs5hJQgamJhoKZH/B/+o4AmUMCdqPiou690IK7L/JNLLRUoUBSXXtQEo2JGwoT
+qwyBzoldIAe+6GtvgJkWNCc+YOU5zWXbQMwJ9dg4oreYyor6hswMGxbmu3cKN6DGhwyCol7Kchjv
+Pemfk/97I/+4N7vYCZ8=
+</cfCittadino>
+  <voceSpesa>
+      <tipoSpesa>SP</tipoSpesa>
+      <importo>272.00</importo>
+  </voceSpesa>
+</documentoSpesa>
+
+
+
+        
+</precompilata>
+
