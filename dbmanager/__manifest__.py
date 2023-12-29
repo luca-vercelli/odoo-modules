@@ -7,7 +7,7 @@
 
 {
     "name": "Database Manager",
-    "version": "16.0.0.0.0",
+    "version": "16.0.1.0.0",
     "category": "Configuration",
     "description": "",
     "author": "Luca Vercelli",

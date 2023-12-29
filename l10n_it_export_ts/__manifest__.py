@@ -12,7 +12,7 @@
 
 {
     'name': 'Send Invoices to Sistema TS',
-    'version': '16.0.0.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Accounting',
     'description': "",
     'author': 'Luca Vercelli',
