@@ -36,7 +36,7 @@
 
 	<!-- ===================== TABLES ===================================== -->
 
-		<record id="view_tables_list" model="ir.ui.view">	<!-- Should disable "Create"/"Import" buttons -->
+		<record id="view_tables_list" model="ir.ui.view">
 			<field name="name">dbmanager.tables</field>
 			<field name="model">dbmanager.tables</field>
 			<field name="arch" type="xml">
@@ -48,7 +48,7 @@
 			</field>
 		</record>
 
-		<record id="view_tables_form" model="ir.ui.view">	<!-- Should disable "Edit" button -->
+		<record id="view_tables_form" model="ir.ui.view">
 			<field name="name">dbmanager.tables.form</field>
 			<field name="model">dbmanager.tables</field>
 			<field name="arch" type="xml">
