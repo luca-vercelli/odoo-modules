@@ -22,16 +22,11 @@ class TablesList(models.Model, ModelFromView):
 	_table = "dbmanager_tables"
 	_auto = False
 	
-	table_catalog = fields.Char()
-	table_schema = fields.Char()
-	table_name = fields.Char()
+	catalog = fields.Char()
+	schema = fields.Char()
+	name = fields.Char()
 	table_type = fields.Char()
-	name = fields.Char(compute='_compute_name')
 	column_ids = fields.One2many('dbmanager.columns', 'table_id')
-
-	def _compute_name(self):
-		for rec in self:
-			rec.name = rec.table_name.upper()
 			
 class ViewsList(models.Model, ModelFromView):
 	_name = "dbmanager.views"
@@ -39,15 +34,10 @@ class ViewsList(models.Model, ModelFromView):
 	_table = "dbmanager_views"
 	_auto = False
 	
-	table_catalog = fields.Char()
-	table_schema = fields.Char()
-	table_name = fields.Char()
+	catalog = fields.Char()
+	schema = fields.Char()
+	name = fields.Char()
 	view_definition = fields.Text()
-	name = fields.Char(compute='_compute_name')
-	
-	def _compute_name(self):
-		for rec in self:
-			rec.name = rec.table_name.upper()
 			
 class TablesColumns(models.Model, ModelFromView):
 	_name = "dbmanager.columns"
@@ -58,7 +48,7 @@ class TablesColumns(models.Model, ModelFromView):
 	table_catalog = fields.Char()
 	table_schema = fields.Char()
 	table_name = fields.Char()
-	column_name = fields.Char()
+	name = fields.Char()
 	data_type = fields.Char()
 	character_maximum_length = fields.Integer()
 	numeric_precision = fields.Integer()

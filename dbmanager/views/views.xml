@@ -41,9 +41,10 @@
 			<field name="model">dbmanager.tables</field>
 			<field name="arch" type="xml">
 				<tree string="Tables">
-                    <field name="table_catalog"/>
-                    <field name="table_schema"/>
-                    <field name="table_name"/>
+                    <field name="catalog"/>
+                    <field name="schema"/>
+                    <field name="name"/>
+                    <field name="table_type"/>
 				</tree>
 			</field>
 		</record>
@@ -55,7 +56,7 @@
 				<form>
 					<field name="column_ids">
 						<tree string="Columns">
-							<field name="column_name"/>
+							<field name="name"/>
 							<field name="data_type"/>
 							<field name="character_maximum_length"/>
 							<field name="numeric_precision"/>
@@ -81,9 +82,9 @@
 			<field name="model">dbmanager.views</field>
 			<field name="arch" type="xml">
                 <tree string="Views">
-                    <field name="table_catalog"/>
-                    <field name="table_schema"/>
-                    <field name="table_name"/>
+                    <field name="catalog"/>
+                    <field name="schema"/>
+                    <field name="name"/>
                 </tree>
 			</field>
 		</record>

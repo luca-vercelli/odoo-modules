@@ -9,17 +9,17 @@ $$ language sql;
 
 
 create view dbmanager_tables as
-select hash(table_name) as id,*
+select hash(table_name) as id, table_catalog as "catalog", table_schema as "schema", table_name as name, table_type
 from information_schema.tables
 where table_schema='public';
 
 create view dbmanager_views as
-select hash(table_name) as id,*
+select hash(table_name) as id, table_catalog as "catalog", table_schema as "schema", table_name as name, view_definition
 from information_schema.views
 where table_schema='public';
 
 create view dbmanager_columns as
-select hash(table_name||column_name) as id, hash(table_name) as table_id, C.*
+select hash(table_name||column_name) as id, hash(table_name) as table_id, column_name as name, C.*
 from information_schema.columns C
 where C.table_schema='public';
 
