@@ -2,7 +2,7 @@
 <odoo>
 	<data>
 		
-		<!-- maschera di lancio -->
+		<!-- run command mask -->
 		<record id="view_sql_commander" model="ir.ui.view">
 			<field name="name">dbmanager.sql.commander</field>
 			<field name="model">dbmanager.sql.commander</field>
@@ -22,15 +22,6 @@
 			</field>
 		</record>
 
-		<!--act_window id="action_main_form"
-			name="Database manager"
-			res_model="dbmanager.sql.commander"
-			view_mode="form"
-			view_type="form"
-			target="inline"
-			view_id="view_sql_commander"
-			/-->
-
 		<record id="action_main_form" model="ir.actions.act_window">
 			<field name="name">Database manager</field>
 			<field name="res_model">dbmanager.sql.commander</field>
@@ -42,6 +33,8 @@
 			<field name="view_id" ref="view_sql_commander"/>
 			<field name="act_window_id" ref="action_main_form"/>
 		</record>
+
+	<!-- ===================== TABLES ===================================== -->
 
 		<record id="view_tables_list" model="ir.ui.view">	<!-- Should disable "Create"/"Import" buttons -->
 			<field name="name">dbmanager.tables</field>
@@ -73,24 +66,17 @@
 			</field>
 		</record>
 
-		<!--act_window id="action_tables_list"
-			name="Tables list"
-			res_model="dbmanager.tables"
-			view_mode="tree,form"
-			view_type="form"
-			/-->
 		<record id="action_tables_list" model="ir.actions.act_window">
 			<field name="name">Tables list</field>
 			<field name="res_model">dbmanager.tables</field>
 			<field name="view_mode">tree,form</field>
-		</record>
-		<record id="action_tables_list_view" model="ir.actions.act_window.view">
-			<field name="view_mode">form</field>
-			<field name="act_window_id" ref="action_tables_list"/>
+            <field name="view_id" ref="view_tables_list"/>
 		</record>
 
 
-		<record id="view_views_list" model="ir.ui.view">	<!-- Should disable "Create"/"Import" buttons -->
+	<!-- ===================== VIEWS ===================================== -->
+
+		<record id="view_views_list" model="ir.ui.view">
 			<field name="name">dbmanager.views</field>
 			<field name="model">dbmanager.views</field>
 			<field name="arch" type="xml">
@@ -102,7 +88,7 @@
 			</field>
 		</record>
 
-		<record id="view_views_form" model="ir.ui.view">	<!-- Should disable "Edit" button -->
+		<record id="view_views_form" model="ir.ui.view">
 			<field name="name">dbmanager.views.form</field>
 			<field name="model">dbmanager.views</field>
 			<field name="arch" type="xml">
@@ -112,23 +98,14 @@
 			</field>
 		</record>
 
-		<!--act_window id="action_views_list"
-			name="Views list"
-			res_model="dbmanager.views"
-			view_mode="tree,form"
-			view_type="form"
-			view_id="view_views_list"
-			/-->
 		<record id="action_views_list" model="ir.actions.act_window">
 			<field name="name">Views list</field>
 			<field name="res_model">dbmanager.views</field>
 			<field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_views_list"/>
 		</record>
-		<record id="action_views_list_view" model="ir.actions.act_window.view">
-			<field name="view_mode">form</field>
-			<field name="act_window_id" ref="action_views_list"/>
-			<field name="view_id" ref="view_views_list"/>
-		</record>
+
+	<!-- ===================== MENU ===================================== -->
 
 		<menuitem id="db_manager" name="Database manager" parent="base.menu_custom" sequence="99" groups="group_db_manager" />
 		<menuitem id="sql_commander" name="SQL Execute" action="action_main_form"  parent="db_manager" sequence="1" />
