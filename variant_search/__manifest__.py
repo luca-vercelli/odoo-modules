@@ -7,7 +7,7 @@
 
 {
     "name": "Product variant search",
-    "version": "16.0.1.0.0",
+    "version": "16.0.2.0.0",
     "category": "Sales",
     "description": """
 		Enable search in product variants names instead then in product name only.
@@ -27,7 +27,7 @@
 		* product_product.var_desc is a computed attribute stored on database, it's calculated during module install. If you want to recalculate it, the fast option is to reinstall this module.
 		""",
     "author": "Luca Vercelli",
-    "website": "",
+    "website": "https://github.com/luca-vercelli/odoo-modules",
     "depends": [
         "product",
     ],
