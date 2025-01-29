@@ -7,11 +7,10 @@
 
 {
     "name": "Database Manager",
-    "version": "16.0.3.0.0",
+    "version": "16.0.4.0.0",
     "category": "Configuration",
-    "description": "",
     "author": "Luca Vercelli",
-    "website": "",
+    "website": "https://github.com/luca-vercelli/odoo-modules",
     "depends": [
         "base"
     ],
