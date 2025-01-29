@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!--record id="view_export_registry_form" model="ir.ui.view">
+        <record id="view_export_registry_form" model="ir.ui.view">
             <field name="name">export.registry.form</field>
             <field name="model">exportts.export.registry</field>
             <field name="arch" type="xml">
@@ -37,7 +37,7 @@
             <field name="name">Esportazioni TS</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">exportts.export.registry</field>
-            <field name="view_type">form</field>
+            <!--field name="view_type">form</field-->
             <field name="view_mode">tree,form</field>
         </record>
         <record id="action_export_registry_form" model="ir.actions.act_window.view">
@@ -54,11 +54,12 @@
         </record>
 
         <menuitem
-            name="Esportazioni TS"
             action="action_export_registry"
             id="menu_export_registry"
             parent="menu_sistema_ts"
-            sequence="10"/-->
+            sequence="10"
+			groups="base.group_system"
+			/>
 
     </data>
 </odoo>

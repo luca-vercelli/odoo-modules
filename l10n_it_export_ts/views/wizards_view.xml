@@ -18,12 +18,6 @@
             </field>
         </record>
 
-        <!--act_window id="action_export_view"
-            multi="True"
-            key2="client_action_multi" name="Esporta fatture verso TS"
-            res_model="exportts.wizard.export" src_model="account.invoice"
-            view_mode="form" target="new" view_type="form" /-->
-
         <record id="wizard_send_view" model="ir.ui.view">
             <field name="name">wizard.send.form</field>
             <field name="model">exportts.wizard.send</field>
@@ -48,12 +42,6 @@
             </field>
         </record>
 
-        <!--act_window id="action_send_view"
-            multi="False"
-            key2="client_action_multi" name="Invia fatture a TS"
-            res_model="exportts.wizard.send" src_model="exportts.export.registry"
-            view_mode="form" target="new" view_type="form" /-->
-
         <record id="view_encrypt_fiscalcodes_dialog" model="ir.ui.view">
             <field name="name">Encrypt fiscal codes</field>
             <field name="model">res.partner.encrypt</field>
@@ -72,19 +60,17 @@
 
         <record id="action_encrypt_fiscalcode" model="ir.actions.act_window">
             <field name="name">Encrypt fiscal codes</field>
-            <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner.encrypt</field>
-            <!--field name="view_type">form</field-->
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
         <menuitem
-            name="Encrypt fiscal codes"
             action="action_encrypt_fiscalcode"
             id="menu_encrypt_fiscalcode"
             parent="menu_sistema_ts"
-            sequence="20"/>
+            sequence="20"
+			/>
 
     </data>
 </odoo>
