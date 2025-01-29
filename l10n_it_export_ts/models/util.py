@@ -74,6 +74,7 @@ def encrypt(message):
 
 	from Crypto.Cipher import PKCS1_v1_5
 	from Crypto.Hash import SHA
+
 	import base64
 
 	h = SHA.new(message)
@@ -81,7 +82,7 @@ def encrypt(message):
 	cipher = PKCS1_v1_5.new(key)
 	msg_enc = cipher.encrypt(message)
 
-	return base64.encodestring(msg_enc).decode()
+	return base64.encodebytes(msg_enc).decode()
 	
 def write_to_new_tempfile(data, mode=None, prefix='', suffix='.tmp', dir=None, delete=False):
     """
