@@ -12,7 +12,7 @@
 
 {
     'name': 'Send Invoices to Sistema TS',
-    'version': '16.0.1.0.0',
+    'version': '16.0.2.0.0',
     'category': 'Accounting',
     'description': "",
     'author': 'Luca Vercelli',
@@ -32,6 +32,6 @@
     'application': True,
 	'license' : 'AGPL-3',
     'external_dependencies': {
-        'python': ['Crypto', 'zeep', 'requests'],  #pip install pycryptho zeep requests
+        'python': ['Crypto', 'zeep', 'requests'],  #pip install pycrypthodome zeep requests
     }
 }

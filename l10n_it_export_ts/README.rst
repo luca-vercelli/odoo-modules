@@ -31,7 +31,7 @@ Stato dell'arte
 
 Note tecniche
 -------------
-Questo modulo utilizza zeep [3] come client SOAP, e altre dipendenze da installare con `pip install pycryptho zeep requests`.
+Questo modulo utilizza zeep [3] come client SOAP, e altre dipendenze da installare con `pip install pycrypthodome zeep requests`.
 
 
 [1] https://sistemats1.sanita.finanze.it/portale/spese-sanitarie-documenti-e-specifiche-tecniche
