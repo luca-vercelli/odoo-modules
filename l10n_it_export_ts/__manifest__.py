@@ -13,9 +13,9 @@
 {
     'name': 'Send Invoices to Sistema TS',
     'version': '16.0.2.0.0',
-    'category': 'Accounting',
-    'description': "",
+    'category': 'Localization/Italy',
     'author': 'Luca Vercelli',
+    'website': 'https://github.com/luca-vercelli/odoo-modules',
     'depends': ['base','account','l10n_it_fiscalcode'],
     'data': [
         'views/invoice_report.xml',
