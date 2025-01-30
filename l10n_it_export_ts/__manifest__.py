@@ -12,7 +12,7 @@
 
 {
     'name': 'Send Invoices to Sistema TS',
-    'version': '16.0.3.0.0',
+    'version': '16.0.4.0.0',
     'category': 'Localization/Italy',
     'author': 'Luca Vercelli',
     'website': 'https://github.com/luca-vercelli/odoo-modules',
