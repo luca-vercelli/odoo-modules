@@ -29,7 +29,7 @@
                                             <label for="pincode_inviante" class="col-lg-3 o_light_label"/>
                                             <field name="pincode_inviante" />
                                             <label for="password_inviante" class="col-lg-3 o_light_label"/>
-                                            <field name="password_inviante" />
+                                            <field name="password_inviante" password="True"/>
                                             <label for="endpoint" class="col-lg-3 o_light_label"/>
                                             <field name="endpoint" />
                                             <label for="folder" class="col-lg-3 o_light_label"/>
