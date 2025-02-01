@@ -44,7 +44,7 @@
 
 <template id="report_invoice_document_xml_ts">
 <t t-name="report_invoice_document_xml_ts">
-<t t-if="(not o.partner_id.is_company)" > <!--FIXME se non persona fisica è corretto escluderlo? -->
+<t t-if="(not o.partner_id.is_company)" > <!--solo persone fiscihe! per le aziende ci va la fattura elettronica -->
 <documentoSpesa>
   <idSpesa>
        <pIva><t t-if="proprietario.vat"><t t-out="proprietario.vat[2:]"/></t></pIva>
