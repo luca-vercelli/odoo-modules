@@ -24,6 +24,7 @@ from odoo import models,fields,api
 class ExportRegistry(models.Model):
     _name = 'exportts.export.registry'
     _description = 'Esportazioni TS'
+    _order = 'date_export DESC'
 
     name = fields.Char('Nome', compute='_compute_name')
     status = fields.Char('Status', readonly=True)
