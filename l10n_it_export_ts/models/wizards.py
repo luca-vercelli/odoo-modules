@@ -135,6 +135,7 @@ class WizardSendToTS(models.TransientModel):
         _logger.info("Invio dati...")
         answer = self.call_ws_invio()
         export.status = "sent"
+        export.date_send = fields.Datetime.now()
 
         _logger.info("Invio concluso. Risposta:")
         _logger.info(answer)
