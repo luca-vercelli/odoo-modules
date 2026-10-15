@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Luca Vercelli 2016. Released under GNU Affero General Public License.

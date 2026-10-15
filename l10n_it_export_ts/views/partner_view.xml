@@ -1,26 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <data>
+    <record id="view_partner_property_form" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field eval="8" name="priority" />
+        <field name="inherit_id" ref="account.view_partner_property_form" />
+        <field name="arch" type="xml">
+            <page name="accounting" position="inside">
+                <group string="Sistema TS" name="sistema_ts">
+                    <field name="opposizione_730" />
+                </group>
+            </page>
+        </field>
+    </record>
 
-        <record id="view_partner_property_form" model="ir.ui.view">
-            <field name="name">res.partner.form</field>
-            <field name="model">res.partner</field>
-            <field eval="8" name="priority"/>
-            <field name="inherit_id" ref="account.view_partner_property_form"/>
-            <field name="arch" type="xml">
-                <page name="accounting" position="inside">
-                    <group string="Sistema TS" name="sistema_ts">
-                        <field name="opposizione_730"/>
-                    </group>
-                </page>
-            </field>
-        </record>
-
-        <menuitem
-            name="Sistema TS"
-            id="menu_sistema_ts"
-            parent="account.menu_finance_receivables"
-            sequence="100"/>
-
-    </data>
+    <menuitem
+        name="Sistema TS"
+        id="menu_sistema_ts"
+        parent="account.menu_finance_receivables"
+        sequence="100"
+    />
 </odoo>

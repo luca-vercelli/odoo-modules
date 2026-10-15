@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -19,26 +18,28 @@
 #
 ##############################################################################
 
-from odoo import models,fields,api
+from odoo import fields, models
 
-#see /usr/lib/python2.7/dist-packages/openerp/addons/product/product.py
+# see /usr/lib/python2.7/dist-packages/openerp/addons/product/product.py
 
 
 class product_template(models.Model):
-    _inherit = 'product.template'
+    _inherit = "product.template"
 
-    tipo_spesa_730 = fields.Selection([
-        ('TK','Ticket'),
-        ('FC','Farmaco, anche omeopatico'),
-        ('FV','Farmaco per uso veterinario'),
-        ('SV','Spese veterinarie'),
-        ('SP','Prestazioni sanitarie'),
-        ('AD','Acquisto o affitto dispositivo medico CE'),
-        ('AS','ECG, spirometria, Holter pressorio e cardiaco, test, ...'),
-        ('SR','Assistenza specialistica ambulatoriale'),
-        ('CT','Cure termali'),
-        ('PI','Protesica e integrativa'),
-        ('IC','Chirurgia estetica e medicina estetica'),
-        ('AA','Altre spese'),
-        ], default="SP")
-
+    tipo_spesa_730 = fields.Selection(
+        [
+            ("TK", "Ticket"),
+            ("FC", "Farmaco, anche omeopatico"),
+            ("FV", "Farmaco per uso veterinario"),
+            ("SV", "Spese veterinarie"),
+            ("SP", "Prestazioni sanitarie"),
+            ("AD", "Acquisto o affitto dispositivo medico CE"),
+            ("AS", "ECG, spirometria, Holter pressorio e cardiaco, test, ..."),
+            ("SR", "Assistenza specialistica ambulatoriale"),
+            ("CT", "Cure termali"),
+            ("PI", "Protesica e integrativa"),
+            ("IC", "Chirurgia estetica e medicina estetica"),
+            ("AA", "Altre spese"),
+        ],
+        default="SP",
+    )

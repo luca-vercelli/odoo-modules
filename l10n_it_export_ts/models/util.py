@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -20,108 +19,125 @@
 ##############################################################################
 
 import os
+
 DIRNAME = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PUBLIC_KEY_PEM_FILENAME = os.path.join(DIRNAME, "data", "SanitelCF.cer")
 PUBLIC_KEY = None
 
+
 def get_pubkey():
-	"""
-	Extract public RSA key from X.509 PEM certificate specified by PUBLIC_KEY_PEM_FILENAME
-	"""
-	#see http://stackoverflow.com/questions/12911373/how-do-i-use-a-x509-certificate-with-pycrypto
-	global PUBLIC_KEY
-	if PUBLIC_KEY is None:
-		global PUBLIC_KEY_PEM_FILENAME
-		from Crypto.Util.asn1 import DerSequence
-		from Crypto.PublicKey import RSA
-		from binascii import a2b_base64
+    """
+    Extract the public RSA key from the X.509 PEM certificate specified by
+    PUBLIC_KEY_PEM_FILENAME.
+    """
+    # see http://stackoverflow.com/questions/12911373/how-do-i-use-a-x509
+    # certificate-with-pycrypto
+    global PUBLIC_KEY
+    if PUBLIC_KEY is None:
+        global PUBLIC_KEY_PEM_FILENAME
+        from binascii import a2b_base64
 
-		# Convert from PEM to DER
-		pem = open(PUBLIC_KEY_PEM_FILENAME).read()
-		lines = pem.replace(" ",'').split()
-		der = a2b_base64(''.join(lines[1:-1]))
+        from Crypto.PublicKey import RSA
+        from Crypto.Util.asn1 import DerSequence
 
-		# Extract subjectPublicKeyInfo field from X.509 certificate (see RFC3280)
-		cert = DerSequence()
-		cert.decode(der)
-		tbsCertificate = DerSequence()
-		tbsCertificate.decode(cert[0])
-		subjectPublicKeyInfo = tbsCertificate[6]
+        # Convert from PEM to DER
+        pem = open(PUBLIC_KEY_PEM_FILENAME).read()
+        lines = pem.replace(" ", "").split()
+        der = a2b_base64("".join(lines[1:-1]))
 
-		# Initialize RSA key
-		PUBLIC_KEY = RSA.importKey(subjectPublicKeyInfo)
-	return PUBLIC_KEY
+        # Extract subjectPublicKeyInfo field from X.509 certificate (see RFC3280)
+        cert = DerSequence()
+        cert.decode(der)
+        tbsCertificate = DerSequence()
+        tbsCertificate.decode(cert[0])
+        subjectPublicKeyInfo = tbsCertificate[6]
+
+        # Initialize RSA key
+        PUBLIC_KEY = RSA.importKey(subjectPublicKeyInfo)
+    return PUBLIC_KEY
+
 
 def encrypt(message):
-	"""
-	Encrypt emessage using given RSA public key, padding PKCS#1 v1.5, encoding base64
-	"""
-	#see https://www.dlitz.net/software/pycrypto/api/2.6/
-	#cfr. echo "message" | openssl rsautl -encrypt -inkey SanitelCF.cer -certin -pkcs | base64
-	#SanitelCF.cer non e' una chiave RSA ma un certificato che contiene una chiave RSA (pubblica)
-	#padding PKCS1_v1_5 = sequenza causale di byte per raggiungere la lunghezza della chiave RSA
-	#base64 = binary to ASCII
-
-	#Python 2:
-	#try:
-	#	message = str(message)
-	#except UnicodeDecodeError:
-	#	message = message.encode('ascii','replace')
-
-	#Python 3:
-	message = message.encode()
-
-	from Crypto.Cipher import PKCS1_v1_5
-	from Crypto.Hash import SHA
-
-	import base64
-
-	h = SHA.new(message)
-	key = get_pubkey()
-	cipher = PKCS1_v1_5.new(key)
-	msg_enc = cipher.encrypt(message)
-
-	return base64.encodebytes(msg_enc).decode()
-	
-def write_to_new_tempfile(data, mode=None, prefix='', suffix='.tmp', dir=None, delete=False):
     """
-    Create a new file, write 'data' into it, close it
-    @param data can be a str or a bytes-like object, mode should be set according to that
+    Encrypt emessage using given RSA public key, padding PKCS#1 v1.5, encoding base64
+    """
+    # see https://www.dlitz.net/software/pycrypto/api/2.6/
+    # cfr. echo "message" | openssl rsautl -encrypt -inkey SanitelCF.cer
+    # -certin -pkcs | base64
+    # SanitelCF.cer non e' una chiave RSA ma un certificato che contiene una
+    # chiave RSA (pubblica)
+    # padding PKCS1_v1_5 = sequenza causale di byte per raggiungere la
+    # lunghezza della chiave RSA
+    # base64 = binary to ASCII
+
+    # Python 2:
+    # try:
+    # message = str(message)
+    # except UnicodeDecodeError:
+    # message = message.encode('ascii','replace')
+
+    # Python 3:
+    message = message.encode()
+
+    import base64
+
+    from Crypto.Cipher import PKCS1_v1_5
+
+    key = get_pubkey()
+    cipher = PKCS1_v1_5.new(key)
+    msg_enc = cipher.encrypt(message)
+
+    return base64.encodebytes(msg_enc).decode()
+
+
+def write_to_new_tempfile(
+    data, mode=None, prefix="", suffix=".tmp", directory=None, delete=False
+):
+    """
+    Create a new file, write 'data' into it, and close it.
+    @param data can be a str or bytes-like object; mode should be set accordingly
     @return filename
     """
     import tempfile
+
     if mode is None:
-        mode = 'wb+' if isinstance(data, (bytes, bytearray)) else 'w+'
-    fd = tempfile.NamedTemporaryFile(mode=mode, prefix=prefix, suffix=suffix, dir=dir, delete=delete)
+        mode = "wb+" if isinstance(data, bytes | bytearray) else "w+"
+    fd = tempfile.NamedTemporaryFile(
+        mode=mode, prefix=prefix, suffix=suffix, dir=directory, delete=delete
+    )
     fd.write(data)
     fd.close()
     return fd.name
 
-def zip_single_file(orig_filename):
-	"""
-	Compress single file to a temporary location.
-	ZIP File will be deleted on exit.
 
-	@return ZIP full file name
-	"""
-	import tempfile
-	fd, zip_filename = tempfile.mkstemp(prefix=orig_filename, suffix=".zip")
-	from zipfile import ZipFile
-	zf = ZipFile(zip_filename, "w") #overwrite if exists
-	zf.write(orig_filename) #FIXME cartella /tmp !?!
-	zf.close()
-	return zip_filename
+def zip_single_file(orig_filename):
+    """
+    Compress single file to a temporary location.
+    ZIP File will be deleted on exit.
+
+    @return ZIP full file name
+    """
+    import tempfile
+
+    fd, zip_filename = tempfile.mkstemp(prefix=orig_filename, suffix=".zip")
+    from zipfile import ZipFile
+
+    zf = ZipFile(zip_filename, "w")  # overwrite if exists
+    zf.write(orig_filename)  # FIXME cartella /tmp !?!
+    zf.close()
+    return zip_filename
+
 
 def test_xsd(xml_filename, xsd_filename):
-	"""
-	Test XML against XSD schema.
-	Raise exception with details if validation fails. 
-	"""
-	from lxml import etree
-	xmlschema_doc = etree.parse(xsd_filename)
-	xmlschema = etree.XMLSchema(xmlschema_doc)
-	doc = etree.parse(xml_filename)
-	#return xmlschema.validate(doc)
-	xmlschema.assertValid(doc)
+    """
+    Test XML against XSD schema.
+    Raise exception with details if validation fails.
+    """
+    from lxml import etree
 
+    xmlschema_doc = etree.parse(xsd_filename)
+    xmlschema = etree.XMLSchema(xmlschema_doc)
+    doc = etree.parse(xml_filename)
+    # return xmlschema.validate(doc)
+    xmlschema.assertValid(doc)

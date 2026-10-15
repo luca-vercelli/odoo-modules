@@ -1,89 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <data>
+    <!-- cfr. account_report.xml -->
 
-<!-- cfr. account_report.xml -->
-
-<!-- ho tolto file="l10n_it_export_ts.qweb_invoice_xml_ts"
+    <!-- ho tolto file="l10n_it_export_ts.qweb_invoice_xml_ts"
             -->
-        <report 
-            id="report_invoice_xml_ts"
-            model="account.invoice"
-            string="Fatture XML TS"
-            report_type="qweb-html"
-            name="l10n_it_export_ts.qweb_invoice_xml_ts"
-            attachment_use="True"
-            attachment="(object.state in ('open','paid')) and ('FAT'+(object.number or '').replace('/','')+'.html')"
-        />
+    <record id="report_invoice_xml_ts" model="ir.actions.report">
+        <field name="name">Fatture XML TS</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_it_export_ts.qweb_invoice_xml_ts</field>
+        <field name="report_file">l10n_it_export_ts.qweb_invoice_xml_ts</field>
+        <field name="attachment_use">True</field>
+        <field
+            name="attachment"
+        >(object.state == 'posted') and ('FAT' + (object.name or '').replace('/', '') + '.html')</field>
+    </record>
 
-<template id="qweb_invoice_xml_ts">
-<t r-raw="'&gt;?xml version=1.0?>'" />
-<t t-name="l10n_it_export_ts.qweb_invoice_xml_ts"><precompilata>
-    <!-- Multicompany -->
-    <!-- dalla v.11 qui trovo: docs e doc_ids, non o -->
-    <t t-if="proprietario is None">
+    <template id="qweb_invoice_xml_ts">
+        <precompilata>
+            <!-- Multicompany -->
+            <!-- dalla v.11 qui trovo: docs e doc_ids, non o -->
+            <t t-if="proprietario is None">
      Qualcosa non va! Non devi stampare dal menu "Stampa" ma usare la funzione "Esporta TS"
     </t>
-    <t t-if="proprietario is not None">
-      <t t-call="l10n_it_export_ts.header_xml_ts"/>
-      <t t-foreach="docs" t-as="o">
-        <t t-call="l10n_it_export_ts.report_invoice_document_xml_ts"/>
-      </t>
-    </t>
-</precompilata></t>
-</template>
+            <t t-if="proprietario is not None">
+                <t t-call="l10n_it_export_ts.header_xml_ts" />
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="l10n_it_export_ts.report_invoice_document_xml_ts" />
+                </t>
+            </t>
+        </precompilata>
+    </template>
 
-<template id="header_xml_ts">
-<t t-name="l10n_it_export_ts.header_xml_ts">
-  <proprietario>
-  <!-- se fosse una Struttura qui il formato è differente-->
-      <cfProprietario><t t-out="proprietario.fiscalcode_enc"/></cfProprietario>
-  </proprietario>
-</t>
-</template>
+    <template id="header_xml_ts">
+        <proprietario>
+            <!-- se fosse una Struttura qui il formato è differente-->
+            <cfProprietario>
+                <t t-out="proprietario.l10n_it_codice_fiscale_enc" />
+            </cfProprietario>
+        </proprietario>
+    </template>
 
-<template id="report_invoice_document_xml_ts">
-<t t-name="report_invoice_document_xml_ts">
-<t t-if="(not o.partner_id.is_company)" > <!--solo persone fiscihe! per le aziende ci va la fattura elettronica -->
-<documentoSpesa>
-  <idSpesa>
-       <pIva><t t-if="proprietario.vat"><t t-out="proprietario.vat[2:]"/></t></pIva>
-       <dataEmissione><t t-out="o.date_invoice"/></dataEmissione>
-       <numDocumentoFiscale>
-          <!--registratore di cassa. 1 = fattura -->
-          <dispositivo><t t-out="1"/></dispositivo>
-          <numDocumento><t t-out="o.number"/></numDocumento>
-       </numDocumentoFiscale>
-  </idSpesa>
-  <!-- regime dei minimi: data pagamento=data fattura -->
-  <dataPagamento><t t-out="o.date_invoice"/></dataPagamento>
-  <!-- I=inserimento,R=rimborso,V=variazione,C=cancellazione    out_invoice=fattura,out_refund=nota di credito-->
-  <flagOperazione><t t-out="'I' if o.type=='out_invoice' else 'R'"/></flagOperazione>
-  <!-- da crittografare -->
-  <cfCittadino t-if="not o.partner_id.opposizione_730"><t t-out="o.partner_id.fiscalcode_enc"/></cfCittadino>
-  <pagamentoTracciato><t t-out="'SI' if (not o.partner_id.opposizione_730) else 'NO'"/></pagamentoTracciato>
-  <tipoDocumento><t t-out="'F'"/></tipoDocumento>
-  <flagOpposizione><t t-out="'1' if o.partner_id.opposizione_730 else '0'"/></flagOpposizione>
-  <t t-foreach="o.invoice_line_ids" t-as="o"><t t-call="l10n_it_export_ts.report_invoice_riga_xml_ts"/></t>
-</documentoSpesa>
-</t>
+    <template id="report_invoice_document_xml_ts">
+        <t t-if="(not o.partner_id.is_company)">
+            <!--solo persone fiscihe! per le aziende ci va la fattura elettronica -->
+            <documentoSpesa>
+                <idSpesa>
+                    <pIva>
+                        <t t-if="proprietario.vat" t-out="proprietario.vat[2:]" />
+                    </pIva>
+                    <dataEmissione>
+                        <t t-out="o.invoice_date" />
+                    </dataEmissione>
+                    <numDocumentoFiscale>
+                        <!--registratore di cassa. 1 = fattura -->
+                        <dispositivo>1</dispositivo>
+                        <numDocumento>
+                            <t t-out="o.name" />
+                        </numDocumento>
+                    </numDocumentoFiscale>
+                </idSpesa>
+                <!-- regime dei minimi: data pagamento=data fattura -->
+                <dataPagamento>
+                    <t t-out="o.invoice_date" />
+                </dataPagamento>
+                <!-- I=inserimento,R=rimborso,V=variazione,C=cancellazione    out_invoice=fattura,out_refund=nota di credito-->
+                <flagOperazione>
+                    <t t-out="'I' if o.move_type=='out_invoice' else 'R'" />
+                </flagOperazione>
+                <!-- da crittografare -->
+                <cfCittadino t-if="not o.partner_id.opposizione_730">
+                    <t t-out="o.partner_id.l10n_it_codice_fiscale_enc" />
+                </cfCittadino>
+                <pagamentoTracciato>
+                    <t t-out="'SI' if (not o.partner_id.opposizione_730) else 'NO'" />
+                </pagamentoTracciato>
+                <tipoDocumento>F</tipoDocumento>
+                <flagOpposizione>
+                    <t t-out="'1' if o.partner_id.opposizione_730 else '0'" />
+                </flagOpposizione>
+                <t t-foreach="o.invoice_line_ids" t-as="o">
+                    <t t-call="l10n_it_export_ts.report_invoice_riga_xml_ts" />
+                </t>
+            </documentoSpesa>
+        </t>
+    </template>
 
-</t>
-</template>
-
-<template id="report_invoice_riga_xml_ts">
-<!--
+    <template id="report_invoice_riga_xml_ts">
+        <!--
 Le righe di spesa dovrebbero essere esentasse
 Se ci fossero delle tasse, qui le sto contando
 Sto assumendo che l'eventuale addebito di marca da bollo non sia detraibile
 -->
-  <voceSpesa>
-      <!-- tipologia di spesa. SP=Prestazioni Sanitarie -->
-      <tipoSpesa><t t-out="o.product_id.tipo_spesa_730"/></tipoSpesa>
-      <importo><t t-out="'{0:.2f}'.format(o.price_total)"/></importo>
-      <naturaIVA><t t-out="'N2'"/></naturaIVA>
-  </voceSpesa>
-</template>
-
-    </data>
+        <voceSpesa>
+            <!-- tipologia di spesa. SP=Prestazioni Sanitarie -->
+            <tipoSpesa>
+                <t t-out="o.product_id.tipo_spesa_730" />
+            </tipoSpesa>
+            <importo>
+                <t t-out="'{0:.2f}'.format(o.price_total)" />
+            </importo>
+            <naturaIVA>N2</naturaIVA>
+        </voceSpesa>
+    </template>
 </odoo>

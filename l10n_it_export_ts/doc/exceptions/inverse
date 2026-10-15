@@ -110,4 +110,3 @@ Traceback (most recent call last):
   File "/usr/lib/python2.7/dist-packages/simplejson/encoder.py", line 340, in iterencode
     return _iterencode(o, 0)
 UnicodeDecodeError: 'utf8' codec can't decode byte 0xd6 in position 2: invalid continuation byte
-

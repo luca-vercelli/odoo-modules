@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -19,32 +18,30 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api
+from werkzeug.datastructures import Headers
+
 from odoo import http
 from odoo.http import request
-from odoo.addons.web.controllers.main import content_disposition
-#from odoo.addons.web.controllers.main import serialize_exception
-from werkzeug.datastructures import Headers
 
 
 class DownloadSistemaTsAttachments(http.Controller):
     # see https://stackoverflow.com/questions/38120510
 
-    @http.route('/web/sistemats/receipt/<int:id>', type='http', auth="public")
-    #@serialize_exception
-    def download_receipt(self, id, **kw):
-        """ let the user download pdf_filename """
-        export = request.env['exportts.export.registry'].browse(id)
+    @http.route("/web/sistemats/receipt/<int:export_id>", type="http", auth="public")
+    # @serialize_exception
+    def download_receipt(self, export_id, **kw):
+        """let the user download pdf_filename"""
+        export = request.env["exportts.export.registry"].browse(export_id)
         if not export or not export.pdf_filename:
             return request.not_found("Report not available")
         else:
             return self.common_make_response(export.pdf_filename, "application/pdf")
 
-    @http.route('/web/sistemats/errors/<int:id>', type='http', auth="public")
-    #@serialize_exception
-    def download_errors(self, id, **kw):
-        """ let the user download csv_filename """
-        export = request.env['exportts.export.registry'].browse(id)
+    @http.route("/web/sistemats/errors/<int:export_id>", type="http", auth="public")
+    # @serialize_exception
+    def download_errors(self, export_id, **kw):
+        """let the user download csv_filename"""
+        export = request.env["exportts.export.registry"].browse(export_id)
         if not export or not export.csv_filename:
             return request.not_found("Report not available")
         else:
@@ -52,17 +49,17 @@ class DownloadSistemaTsAttachments(http.Controller):
 
     def common_make_response(self, filepath, mimeType):
         filename = self.get_filename(filepath)
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             file_content = f.read()
         headers = Headers()
-        headers.add('Content-Type', mimeType)
-        headers.add('Content-Disposition', 'attachment', filename=filename)
+        headers.add("Content-Type", mimeType)
+        headers.add("Content-Disposition", "attachment", filename=filename)
         return request.make_response(file_content, headers)
 
     def get_filename(self, filepath):
-        """ /a/b/c   ->   c """
+        """/a/b/c   ->   c"""
         if not filepath:
             return filepath
-        if '/' not in filepath:
+        if "/" not in filepath:
             return filepath
-        return filepath[filepath.rindex('/')+1:]
+        return filepath[filepath.rindex("/") + 1 :]

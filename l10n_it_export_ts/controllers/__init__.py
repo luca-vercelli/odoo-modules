@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Luca Vercelli 2021. Released under GNU Affero General Public License.

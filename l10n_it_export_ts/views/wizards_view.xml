@@ -1,76 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <data>
+    <record id="wizard_export_view" model="ir.ui.view">
+        <field name="name">wizard.export.form</field>
+        <field name="model">exportts.wizard.export</field>
+        <field name="arch" type="xml">
+            <form string="Esporta fatture verso TS">
+                <group>
+                    <field name="proprietario_id" required="1" />
+                </group>
+                <p class="oe_grey">
+                    Le fatture saranno esportate in formato XML e saranno disponibili nel menu Esportazioni TS.
+                </p>
+                <footer>
+                    <button
+                        string="Export"
+                        name="export"
+                        type="object"
+                        default_focus="1"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="wizard_export_view" model="ir.ui.view">
-            <field name="name">wizard.export.form</field>
-            <field name="model">exportts.wizard.export</field>
-            <field name="arch" type="xml">
-                <form string="Esporta fatture verso TS">
-                    <p class="oe_grey">
-                        Le fatture saranno esportate in formato XML e saranno disponibili nel menu Esportazioni TS.
-                    </p>
-                    <footer>
-                        <button string="Export" name="export" type="object" default_focus="1" class="btn-primary"/>
-                        <button string="Cancel" class="btn-default" special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
+    <record id="action_export_invoices" model="ir.actions.act_window">
+        <field name="name">Esporta fatture verso TS</field>
+        <field name="res_model">exportts.wizard.export</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="account.model_account_move" />
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list,form</field>
+    </record>
 
-        <record id="wizard_send_view" model="ir.ui.view">
-            <field name="name">wizard.send.form</field>
-            <field name="model">exportts.wizard.send</field>
-            <field name="arch" type="xml">
-                <form string="Invia fatture a TS">
-                    <p class="oe_grey">
-                        L'XML ora verrà compresso e inviato a Sistema TS.
-                    </p>
-                                            <label for="pincode_inviante" class="col-lg-3 o_light_label"/>
-                                            <field name="pincode_inviante" />
-                                            <label for="password_inviante" class="col-lg-3 o_light_label"/>
-                                            <field name="password_inviante" password="True"/>
-                                            <label for="endpoint" class="col-lg-3 o_light_label"/>
-                                            <field name="endpoint" />
-                                            <label for="folder" class="col-lg-3 o_light_label"/>
-                                            <field name="folder" />
-                    <footer>
-                        <button string="Send" name="send" type="object" default_focus="1" class="btn-primary"/>
-                        <button string="Cancel" class="btn-default" special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
+    <record id="wizard_send_view" model="ir.ui.view">
+        <field name="name">wizard.send.form</field>
+        <field name="model">exportts.wizard.send</field>
+        <field name="arch" type="xml">
+            <form string="Invia fatture a TS">
+                <p class="oe_grey">
+                    L'XML ora verrà compresso e inviato a Sistema TS.
+                </p>
+                <group>
+                    <group>
+                        <field name="pincode_inviante" />
+                        <field name="password_inviante" password="True" />
+                    </group>
+                    <group>
+                        <field name="endpoint" />
+                        <field name="folder" />
+                    </group>
+                </group>
+                <footer>
+                    <button
+                        string="Send"
+                        name="send"
+                        type="object"
+                        default_focus="1"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="view_encrypt_fiscalcodes_dialog" model="ir.ui.view">
-            <field name="name">Encrypt fiscal codes</field>
-            <field name="model">res.partner.encrypt</field>
-            <field name="arch" type="xml">
-                <form string="Encrypt now">
-                    <p class="oe_grey">
-                        Tutti i codici fiscali verranno criptati usando la chiave pubblica di Sistema TS.
-                    </p>
-                    <footer>
-                      <button name="encrypt_all_fiscalcodes" string="Encrypt" type="object" class="oe_highlight"/> or
-                      <button special="cancel" string="Cancel" class="oe_link"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
+    <record id="view_encrypt_fiscalcodes_dialog" model="ir.ui.view">
+        <field name="name">Encrypt fiscal codes</field>
+        <field name="model">res.partner.encrypt</field>
+        <field name="arch" type="xml">
+            <form string="Encrypt now">
+                <p class="oe_grey">
+                    Tutti i codici fiscali verranno criptati usando la chiave pubblica di Sistema TS.
+                </p>
+                <footer>
+                    <button
+                        name="encrypt_all_fiscalcodes"
+                        string="Encrypt"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    <button special="cancel" string="Cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="action_encrypt_fiscalcode" model="ir.actions.act_window">
-            <field name="name">Encrypt fiscal codes</field>
-            <field name="res_model">res.partner.encrypt</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-        </record>
+    <record id="action_encrypt_fiscalcode" model="ir.actions.act_window">
+        <field name="name">Encrypt fiscal codes</field>
+        <field name="res_model">res.partner.encrypt</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 
-        <menuitem
-            action="action_encrypt_fiscalcode"
-            id="menu_encrypt_fiscalcode"
-            parent="menu_sistema_ts"
-            sequence="20"
-			/>
-
-    </data>
+    <menuitem
+        action="action_encrypt_fiscalcode"
+        id="menu_encrypt_fiscalcode"
+        parent="menu_sistema_ts"
+        sequence="20"
+    />
 </odoo>
