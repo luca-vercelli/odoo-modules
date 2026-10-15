@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_dbmanager_views,access_dbmanager_views,model_dbmanager_views,group_db_manager,1,0,0,0
-access_dbmanager_tables,access_dbmanager_tables,model_dbmanager_tables,group_db_manager,1,0,0,0
-access_dbmanager_columns,access_dbmanager_columns,model_dbmanager_columns,group_db_manager,1,0,0,0
-access_dbmanager_sqlcommander,access_dbmanager_sqlcommander,model_dbmanager_sql_commander,group_db_manager,1,1,1,1
